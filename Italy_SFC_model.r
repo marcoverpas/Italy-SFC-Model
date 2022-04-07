@@ -4,12 +4,15 @@
 
 # Authors: Rosa Canelli and Marco Veronese Passarella
 
-# Last change: 24 February 2022
+# Last change: 7 April 2022
 
 # Note: this R code reproduces the experiments discussed in: Canelli, R.,
 # Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2022) "Is the Italian
 # government debt sustainable? Scenarios after the Covid-19 shock", Cambridge
-# Journal of Economics.
+# Journal of Economics. An early version of it was used to produce the
+# simulations discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese
+# Passarella, M. (2021) "Are EU Policies Effective to Tackle the Covid-19
+# Crisis? The Case of Italy", Review of Political Economy.
 
 # Instructions: just download the file and run/source it!
 
@@ -171,9 +174,17 @@ EQ> TSDELTA(lh,1) = phi2*TSLAG(yd,1)
 COEFF> phi2
 STORE> coe(6)
 
-COMMENT> Interest payments on loans by households
+COMMENT> Interests paid by households on personal loans 
+IDENTITY> intlh
+EQ> intlh = rlh*lh  
+
+COMMENT> Interests received by households on their government debt holdings 
+IDENTITY> intgh
+EQ> intgh = rb*bh
+
+COMMENT> Net interest payments received by households 
 IDENTITY> inth
-EQ> inth = rlh*lh  
+EQ> inth = intgh - intlh
 
 COMMENT> Interest rate on loans to households
 BEHAVIORAL> rlh
@@ -198,17 +209,13 @@ COMMENT> Supply of deposits
 IDENTITY> ms
 EQ> ms = mh
 
-COMMENT> Net interest payments received by banks
-IDENTITY> intb
-EQ> intb = intf + intg - inth  
+COMMENT> Net interest payments received by banks on government bills 
+IDENTITY> intgb
+EQ> intgb = rb*bb 
 
 COMMENT> Banks profit (note: interest payments on advances and reserves are assumed = 0) 
 IDENTITY> fb
-EQ> fb = intf + inth + intg*iotab 
-
-COMMENT> Percentage of interests on bonds received by banks
-IDENTITY> iotab
-EQ> iotab = bb/bs
+EQ> fb = intf + intlh + intgb 
 
 COMMENT> Stock of bills held by banks  
 IDENTITY> bb
@@ -222,9 +229,9 @@ ERROR> AUTO(1)
 COEFF> opb1
 STORE> coe(36)
 
-COMMENT> Total wealth accumulated by banks
+COMMENT> Total wealth accumulated by banks 
 IDENTITY> vb
-EQ> vb = TSLAG(vb,1) + intb + opb - fb 
+EQ> vb = TSLAG(vb,1) + opb 
 
 COMMENT> Other financial assets held by banks
 IDENTITY> oab
@@ -269,10 +276,6 @@ EQ> loans = loans0
 COEFF> loans0
 STORE> coe(40)
 
-COMMENT> Stock of loans from supranational institutions received by the government 
-IDENTITY> deb_l
-EQ> deb_l = TSLAG(deb_l,1) + loans 
-
 COMMENT> Goverment spending covered by grants from supranational institutions
 BEHAVIORAL> grants
 TSRANGE 1998 1 2019 1
@@ -286,6 +289,14 @@ TSRANGE 1998 1 2019 1
 EQ> paym = paym0
 COEFF> paym0
 STORE> coe(42)
+
+COMMENT> Stock of loans from supranational institutions received by the government 
+IDENTITY> deb_l
+EQ> deb_l = TSLAG(deb_l,1) + loans 
+
+COMMENT> Government debt stock
+IDENTITY> deb
+EQ> deb = bs + ogds 
 
 COMMENT> Interest payments on government debt 
 IDENTITY> intg
@@ -388,7 +399,7 @@ TSRANGE 1998 1 2019 1
 EQ> bcb_star = bcb_star0
 COEFF> bcb_star0
 
-COMMENT> Supply of cash (Note: hs = -vcb + (bcb + bcb_star + oacb) )
+COMMENT> Supply of cash
 IDENTITY> hs
 EQ> hs = -vcb + (bcb + bcb_star + oacb)
 
@@ -396,13 +407,17 @@ COMMENT> Other net assets held by central bank (Note: residual to ensure that hs
 IDENTITY> oacb
 EQ> oacb = hh + hbs + vcb - bcb - bcb_star 
 
-COMMENT> Profit realised and distributed by CB (note: interest payments on advances and reserves are assumed away)
+COMMENT> Profit realised and distributed by CB (note: interest payments on advances and reserves are assumed away) 
 IDENTITY> fcb
-EQ> fcb = rb*(bcb+bcb_star) 
+EQ> fcb = intg - intgb - intgh 
 
 COMMENT> Reserve requirement: demand 
 IDENTITY> hbd
 EQ> hbd = rho*ms
+
+COMMENT> Total demand for cash and reserves 
+IDENTITY> hd
+EQ> hd = hbd + hh
 
 COMMENT> Reserve requirement: supply
 IDENTITY> hbs
@@ -427,9 +442,9 @@ ERROR> AUTO(1)
 COEFF> opcb1
 STORE> coe(37)
 
-COMMENT> Total wealth accumulated by central bank
+COMMENT> Total wealth accumulated by central bank 
 IDENTITY> vcb
-EQ> vcb = TSLAG(vcb,1) + rb*(bcb+bcb_star) - fcb + opcb
+EQ> vcb = TSLAG(vcb,1) + opcb
 
 
 COMMENT> FOREIGN SECTOR
@@ -471,17 +486,13 @@ COEFF> lambdarow
 ERROR> AUTO(1)
 STORE> coe(33)
 
-COMMENT> Government debt stock
-IDENTITY> deb
-EQ> deb = bs + ogdd 
-
 COMMENT> Other payments or receipts received by RoW (exogenous variable) 
 IDENTITY> oprow
 EQ> oprow = -(opf + opb + opcb + oph + opg)
 
 COMMENT> Total wealth accumulated by RoW
 IDENTITY> vrow
-EQ> vrow = TSLAG(vrow,1) - x + im + oprow
+EQ> vrow = TSLAG(vrow,1) - nx + oprow
 
 COMMENT> Other financial assets held by RoW 
 IDENTITY> oarow
@@ -732,7 +743,8 @@ S_modelData=list(
   intg  = TIMESERIES(c(TFM$INTg),   
                      START=c(1995,1),FREQ=1),
   intb  = TIMESERIES(c(TFM$INTb),   
-                     START=c(1995,1),FREQ=1),
+                     START=c(1995,1),FREQ=1), 
+  
   bh_star  = TIMESERIES(c(BS$Bh),   
                         START=c(1995,1),FREQ=1),
   bh = TIMESERIES(c(BS$Bh),   
@@ -789,9 +801,9 @@ S_modelData=list(
                    START=c(1995,1),FREQ=1),
   hbs = TIMESERIES(c(-BS$HBs),   
                    START=c(1995,1),FREQ=1),
-  hs = TIMESERIES(c(-BS$Hs),   
+  hs = TIMESERIES(c(-BS$Vcb + BS$Bcb + -( BS$Residh+BS$Residf+BS$Residb+BS$Vg-(BS$Bs-BS$OGD)+BS$ResidROW)),   
                   START=c(1995,1),FREQ=1),
-  hd = TIMESERIES(c(-BS$Hs),   
+  hd = TIMESERIES(c(-BS$Vcb + BS$Bcb + -( BS$Residh+BS$Residf+BS$Residb+BS$Vg-(BS$Bs-BS$OGD)+BS$ResidROW)),   
                   START=c(1995,1),FREQ=1),
   fb = TIMESERIES(c(TFM$Fb),   
                   START=c(1995,1),FREQ=1),
@@ -814,8 +826,6 @@ S_modelData=list(
   opg = TIMESERIES(c(TFM$OPG),   
                    START=c(1995,1),FREQ=1),
   oprow = TIMESERIES(c(TFM$OPROW),   
-                     START=c(1995,1),FREQ=1),
-  iotab = TIMESERIES(c(((TFM$INTf+TFM$INTh+TFM$INTg*(BS$Bb/(-BS$Bs)))-TFM$INTf-TFM$INTh)/TFM$INTg),   
                      START=c(1995,1),FREQ=1),
   beta = TIMESERIES(c(BS$Bb/(-BS$Ms-BS$Ls-BS$HBd)),   
                     START=c(1995,1),FREQ=1),
@@ -863,10 +873,14 @@ S_modelData=list(
                        START=c(1995,1),FREQ=1),
   rl = TIMESERIES(c(-TFM$INTf/BS$Lf),   
                   START=c(1995,1),FREQ=1),
-  rlh = TIMESERIES(c(-TFM$INTh/BS$Lh),   
-                   START=c(1995,1),FREQ=1),
-  time = TIMESERIES(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26),   
-                    START=c(1995,1),FREQ=1),
+  intgb  = TIMESERIES(c(TFM$R_b3*BS$Bb),   
+                      START=c(1995,1),FREQ=1),        
+  intgh  = TIMESERIES(c(TFM$INTg-TFM$R_b3*(BS$Bb+BS$Bcb)),   
+                      START=c(1995,1),FREQ=1),            
+  intlh  = TIMESERIES(c((TFM$INTg-TFM$R_b3*(BS$Bb+BS$Bcb))-TFM$INTh),   
+                      START=c(1995,1),FREQ=1),           
+  rlh = TIMESERIES(c(((TFM$R_b3*BS$Bh)-TFM$INTh)/BS$Lh),   
+                   START=c(1995,1),FREQ=1),               
   pi = TIMESERIES(c(TFM$Pi),   
                   START=c(1995,1),FREQ=1),
   pf = TIMESERIES(c(TFM$PF),   
@@ -929,29 +943,6 @@ S_model <- SIMULATE(S_model
                     ,simIterLimit=100
                     ,Exogenize=exogenizeList)
 
-#Plot in-sample prediction (no add factors)
-layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
-
-# Show predicted GDP
-plot(S_model$simulation$y,col="red1",lty=2,lwd=1,font.main=1,cex.main=1,main="Fig. 5(a) Nominal GDP",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2018),ylim=range(min(S_model$simulation$y),max(S_model$simulation$y)))
-lines(S_modelData$y,col="darkorchid4",lty=1,lwd=1)
-legend("topleft",c("Observed","Simulated (in-sample, no adj.)"),  bty = "n", cex=1, lty=c(1,2), lwd=c(1,1), col = c("darkorchid4","red1"), box.lty=0)
-
-# Show predicted employment
-plot(S_model$simulation$nd,col="red1",lty=2,lwd=1,font.main=1,cex.main=1,main="Fig. 5(b) Employment",ylab = 'Number of employees',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2018),ylim=range(20000,24000))
-lines(S_modelData$nd,col="darkorchid4",lty=1,lwd=1)
-legend("topleft",c("Observed","Simulated (in-sample, no adj.)"),  bty = "n", cex=1, lty=c(1,2), lwd=c(1,1), col = c("darkorchid4","red1"), box.lty=0)
-
-# Return rate on bonds
-plot(100*S_model$simulation$rb,col="red1",lty=2,lwd=1,font.main=1,cex.main=1,main="Fig. 5(c) Average yield on gov. securities",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2018),ylim=range(2,9))
-lines(100*S_modelData$rb,col="darkorchid4",lty=1,lwd=1)
-legend("topleft",c("Observed","Simulated (in-sample, no adj.)"),  bty = "n", cex=1, lty=c(1,2), lwd=c(1,1), col = c("darkorchid4","red1"), box.lty=0)
-
-# GDP delflator
-plot(S_model$simulation$p,col="red1",lty=2,lwd=1,font.main=1,cex.main=1,main="Fig. 5(d) Price level (GDP deflator)",ylab = 'Index (2015=100)',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2018),ylim=range(70,110))
-lines(S_modelData$p,col="darkorchid4",lty=1,lwd=1)
-legend("topleft",c("Observed","Simulated (in-sample, no adj.)"),  bty = "n", cex=1, lty=c(1,2), lwd=c(1,1), col = c("darkorchid4","red1"), box.lty=0)
-
 #Save selected pre-baseline values with no add factors
 y_00 = S_model$simulation$y
 yd_00 = S_model$simulation$yd
@@ -1006,7 +997,6 @@ nd_00 = S_model$simulation$nd
 S_model$modelData <- within(S_model$modelData,{
   rho  = TSEXTEND(rho,  UPTO=c(2026,1))
   wb = TSEXTEND(wb,  UPTO=c(2026,1))
-  time = TSEXTEND(time,  UPTO=c(2026,1))
   beta = TSEXTEND(beta,  UPTO=c(2026,1))
   pf = TSEXTEND(pf,  UPTO=c(2026,1))
   hd = TSEXTEND(hd,  UPTO=c(2026,1))
@@ -1026,7 +1016,6 @@ exogenizeList <- list(
   ff = c(1996,1,2019,1),
   lh = c(1996,1,2019,1),
   inth = c(1996,1,2019,1),
-  iotab = c(1996,1,2019,1),
   tax = c(1996,1,2019,1),
   tr = c(1996,1,2019,1),
   intg = c(1996,1,2019,1),
@@ -1147,7 +1136,6 @@ exogenizeList <- list(
   ff = c(1996,1,2020,1),
   lh = c(1996,1,2020,1),
   inth = c(1996,1,2020,1),
-  iotab = c(1996,1,2020,1),
   tax = c(1996,1,2020,1),
   tr = c(1996,1,2020,1),
   intg = c(1996,1,2020,1),
