@@ -1,10 +1,10 @@
 ##############################################################################
 
-# SFC macroeconomic model for Italy using 'Bimets' package
+# Empirical SFC macroeconomic model for Italy (1998-2026) using 'Bimets' package
 
 # Authors: Rosa Canelli and Marco Veronese Passarella
 
-# Last change: 7 April 2022
+# Last change: 9 May 2022
 
 # Note: this R code reproduces the experiments discussed in: Canelli, R.,
 # Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2022) "Is the Italian
@@ -32,12 +32,10 @@ cat("\014")
 #Upload libraries
 library(mFilter)
 library(bimets)
-library(mFilter)
+library(knitr)
 
-#Upload data: transactions-flow matrix and balance sheet
-TFM <- read.csv( "https://www.dropbox.com/s/i7at7gyxcb96udk/tfm_cje.csv?dl=1" ) 
-BS <- read.csv( "https://www.dropbox.com/s/wjaf1p02qslyeje/bs_cje.csv?dl=1" ) 
-
+#Upload data: time series for transactions-flow matrix and balance sheet
+DataCJE <- read.csv("https://www.dropbox.com/s/xl6m4jmrirsdubp/cje_data.csv?dl=1") 
 #Source: (our elaboration on) Eurostat data, December 2021
 
 ##############################################################################
@@ -159,7 +157,7 @@ COMMENT> Nominal consumption
 IDENTITY> cons
 EQ> cons = consR*p/100
 
-COMMENT> Net wealth of households  
+COMMENT> Net wealth of households - Note: yd = wb - tax + tr + inth + fdf + fb + oph    
 IDENTITY> nvh
 EQ> nvh = TSLAG(nvh,1) + yd - cons
 
@@ -209,7 +207,7 @@ COMMENT> Supply of deposits
 IDENTITY> ms
 EQ> ms = mh
 
-COMMENT> Net interest payments received by banks on government bills 
+COMMENT> Net interest payments received by banks on government bills
 IDENTITY> intgb
 EQ> intgb = rb*bb 
 
@@ -229,9 +227,9 @@ ERROR> AUTO(1)
 COEFF> opb1
 STORE> coe(36)
 
-COMMENT> Total wealth accumulated by banks 
+COMMENT> Total wealth accumulated by banks     
 IDENTITY> vb
-EQ> vb = TSLAG(vb,1) + opb 
+EQ> vb = TSLAG(vb,1) + opb  
 
 COMMENT> Other financial assets held by banks
 IDENTITY> oab
@@ -330,9 +328,9 @@ COEFF> opg0
 ERROR> AUTO(1)
 STORE> coe(34)
 
-COMMENT> Net wealth of goverment sector  (Note: negative value)
+COMMENT> Net wealth of goverment sector  (Note: negative value) 
 IDENTITY> vg
-EQ> vg = TSLAG(vg,1) - gov + tax - tr - intg + opg
+EQ> vg = TSLAG(vg,1) - gov + tax - tr - intg + opg + fcb
 
 COMMENT> Other financial assets held by government
 IDENTITY> oag
@@ -403,7 +401,7 @@ COMMENT> Supply of cash
 IDENTITY> hs
 EQ> hs = -vcb + (bcb + bcb_star + oacb)
 
-COMMENT> Other net assets held by central bank (Note: residual to ensure that hs = hh after 2019; alternatively: oacb = -(oaf + oab + oag + oah + oarow) )
+COMMENT> Other net assets held by central bank
 IDENTITY> oacb
 EQ> oacb = hh + hbs + vcb - bcb - bcb_star 
 
@@ -478,7 +476,7 @@ COMMENT> Net export (trade balance)
 IDENTITY> nx
 EQ> nx = x - im
 
-COMMENT> Demand for additional goverment debt 
+COMMENT> Additional stock of Italian goverment debt held by foreign agents
 BEHAVIORAL> ogdd
 TSRANGE 1998 1 2019 1
 EQ> ogdd = lambdarow*vrow
@@ -486,13 +484,13 @@ COEFF> lambdarow
 ERROR> AUTO(1)
 STORE> coe(33)
 
-COMMENT> Other payments or receipts received by RoW (exogenous variable) 
+COMMENT> Other payments or receipts received by RoW (including net received interest payments)
 IDENTITY> oprow
 EQ> oprow = -(opf + opb + opcb + oph + opg)
 
-COMMENT> Total wealth accumulated by RoW
+COMMENT> Total wealth accumulated by RoW 
 IDENTITY> vrow
-EQ> vrow = TSLAG(vrow,1) - nx + oprow
+EQ> vrow = -(nvh+vf+vcb+vg+vb)
 
 COMMENT> Other financial assets held by RoW 
 IDENTITY> oarow
@@ -638,7 +636,7 @@ END"
 #C) CALCULATE TARGET CAPITAL
 
 #Deflate K 
-kr = 100*BS$K/TFM$P
+kr = 100*DataCJE$K/DataCJE$P
 
 #Take log of real capital
 lk<-log(kr)
@@ -656,242 +654,217 @@ S_model=LOAD_MODEL(modelText = S_model.txt)
 
 #Attribute values to model variables and coefficients
 S_modelData=list(  
-  y  = TIMESERIES(c(TFM$Y),   
+  y  = TIMESERIES(c(DataCJE$Y),   
                   START=c(1995,1),FREQ=1),
-  cons  = TIMESERIES(c(TFM$CONS),   
+  cons  = TIMESERIES(c(DataCJE$CONS),   
                      START=c(1995,1),FREQ=1),
-  id = TIMESERIES(c(TFM$INV),   
+  id = TIMESERIES(c(DataCJE$INV),   
                   START=c(1995,1),FREQ=1),
-  gov  = TIMESERIES(c(TFM$GOV),   
+  gov  = TIMESERIES(c(DataCJE$GOV),   
                     START=c(1995,1),FREQ=1),
-  gov_net  = TIMESERIES(c(TFM$GOV),   
+  gov_net  = TIMESERIES(c(DataCJE$GOV),   
                         START=c(1995,1),FREQ=1),
-  x  = TIMESERIES(c(TFM$X),   
+  x  = TIMESERIES(c(DataCJE$X),   
                   START=c(1995,1),FREQ=1),
-  xR  = TIMESERIES(c(TFM$X*100/TFM$P),   
+  Lx  = TIMESERIES(c(log(DataCJE$X)),   
                    START=c(1995,1),FREQ=1),
-  Lx  = TIMESERIES(c(log(TFM$X)),   
+  im  = TIMESERIES(c(DataCJE$IM),   
                    START=c(1995,1),FREQ=1),
-  im  = TIMESERIES(c(TFM$IM),   
-                   START=c(1995,1),FREQ=1),
-  imR  = TIMESERIES(c(TFM$IM*100/TFM$P),   
-                    START=c(1995,1),FREQ=1),
-  LimR  = TIMESERIES(c(log(TFM$IM*100/TFM$P)),   
-                     START=c(1995,1),FREQ=1),
-  yR  = TIMESERIES(c(TFM$Y*100/TFM$P),          
-                   START=c(1995,1),FREQ=1),
-  consR  = TIMESERIES(c(TFM$CONS*100/TFM$P),   
+  consR  = TIMESERIES(c(DataCJE$CONS*100/DataCJE$P),   
                       START=c(1995,1),FREQ=1),
-  LconsR  = TIMESERIES(c(log(TFM$CONS*100/TFM$P)),   
+  LconsR  = TIMESERIES(c(log(DataCJE$CONS*100/DataCJE$P)),   
                        START=c(1995,1),FREQ=1),
-  idR = TIMESERIES(c(TFM$INV*100/TFM$P),   
+  idR = TIMESERIES(c(DataCJE$INV*100/DataCJE$P),   
                    START=c(1995,1),FREQ=1),
-  govR  = TIMESERIES(c(TFM$GOV*100/TFM$P),   
-                     START=c(1995,1),FREQ=1),
-  xR  = TIMESERIES(c(TFM$X*100/TFM$P),   
+  nx  = TIMESERIES(c(DataCJE$X-DataCJE$IM),   
                    START=c(1995,1),FREQ=1),
-  imR  = TIMESERIES(c(TFM$IM*100/TFM$P),   
-                    START=c(1995,1),FREQ=1),
-  nx  = TIMESERIES(c(TFM$X-TFM$IM),   
+  wb  = TIMESERIES(c(DataCJE$WB),   
                    START=c(1995,1),FREQ=1),
-  wb  = TIMESERIES(c(TFM$WB),   
+  yd  = TIMESERIES(c(DataCJE$YD),   
                    START=c(1995,1),FREQ=1),
-  yd  = TIMESERIES(c(TFM$YD2),   
+  nvh = TIMESERIES(c(DataCJE$NVh),   
                    START=c(1995,1),FREQ=1),
-  nvh  = TIMESERIES(c(BS$NVh),   
-                    START=c(1995,1),FREQ=1),
-  vh  = TIMESERIES(c(BS$NVh+(-BS$Lh)),   
+  vh  = TIMESERIES(c(DataCJE$NVh+(-DataCJE$Lh)),   
                    START=c(1995,1),FREQ=1),
-  k  = TIMESERIES(c(BS$K),   
+  k  = TIMESERIES(c(DataCJE$K),   
                   START=c(1995,1),FREQ=1),
-  intf  = TIMESERIES(c(TFM$INTf),   
+  intf = TIMESERIES(c(DataCJE$INTf),   
+                    START=c(1995,1),FREQ=1),
+  lf  = TIMESERIES(c(-DataCJE$Lf),   
+                   START=c(1995,1),FREQ=1),
+  fdf  = TIMESERIES(c(DataCJE$Fdf),   
+                    START=c(1995,1),FREQ=1),
+  ff  = TIMESERIES(c(DataCJE$Ff),   
+                   START=c(1995,1),FREQ=1),
+  fuf  = TIMESERIES(c(DataCJE$Fuf),   
+                    START=c(1995,1),FREQ=1),
+  es  = TIMESERIES(c(-DataCJE$Es),   
+                   START=c(1995,1),FREQ=1),
+  eh  = TIMESERIES(c(DataCJE$Eh),   
+                   START=c(1995,1),FREQ=1),
+  tax  = TIMESERIES(c(DataCJE$TAX),   
+                    START=c(1995,1),FREQ=1),
+  tr  = TIMESERIES(c(DataCJE$TR),   
+                   START=c(1995,1),FREQ=1),
+  lh  = TIMESERIES(c(-DataCJE$Lh),   
+                   START=c(1995,1),FREQ=1),
+  ls  = TIMESERIES(c(DataCJE$Ls),   
+                   START=c(1995,1),FREQ=1),
+  mh  = TIMESERIES(c(DataCJE$Mh),   
+                   START=c(1995,1),FREQ=1),
+  ms  = TIMESERIES(c(-DataCJE$Ms),   
+                   START=c(1995,1),FREQ=1),
+  inth  = TIMESERIES(c(DataCJE$INTh),   
                      START=c(1995,1),FREQ=1),
-  lf  = TIMESERIES(c(-BS$Lf),   
+  un  = TIMESERIES(c(DataCJE$Un),   
                    START=c(1995,1),FREQ=1),
-  fdf  = TIMESERIES(c(TFM$Fdf),   
-                    START=c(1995,1),FREQ=1),
-  ff  = TIMESERIES(c(TFM$Ff),   
-                   START=c(1995,1),FREQ=1),
-  fuf  = TIMESERIES(c(TFM$Fuf),   
-                    START=c(1995,1),FREQ=1),
-  es  = TIMESERIES(c(-BS$Es),   
-                   START=c(1995,1),FREQ=1),
-  eh  = TIMESERIES(c(BS$Eh),   
-                   START=c(1995,1),FREQ=1),
-  tax  = TIMESERIES(c(TFM$TAX),   
-                    START=c(1995,1),FREQ=1),
-  tr  = TIMESERIES(c(TFM$TR),   
-                   START=c(1995,1),FREQ=1),
-  lh  = TIMESERIES(c(-BS$Lh),   
-                   START=c(1995,1),FREQ=1),
-  ls  = TIMESERIES(c(BS$Ls),   
-                   START=c(1995,1),FREQ=1),
-  mh  = TIMESERIES(c(BS$Mh),   
-                   START=c(1995,1),FREQ=1),
-  ms  = TIMESERIES(c(-BS$Ms),   
-                   START=c(1995,1),FREQ=1),
-  inth  = TIMESERIES(c(TFM$INTh),   
-                     START=c(1995,1),FREQ=1),
-  un  = TIMESERIES(c(TFM$Un),   
-                   START=c(1995,1),FREQ=1),
-  Omega  = TIMESERIES(c(TFM$WB/TFM$Y),   
+  Omega  = TIMESERIES(c(DataCJE$WB/DataCJE$Y),   
                       START=c(1995,1),FREQ=1),
-  ns  = TIMESERIES(c(TFM$Ns),   
+  ns  = TIMESERIES(c(DataCJE$Ns),   
                    START=c(1995,1),FREQ=1),
-  bs  = TIMESERIES(c(-BS$Bs),   
+  bs  = TIMESERIES(c(-DataCJE$Bs),   
                    START=c(1995,1),FREQ=1),
-  intg  = TIMESERIES(c(TFM$INTg),   
+  intg = TIMESERIES(c(DataCJE$R_b*DataCJE$Deb),   
                      START=c(1995,1),FREQ=1),
-  intb  = TIMESERIES(c(TFM$INTb),   
-                     START=c(1995,1),FREQ=1), 
-  
-  bh_star  = TIMESERIES(c(BS$Bh),   
+  bh_star  = TIMESERIES(c(DataCJE$Bh),   
                         START=c(1995,1),FREQ=1),
-  bh = TIMESERIES(c(BS$Bh),   
+  bh = TIMESERIES(c(DataCJE$Bh),   
                   START=c(1995,1),FREQ=1),
-  rb = TIMESERIES(c(TFM$R_b3),         
+  rb = TIMESERIES(c(DataCJE$R_b),         
                   START=c(1995,1),FREQ=1),   
-  fcb = TIMESERIES(c(TFM$R_b3*BS$Bcb),   
+  fcb = TIMESERIES(c(DataCJE$Fcb),                       
                    START=c(1995,1),FREQ=1),
-  re = TIMESERIES(c(TFM$Fdf/BS$Eh),   
+  re = TIMESERIES(c(DataCJE$Fdf/DataCJE$Eh),   
                   START=c(1995,1),FREQ=1),
-  hh  = TIMESERIES(c(BS$Hh),   
+  hh  = TIMESERIES(c(DataCJE$Hh),   
                    START=c(1995,1),FREQ=1),
-  rho  = TIMESERIES(c(BS$RHO),   
+  rho  = TIMESERIES(c(DataCJE$RHO),   
                     START=c(1995,1),FREQ=1),
-  yf  = TIMESERIES(c(TFM$YRoW2/1000),   
+  yf  = TIMESERIES(c(DataCJE$YRoW/1000),   
                    START=c(1995,1),FREQ=1),   
-  yf2  = TIMESERIES(c(TFM$YRoW/1000),   
-                    START=c(1995,1),FREQ=1),
-  fr  = TIMESERIES(c(BS$FR),   
+  fr  = TIMESERIES(c(DataCJE$FR),   
                    START=c(1995,1),FREQ=1),
-  rstar  = TIMESERIES(c(TFM$R_star),   
+  rstar  = TIMESERIES(c(DataCJE$R_star),   
                       START=c(1995,1),FREQ=1),
-  mub  = TIMESERIES(c(TFM$R_b3-TFM$R_star),   
+  mub  = TIMESERIES(c(DataCJE$R_b-DataCJE$R_star),   
                     START=c(1995,1),FREQ=1),
-  deb  = TIMESERIES(c(BS$Deb),   
+  deb  = TIMESERIES(c(DataCJE$Deb),   
                     START=c(1995,1),FREQ=1),
-  ogdd  = TIMESERIES(c(BS$OGD),   
+  ogdd  = TIMESERIES(c(DataCJE$OGD),   
                      START=c(1995,1),FREQ=1),
-  ogds  = TIMESERIES(c(BS$OGD),   
+  ogds  = TIMESERIES(c(DataCJE$OGD),   
                      START=c(1995,1),FREQ=1),
-  vg = TIMESERIES(c(BS$Vg),   
+  vg = TIMESERIES(c(DataCJE$Vg),   
                   START=c(1995,1),FREQ=1),
-  def0  = TIMESERIES(c(TFM$DEF1+TFM$Fcb),   
+  def0  = TIMESERIES(c(DataCJE$DEF1+DataCJE$Fcb),   
                      START=c(1995,1),FREQ=1),
-  def1  = TIMESERIES(c(TFM$DEF1),   
+  def1  = TIMESERIES(c(DataCJE$DEF1),   
                      START=c(1995,1),FREQ=1),
-  defa  = TIMESERIES(c(TFM$DEF2-TFM$DEF1),   
+  defa  = TIMESERIES(c(DataCJE$DEF2-DataCJE$DEF1),   
                      START=c(1995,1),FREQ=1),
-  def2  = TIMESERIES(c(TFM$DEF2),   
+  def2  = TIMESERIES(c(DataCJE$DEF2),   
                      START=c(1995,1),FREQ=1),
-  nd  = TIMESERIES(c(TFM$Nd),   
+  nd  = TIMESERIES(c(DataCJE$Nd),   
                    START=c(1995,1),FREQ=1),
-  w = TIMESERIES(c(TFM$w),   
+  w = TIMESERIES(c(DataCJE$w),   
                  START=c(1995,1),FREQ=1),
-  gw = TIMESERIES(c(TFM$gw),   
+  gw = TIMESERIES(c(DataCJE$gw),   
                   START=c(1995,1),FREQ=1),
-  bb = TIMESERIES(c(BS$Bb),   
+  bb = TIMESERIES(c(DataCJE$Bb),   
                   START=c(1995,1),FREQ=1),
-  bcb = TIMESERIES(c(BS$Bcb),   
+  bcb = TIMESERIES(c(DataCJE$Bcb),   
                    START=c(1995,1),FREQ=1),
-  bb_not = TIMESERIES(c(-BS$Ms - BS$Ls - BS$HBd),                        
+  bb_not = TIMESERIES(c(-DataCJE$Ms - DataCJE$Ls - DataCJE$HBd),                        
                       START=c(1995,1),FREQ=1),
-  hbd = TIMESERIES(c(BS$HBd),   
+  hbd = TIMESERIES(c(DataCJE$HBd),   
                    START=c(1995,1),FREQ=1),
-  hbs = TIMESERIES(c(-BS$HBs),   
+  hbs = TIMESERIES(c(-DataCJE$HBs),   
                    START=c(1995,1),FREQ=1),
-  hs = TIMESERIES(c(-BS$Vcb + BS$Bcb + -( BS$Residh+BS$Residf+BS$Residb+BS$Vg-(BS$Bs-BS$OGD)+BS$ResidROW)),   
+  hs = TIMESERIES(c(-DataCJE$Hs ),   
                   START=c(1995,1),FREQ=1),
-  hd = TIMESERIES(c(-BS$Vcb + BS$Bcb + -( BS$Residh+BS$Residf+BS$Residb+BS$Vg-(BS$Bs-BS$OGD)+BS$ResidROW)),   
+  hd = TIMESERIES(c(-DataCJE$Hs),   
                   START=c(1995,1),FREQ=1),
-  fb = TIMESERIES(c(TFM$Fb),   
+  fb = TIMESERIES(c(DataCJE$Fb ), 
                   START=c(1995,1),FREQ=1),
-  lambdab = TIMESERIES(c(-BS$Bcb/BS$Bs),   
+  lambdab = TIMESERIES(c(-DataCJE$Bcb/DataCJE$Bs),   
                        START=c(1995,1),FREQ=1),
-  pr = TIMESERIES(c(TFM$Y/TFM$Nd),   
+  pr = TIMESERIES(c(DataCJE$Y/DataCJE$Nd),   
                   START=c(1995,1),FREQ=1),
-  nd1 = TIMESERIES(c(TFM$Nd/TFM$Y),   
+  oph = TIMESERIES(c(DataCJE$OPH),   
                    START=c(1995,1),FREQ=1),
-  gk = TIMESERIES(c(TFM$gi),   
-                  START=c(1995,1),FREQ=1),
-  oph = TIMESERIES(c(TFM$OPH),   
+  opb = TIMESERIES(c(DataCJE$OPB),
                    START=c(1995,1),FREQ=1),
-  opb = TIMESERIES(c(TFM$OPB),   
-                   START=c(1995,1),FREQ=1),
-  opcb = TIMESERIES(c(TFM$OPBC),   
+  opcb = TIMESERIES(c(DataCJE$OPBC),   
                     START=c(1995,1),FREQ=1),
-  opf = TIMESERIES(c(TFM$OPF),   
+  opf = TIMESERIES(c(DataCJE$OPF),   
                    START=c(1995,1),FREQ=1),
-  opg = TIMESERIES(c(TFM$OPG),   
+  opg = TIMESERIES(c(DataCJE$OPG),   
                    START=c(1995,1),FREQ=1),
-  oprow = TIMESERIES(c(TFM$OPROW),   
+  oprow = TIMESERIES(c(DataCJE$OPROW),   
                      START=c(1995,1),FREQ=1),
-  beta = TIMESERIES(c(BS$Bb/(-BS$Ms-BS$Ls-BS$HBd)),   
+  beta = TIMESERIES(c(DataCJE$Bb/(-DataCJE$Ms-DataCJE$Ls-DataCJE$HBd)),   
                     START=c(1995,1),FREQ=1),
-  vb = TIMESERIES(c(BS$Vb),   
+  vb = TIMESERIES(c(DataCJE$Vb),                        
                   START=c(1995,1),FREQ=1),
-  vf = TIMESERIES(c(BS$Vf),   
+  vf = TIMESERIES(c(DataCJE$Vf),   
                   START=c(1995,1),FREQ=1),
-  vrow = TIMESERIES(c(BS$Vrow2),   
+  vrow = TIMESERIES(c(DataCJE$Vrow),   
                     START=c(1995,1),FREQ=1),
-  oah = TIMESERIES(c(BS$Residh),   
+  oah = TIMESERIES(c(DataCJE$OAh),   
                    START=c(1995,1),FREQ=1),
-  oaf = TIMESERIES(c(BS$Residf),   
+  oaf = TIMESERIES(c(DataCJE$OAf),   
                    START=c(1995,1),FREQ=1),
-  oab = TIMESERIES(c(BS$Residb),   
+  oab = TIMESERIES(c(DataCJE$OAb),   
                    START=c(1995,1),FREQ=1),
-  oag = TIMESERIES(c(BS$Vg-(BS$Bs-BS$OGD)),   
+  oag = TIMESERIES(c(DataCJE$OAg),   
                    START=c(1995,1),FREQ=1),
-  oacb = TIMESERIES(c(-( BS$Residh+BS$Residf+BS$Residb+BS$Vg-(BS$Bs-BS$OGD)+BS$ResidROW)),   
+  oacb = TIMESERIES(c(DataCJE$OAcb),   
                     START=c(1995,1),FREQ=1),
-  oarow = TIMESERIES(c(BS$ResidROW),   
+  oarow = TIMESERIES(c(DataCJE$OAROW),   
                      START=c(1995,1),FREQ=1),
-  vcb = TIMESERIES(c(BS$Vcb),   
-                   START=c(1995,1),FREQ=1),
-  caa = TIMESERIES(c(TFM$CAA),   
+  vcb = TIMESERIES(c(DataCJE$Vcb),   
                    START=c(1995,1),FREQ=1),
   kt = TIMESERIES(c(exp(lk.hp$trend)),   
                   START=c(1995,1),FREQ=1),
-  kappa = TIMESERIES(c(exp(lk.hp$trend)*TFM$P/(TFM$Y*100)),   
+  kappa = TIMESERIES(c(exp(lk.hp$trend)*DataCJE$P/(DataCJE$Y*100)),   
                      START=c(1995,1),FREQ=1),
-  p = TIMESERIES(c(TFM$P),   
+  p = TIMESERIES(c(DataCJE$P),   
                  START=c(1995,1),FREQ=1),
-  prod = TIMESERIES(c(TFM$Prod),   
+  prod = TIMESERIES(c(DataCJE$Prod),   
                     START=c(1995,1),FREQ=1),
-  gy = TIMESERIES(c(TFM$gy),   
+  gy = TIMESERIES(c(DataCJE$gy),   
                   START=c(1995,1),FREQ=1),
-  gc = TIMESERIES(c(TFM$gc),   
+  gc = TIMESERIES(c(DataCJE$gc),   
                   START=c(1995,1),FREQ=1),
-  gid = TIMESERIES(c(TFM$gid),   
+  gid = TIMESERIES(c(DataCJE$gid),   
                    START=c(1995,1),FREQ=1),
-  gx = TIMESERIES(c(TFM$gx),   
+  gx = TIMESERIES(c(DataCJE$gx),   
                   START=c(1995,1),FREQ=1),
-  gim = TIMESERIES(c(TFM$gim),   
+  gim = TIMESERIES(c(DataCJE$gim),   
                    START=c(1995,1),FREQ=1),
-  nd_star = TIMESERIES(c(TFM$Nd),   
+  nd_star = TIMESERIES(c(DataCJE$Nd),   
                        START=c(1995,1),FREQ=1),
-  rl = TIMESERIES(c(-TFM$INTf/BS$Lf),   
+  rl = TIMESERIES(c(-DataCJE$INTf/DataCJE$Lf),   
                   START=c(1995,1),FREQ=1),
-  intgb  = TIMESERIES(c(TFM$R_b3*BS$Bb),   
+  intgb  = TIMESERIES(c(DataCJE$INTgb),   
                       START=c(1995,1),FREQ=1),        
-  intgh  = TIMESERIES(c(TFM$INTg-TFM$R_b3*(BS$Bb+BS$Bcb)),   
+  intgh = TIMESERIES(c(DataCJE$R_b*DataCJE$Bh),   
                       START=c(1995,1),FREQ=1),            
-  intlh  = TIMESERIES(c((TFM$INTg-TFM$R_b3*(BS$Bb+BS$Bcb))-TFM$INTh),   
-                      START=c(1995,1),FREQ=1),           
-  rlh = TIMESERIES(c(((TFM$R_b3*BS$Bh)-TFM$INTh)/BS$Lh),   
+  intlh = TIMESERIES(-c(((DataCJE$R_b*DataCJE$Bh)-DataCJE$INTh)),   
+                     START=c(1995,1),FREQ=1),           
+  rlh = TIMESERIES(c(((DataCJE$R_b*DataCJE$Bh)-DataCJE$INTh)/DataCJE$Lh),   
                    START=c(1995,1),FREQ=1),               
-  pi = TIMESERIES(c(TFM$Pi),   
+  pi = TIMESERIES(c(DataCJE$Pi),   
                   START=c(1995,1),FREQ=1),
-  pf = TIMESERIES(c(TFM$PF),   
+  pf = TIMESERIES(c(DataCJE$PF),   
                   START=c(1995,1),FREQ=1),
-  RR = TIMESERIES(c( TFM$gy+(TFM$TAX-TFM$GOV-TFM$TR)/(-BS$Bs) ),   
+  RR = TIMESERIES(c( DataCJE$gy+(DataCJE$TAX-DataCJE$GOV-DataCJE$TR)/(-DataCJE$Bs) ),   
                   START=c(1995,1),FREQ=1),
-  GG = TIMESERIES(c( TFM$TAX-TFM$TR-(-BS$Bs)*(TFM$R_b3 -TFM$gy) ),   
+  GG = TIMESERIES(c( DataCJE$TAX-DataCJE$TR-(-DataCJE$Bs)*(DataCJE$R_b -DataCJE$gy) ),   
                   START=c(1995,1),FREQ=1),
-  percb = TIMESERIES(c(BS$PercB),   
+  percb = TIMESERIES(c(DataCJE$PercB),   
                      START=c(1995,1),FREQ=1),
-  debcb = TIMESERIES(c(BS$PercB*BS$Deb),   
+  debcb = TIMESERIES(c(DataCJE$PercB*DataCJE$Deb),   
                      START=c(1995,1),FREQ=1),
   bcb_star = TIMESERIES(c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),   
                         START=c(1995,1),FREQ=1),
@@ -903,10 +876,9 @@ S_modelData=list(
                       START=c(1995,1),FREQ=1),
   paym  = TIMESERIES(c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),   
                      START=c(1995,1),FREQ=1),
-  pc = TIMESERIES(c(TFM$P2),   
+  pc = TIMESERIES(c(DataCJE$P2),   
                   START=c(1995,1),FREQ=1)
-  
-)
+  )
 
 #Load the data into the model
 S_model=LOAD_MODEL_DATA(S_model,S_modelData)
@@ -927,7 +899,7 @@ exogenizeList <- list(
   defa = TRUE,
   percb = TRUE,
   oph = TRUE,
-  opb = TRUE,
+  vb = TRUE,
   opf = TRUE,
   opcb = TRUE,
   opg = TRUE,
@@ -1048,7 +1020,7 @@ exogenizeList <- list(
   defa = c(1996,1,2019,1),
   lambdab = c(1996,1,2019,1),
   oph = c(1996,1,2019,1),
-  opb = c(1996,1,2019,1),
+  vb = c(1996,1,2019,1),
   opf = c(1996,1,2019,1),
   oprow = c(1996,1,2019,1),
   opcb = c(1996,1,2019,1),
@@ -1258,8 +1230,326 @@ RR_1 = S_model$simulation$RR
 GG_1 = S_model$simulation$GG
 nd_1 = S_model$simulation$nd
 
+################################################################################
 
-###########################
+#CREATE TFM AND BS MATRICES FOR SCENARIO 1
+
+#Choose a year. Note: 1 = 1998, 29 = 2026. (2020 = 23; 2018 = 21)
+yr=23
+
+##############################
+
+#Create BS
+
+#Create row names for BS matrix
+rownames<-c( "Cash and reserves",
+             "Deposits",
+             "Securities",
+             "Loans",
+             "Shares",
+             "Other securities",
+             "Other net FA",
+             "Net financial wealth",
+             "[Fixed capital]",
+             "Column total")
+
+#Create firms aggregates
+Firms        <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  round(-S_model$simulation$lf[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$es[yr], digits = 0),                                                                     
+                  0,
+                  round(S_model$simulation$oaf[yr], digits = 0),                                                                     
+                  round(S_model$simulation$vf[yr], digits = 0),                                                                    
+                  paste("[",round(S_model$simulation$k[yr], digits = 0),"]"),
+                  round(-S_model$simulation$lf[yr]-S_model$simulation$es[yr]+S_model$simulation$oaf[yr]-S_model$simulation$vf[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+FirmDataBS<-as.data.frame(Firms,row.names=rownames)
+
+#Create banks aggregates
+Banks        <-c( round(S_model$simulation$hbd[yr], digits = 0),                                                                    
+                  -round(S_model$simulation$ms[yr], digits = 0),                                                                    
+                  round(S_model$simulation$bb[yr], digits = 0),                                                                    
+                  round(S_model$simulation$ls[yr], digits = 0),                                                                    
+                  0,                                                                     
+                  0,
+                  round(S_model$simulation$oab[yr], digits = 0),                                                                     
+                  round(S_model$simulation$vb[yr], digits = 0),
+                  0,
+                  round(S_model$simulation$hbd[yr]-S_model$simulation$ms[yr]+S_model$simulation$bb[yr]+S_model$simulation$ls[yr]+S_model$simulation$oab[yr]-S_model$simulation$vb[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+BankDataBS<-as.data.frame(Banks,row.names=rownames)
+
+#Create ECB aggregates
+ECB          <-c( -round(S_model$simulation$hs[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  round(S_model$simulation$bcb[yr]+S_model$simulation$bcb_star[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  0,
+                  round(S_model$simulation$oacb[yr], digits = 0),                                                                     
+                  round(S_model$simulation$vcb[yr], digits = 0),
+                  0,
+                  round(-S_model$simulation$hs[yr]+S_model$simulation$bcb[yr]+S_model$simulation$bcb_star[yr]+S_model$simulation$oacb[yr]-S_model$simulation$vcb[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+ECBDataBS<-as.data.frame(ECB,row.names=rownames)
+
+#Create government aggregates
+Government    <-c(0,                                                                    
+                  0,                                                                    
+                  round(-S_model$simulation$bs[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(-S_model$simulation$ogds[yr], digits = 0),
+                  round(S_model$simulation$oag[yr], digits = 0),
+                  round(S_model$simulation$vg[yr], digits = 0),
+                  0,
+                  round(-S_model$simulation$bs[yr]+S_model$simulation$oag[yr]-S_model$simulation$ogds[yr]-S_model$simulation$vg[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+GovDataBS<-as.data.frame(Government,row.names=rownames)
+
+#Create household aggregates
+Households    <-c(round(S_model$simulation$hh[yr], digits = 0),                                                                    
+                  round(S_model$simulation$mh[yr], digits = 0),                                                                    
+                  round(S_model$simulation$bh[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$lh[yr], digits = 0),                                                                    
+                  round(S_model$simulation$eh[yr], digits = 0),                                                                     
+                  0,
+                  round(S_model$simulation$oah[yr], digits = 0),
+                  round(S_model$simulation$nvh[yr], digits = 0),
+                  0,
+                  round(S_model$simulation$hh[yr]+S_model$simulation$mh[yr]+S_model$simulation$bh[yr]-S_model$simulation$lh[yr]+S_model$simulation$eh[yr]+S_model$simulation$oah[yr]-S_model$simulation$nvh[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+HouseDataBS<-as.data.frame(Households,row.names=rownames)
+
+#Create foreign sector aggregates
+Foreign      <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_model$simulation$ogdd[yr], digits = 0),  
+                  round(S_model$simulation$oarow[yr], digits = 0),                                                                     
+                  round(S_model$simulation$vrow[yr], digits = 0),
+                  0,
+                  round(S_model$simulation$ogdd[yr]+S_model$simulation$oarow[yr]-S_model$simulation$vrow[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+ROWDataBS<-as.data.frame(Foreign,row.names=rownames)
+
+#Create row total (when entries > 2)
+Total        <-c( round(S_model$simulation$hh[yr]+S_model$simulation$hbs[yr]-S_model$simulation$hs[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  round(S_model$simulation$bh[yr]+S_model$simulation$bb[yr]+S_model$simulation$bcb[yr]+S_model$simulation$bcb_star[yr]-S_model$simulation$bs[yr], digits = 0),                                                                   
+                  round(-S_model$simulation$lf[yr]-S_model$simulation$lh[yr]+S_model$simulation$ls[yr], digits = 0),                                                                    
+                  0,                                                                     
+                  0,  
+                  round(S_model$simulation$oaf[yr]+S_model$simulation$oab[yr]+S_model$simulation$oacb[yr]+S_model$simulation$oag[yr]+S_model$simulation$oah[yr]+S_model$simulation$oarow[yr], digits = 0),                                                                     
+                  round(S_model$simulation$vf[yr]+S_model$simulation$vb[yr]+S_model$simulation$vcb[yr]+S_model$simulation$vg[yr]+S_model$simulation$nvh[yr]+S_model$simulation$vrow[yr], digits = 0),
+                  0,
+                  paste("-")
+)                                                                    
+
+#Create table of results
+TotalDataBS<-as.data.frame(Total,row.names=rownames)
+
+#Create BS matrix
+Italy_BS_Matrix<-cbind(FirmDataBS,BankDataBS,ECBDataBS,GovDataBS,HouseDataBS,ROWDataBS,TotalDataBS)
+kable(Italy_BS_Matrix)
+
+##############################
+
+#Create TFM
+
+#Create row names for TFM matrix
+rownames<-c( "Consumption",
+             "Investment",
+             "Government spending",
+             "Export",
+             "Import",
+             "[GDP]",
+             "Taxes",
+             "Transfers",
+             "Wages",
+             "Interest payments",
+             "Dividends",
+             "Distributed bank profit",
+             "Distributed CB profit",
+             "Other payments",
+             "Change in net wealth",
+             "Column total")
+
+#Create firms aggregates
+Firms        <-c( round(S_model$simulation$cons[yr], digits = 0),                                                                    
+                  paste("[",round(S_model$simulation$id[yr], digits = 0),"]"),                                                                    
+                  round(S_model$simulation$gov[yr], digits = 0),                                                                    
+                  round(S_model$simulation$x[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$im[yr], digits = 0),                                                                    
+                  paste("[",round(S_model$simulation$cons[yr]+S_model$simulation$id[yr]+S_model$simulation$gov[yr]+S_model$simulation$x[yr]-S_model$simulation$im[yr], digits = 0),"]"),                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  round(-S_model$simulation$wb[yr], digits = 0),                                                                     
+                  round(-S_model$simulation$intf[yr], digits = 0),                                                                     
+                  round(-S_model$simulation$fdf[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,
+                  round(S_model$simulation$opf[yr], digits = 0),
+                  round(S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1], digits = 0),
+                  paste(round(S_model$simulation$y[yr]-S_model$simulation$id[yr]-S_model$simulation$wb[yr]-S_model$simulation$intf[yr]-S_model$simulation$fdf[yr]+S_model$simulation$opf[yr]-(S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1]), digits = 0))
+                  )                                                                    
+
+#Create table of results
+FirmData<-as.data.frame(Firms,row.names=rownames)
+
+#Create banks aggregates
+Banks        <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_model$simulation$fb[yr], digits = 0),                                                                     
+                  0,                                                                    
+                  round(-S_model$simulation$fb[yr], digits = 0),                                                                    
+                  0,
+                  round(S_model$simulation$opb[yr], digits = 0),
+                  round(S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1], digits = 0),
+                  paste(round(S_model$simulation$opb[yr]-(S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1]), digits = 0))
+)                                                                    
+
+#Create table of results
+BankData<-as.data.frame(Banks,row.names=rownames)
+
+#Create ECB aggregates
+ECB          <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_model$simulation$fcb[yr], digits = 0),                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  round(-S_model$simulation$fcb[yr], digits = 0),
+                  round(S_model$simulation$opcb[yr], digits = 0),
+                  round(S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1], digits = 0),
+                  paste(round(S_model$simulation$opcb[yr]-(S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1]), digits = 0))
+)                                                                    
+
+#Create table of results
+CBData<-as.data.frame(ECB,row.names=rownames)
+
+#Create government aggregates
+Government   <-c( 0,                                                                    
+                  0,                                                                    
+                  round(-S_model$simulation$gov[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  round(S_model$simulation$tax[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$tr[yr], digits = 0),                                                                    
+                  0,                                                                     
+                  round(-S_model$simulation$intg[yr], digits = 0),                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  round(S_model$simulation$fcb[yr], digits = 0),
+                  round(S_model$simulation$opg[yr], digits = 0),
+                  round(S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$gov[yr]+S_model$simulation$tax[yr]-S_model$simulation$tr[yr]-S_model$simulation$intg[yr]+S_model$simulation$fcb[yr]+S_model$simulation$opg[yr]-(S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1]), digits = 0))
+)                                                                    
+
+#Create table of results
+GovData<-as.data.frame(Government,row.names=rownames)
+
+#Create households aggregates
+Households   <-c( round(-S_model$simulation$cons[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  round(-S_model$simulation$tax[yr], digits = 0),                                                                    
+                  round(S_model$simulation$tr[yr], digits = 0),                                                                    
+                  round(S_model$simulation$wb[yr], digits = 0),                                                                     
+                  round(S_model$simulation$inth[yr], digits = 0),                                                                     
+                  round(S_model$simulation$fdf[yr], digits = 0),                                                                    
+                  round(S_model$simulation$fb[yr], digits = 0),                                                          
+                  0,
+                  round(S_model$simulation$oph[yr], digits = 0),
+                  round(S_model$simulation$nvh[yr]-S_model$simulation$nvh[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$cons[yr]-S_model$simulation$tax[yr]+S_model$simulation$tr[yr]+S_model$simulation$wb[yr]+S_model$simulation$inth[yr]+S_model$simulation$fdf[yr]+S_model$simulation$fb[yr]+S_model$simulation$oph[yr]-(S_model$simulation$nvh[yr]-S_model$simulation$nvh[yr-1]), digits = 0))
+)                                                                    
+
+#Create table of results
+HouseData<-as.data.frame(Households,row.names=rownames)
+
+#Create Foreign sector aggregates
+Foreign      <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  round(-S_model$simulation$x[yr], digits = 0),                                                                    
+                  round(S_model$simulation$im[yr], digits = 0),                                                                       
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  0,                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  0,
+                  round(S_model$simulation$oprow[yr], digits = 0),
+                  round(S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$x[yr]+S_model$simulation$im[yr]+S_model$simulation$oprow[yr]-(S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]), digits = 0))
+                  )                                                                    
+
+#Create table of results
+ROWData<-as.data.frame(Foreign,row.names=rownames)
+
+#Create row total (when entries > 2)
+Total        <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                       
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round((-S_model$simulation$intf[yr]+S_model$simulation$fb[yr]+S_model$simulation$fcb[yr]-S_model$simulation$intg[yr]+S_model$simulation$inth[yr]), digits = 0),                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  0,
+                  round((S_model$simulation$opf[yr]+S_model$simulation$opb[yr]+S_model$simulation$opcb[yr]+S_model$simulation$opg[yr]+S_model$simulation$oph[yr]+S_model$simulation$oprow[yr]), digits = 0),
+                  round((S_model$simulation$vf[yr]+S_model$simulation$vb[yr]+S_model$simulation$vcb[yr]+S_model$simulation$vg[yr]+S_model$simulation$nvh[yr]+S_model$simulation$vrow[yr]-(S_model$simulation$vf[yr-1]+S_model$simulation$vb[yr-1]+S_model$simulation$vcb[yr-1]+S_model$simulation$vg[yr-1]+S_model$simulation$nvh[yr-1]+S_model$simulation$vrow[yr-1])), digits = 0),
+                  paste("-")
+                  )                                                                    
+
+#Create table of results
+TotalData<-as.data.frame(Total,row.names=rownames)
+
+#Create TFM matrix
+Italy_TFM_Matrix<-cbind(FirmData,BankData,CBData,GovData,HouseData,ROWData,TotalData)
+kable(Italy_TFM_Matrix)
+
+################################################################################
 
 #SCENARIO 2
 #No intervention scenario (turquoise) 
@@ -1487,8 +1777,10 @@ mycol3 <- rgb(107,39,169, max = 255, alpha = 10, names = "mypurple")
 layout(matrix(c(1,2,3,4,5,6), 3, 2, byrow = TRUE))
 
 # Show predicted GDP growth rate after shock (with RF)
-plot(100*(gy_1-pi_1),col=2,lty=1,lwd=2,font.main=1,cex.main=1,main="Fig. 1(a)  Real growth rate after shock",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2026),ylim=range(-11,7))
-lines(100*(gy_0-pi_0),col=1,lty=2,lwd=2)
+gyr_1 = ((100*y_1/p_1) - TSLAG(100*y_1/p_1,1))/TSLAG(100*y_1/p_1,1)
+gyr_0 = ((100*y_0/p_0) - TSLAG(100*y_0/p_0,1))/TSLAG(100*y_0/p_0,1)
+plot(100*(gyr_1),col=2,lty=1,lwd=2,font.main=1,cex.main=1,main="Fig. 1(a)  Real growth rate after shock",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2026),ylim=range(-11,7))
+lines(100*(gyr_0),col=1,lty=2,lwd=2)
 lines(100*(S_modelData$gy-S_modelData$pi),col=1,lty=1,lwd=2)
 rect(xleft=2019,xright=2022,ybottom=-30,ytop=50,col=mycol3,border=NA)
 rect(xleft=2019,xright=2025,ybottom=-30,ytop=50,col=mycol3,border=NA)
@@ -1539,10 +1831,7 @@ legend("bottomright",c("Pre-shock forecast","Baseline","Mild austerity","Strong 
 #Maximum sustainable average interest rate vs. actual average interest rate on Italian debt
 plot(100*RR_1,col="red1",lty=2,lwd=2,font.main=1,cex.main=1,main="Fig. 4  Max. sustain. average interest rate",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2026),ylim=range(min(100*RR_1),max(100*RR_1)))
 abline(h=0,col="gray60")
-abline(h=1,col="gray60")
-abline(h=2,col="gray60")
-abline(h=3,col="gray60")
-abline(h=4,col="gray60")
+abline(h=2.5,col="gray60")
 abline(h=5,col="gray60")
 abline(v=2020,col="gray60")
 lines(100*rb_1,col=1,lty=1,lwd=2)
