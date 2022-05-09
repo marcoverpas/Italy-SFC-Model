@@ -346,7 +346,7 @@ EQ> eh = lambda10*vh + lambda11*rb*vh + lambda13*yd + lambda14*re*vh
 COEFF> lambda10 lambda11 lambda13 lambda14 
 STORE> coe(15)
 
-COMMENT> Target holdings of government bills (Note: rm = 0; lambda24 replaced tiwh AUTO(1)) 
+COMMENT> Target holdings of government bills (Note: rm = 0) 
 BEHAVIORAL> bh_star
 TSRANGE 1998 1 2019 1
 EQ> bh_star = lambda20*vh + lambda21*rb*vh + lambda23*yd + lambda24*re*vh
@@ -465,7 +465,7 @@ COMMENT> Nominal export
 IDENTITY> x
 EQ> x = exp(Lx)
 
-COMMENT> Foreign income (Note: yf1 = 1 + gF)
+COMMENT> Foreign income
 BEHAVIORAL> yf
 TSRANGE 1998 1 2019 1
 EQ> yf = yf1*TSLAG(yf,1) 
@@ -549,7 +549,7 @@ ERROR> AUTO(1)
 COEFF> nu3 nu4 nu5
 STORE> coe(26)
 
-COMMENT> Labour force (note: nu1 = 1 + gl )
+COMMENT> Labour force
 BEHAVIORAL> ns
 TSRANGE 1998 1 2019 1
 EQ> ns = nu1*TSLAG(ns,1) + nu2*(nd-TSLAG(ns,1))
