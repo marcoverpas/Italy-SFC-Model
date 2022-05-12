@@ -1234,7 +1234,7 @@ nd_1 = S_model$simulation$nd
 
 #CREATE TFM AND BS MATRICES FOR SCENARIO 1
 
-#Choose a year. Note: 1 = 1998, 29 = 2026. (2020 = 23; 2018 = 21)
+#Choose a year. Note: 1 = 1998, 29 = 2026.
 yr=23
 
 ##############################
