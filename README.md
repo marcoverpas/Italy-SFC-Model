@@ -1,4 +1,4 @@
-Empirical SFC macroeconomic model for Italy using [Bimets](https://github.com/cran/bimets) package
+**Empirical SFC macroeconomic model for Italy using [Bimets](https://github.com/cran/bimets) package**
 
 Authors: Rosa Canelli and Marco Veronese Passarella
 
