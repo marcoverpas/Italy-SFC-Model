@@ -8,4 +8,4 @@ Note: this `R` code reproduces the experiments discussed in: Canelli, R., Fontan
 
 Instructions: simply download the file and execute it line by line or source the entire code!
 
-Note: a new, revised and advanced, version of this model/code will be released by the end of 2023. :sweat_smile:
+Note: a new, revised and advanced, version of this model/code will be released by the end of 2023. 🛠️
