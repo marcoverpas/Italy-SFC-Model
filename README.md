@@ -8,4 +8,4 @@
 
 **Instructions**: simply download the file and execute it line by line or source the entire code!
 
-**News**: a new, revised and advanced, version of this model/code will be released by the end of 2023. 🛠️
+**News**: a new, revised and advanced, version of this model/code will be released by the end of 2023, along with code to reclassify the observed series to fit the BS and the TFM. 🛠️
