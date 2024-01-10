@@ -9,7 +9,7 @@
 
 ### 1_Model_and_data
 
-The first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the balance sheet and the transactions-flow matrix. [...]
+The first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The balance sheet of Italy in 2021 is:
 
 $$
 \begin{array}{lccccccc}
@@ -30,8 +30,42 @@ Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \end{array}
 $$
 
+Figures are all expressed at current prices, million euros. Similarly, the transactions flow matrix is:
 
-The second step is to upload data. This code takes the observed series from a Dropbox folder, containing Eurostat data for Italy over the period 1995-2021.
+$$
+\begin{array}{lcccccccc}
+\hline
+  & Households & Firms ~ (current) & Firms ~ (capital) & Government & Banks & ECB & Foreign & Total\\
+\hline
+Consumption & -1030124 & 1030124 & 0 & 0 & 0 & 0 & 0 & 0\\
+Total ~ investment & 0 & 357215 & -357215 & 0 & 0 & 0 & 0 & 0\\
+Government ~ spending & 0 & 352718 & 0 & -352718 & 0 & 0 & 0 & 0\\
+Export & 0 & 582192 & 0 & 0 & 0 & 0 & -582192 & 0\\
+Import & 0 & -540198 & 0 & 0 & 0 & 0 & 540198 & 0\\
+[GDP] & 0 & [ 1782051 ] & 0 & 0 & 0 & 0 & 0 & 0\\
+Taxes & -483366 & 0 & 0 & 483366 & 0 & 0 & 0 & 0\\
+Transfers & 188601 & 0 & 0 & -188601 & 0 & 0 & 0 & 0\\
+Wages & 692915 & -692915 & 0 & 0 & 0 & 0 & 0 & 0\\
+Interest ~ payments & 10905 & -2326 & 0 & -60678 & 29134 & 13200 & 9765 & 0\\
+Corporate ~ profit & 738858 & -1141970 & 403112 & 0 & 0 & 0 & 0 & 0\\
+Bank ~ profit & 29134 & 0 & 0 & 0 & -29134 & 0 & 0 & 0\\
+CB ~ seigniorage & 0 & 0 & 0 & 13200 & 0 & -13200 & 0 & 0\\
+Other ~ payments & -60675 & 55160 & 0 & 275577 & -151307 & -5171 & -113584 & 0\\
+\hline
+Change ~ in ~ cash ~ and ~ reserves & 15250 & 0 & 0 & 0 & -657 & -14593 & 0 & 0\\
+Change ~ in ~ deposits & 57376 & 0 & 0 & 0 & -57376 & 0 & 0 & 0\\
+Change ~ in ~ securities & -30072 & 0 & 0 & -105432 & -77658 & 103317 & 109845 & 0\\
+Change ~ in ~ loans & -27196 & 0 & 169601 & 0 & -142405 & 0 & 0 & 0\\
+Change ~ in ~ shares & 138716 & 0 & -138716 & 0 & 0 & 0 & 0 & 0\\
+Change ~ in ~ other ~ net ~ financial assets & -67825 & 0 & 15012 & 275577 & 126789 & -93895 & -255658 & 0\\
+Change ~ in ~ net ~ wealth & 86249 & 0 & 45897 & 170145 & -151307 & -5171 & -145813 & 0\\
+\hline
+Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{array}
+$$
+
+The second step is to upload the data (observed series). This code takes the observed series from a Dropbox folder, containing Eurostat data for Italy over the period 1995-2021.
 
 ```R
 #Upload data: time series for transactions-flow matrix and balance sheet
