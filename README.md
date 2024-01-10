@@ -12,7 +12,7 @@
 - [2 Accounting tables](#2_Accouting_tables)
 - [3 In-sample predictions](#3_In_sample_predictions)
 - [4 Out-of-sample predictions](#4_Out_of_sample_predictions)
-- [5 Additional diagrams and figures](#5_Additional_diagrams_and_figures)
+- [5 Additional diagrams and tables](#5_Additional_diagrams_and_tables)
 - [6 Experiments](#6_Experiments)
 
 ### 1_Model_and_data
@@ -1906,7 +1906,9 @@ S_model <- SIMULATE(S_model
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_2_ita_big.png" alt="fig 2 ITA">
 </p>
 
-### 5_Additional_diagrams_and_figures
+The model baseline is ready. Before we move to alternative scenarios, additional diagrams and tables can be created.
+
+### 5_Additional_diagrams_and_tables
 
 [work in progress] 🛠️
 
