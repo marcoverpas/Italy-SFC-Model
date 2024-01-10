@@ -11,6 +11,35 @@
 
 The first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the balance sheet and the transactions-flow matrix. [...]
 
+$$
+\begin{table}
+\caption{Table 1. Balance sheet in period 2021}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r|r}
+\hline
+  & Households & Firms & Government & Banks & ECB & Foreign & Total\\
+\hline
+Cash and reserves & 200683 & 0 & 0 & 10817 & -211500 & 0 & 0\\
+\hline
+Deposits & 1428434 & 0 & 0 & -1428434 & 0 & 0 & 0\\
+\hline
+Securities & 233263 & 0 & -2678397 & 1366294 & 868289 & 210551 & 0\\
+\hline
+Loans & -763488 & -871902 & 0 & 1635390 & 0 & 0 & 0\\
+\hline
+Shares & 1372850 & -1372850 & 0 & 0 & 0 & 0 & 0\\
+\hline
+Other net FA & 1583746 & 284629 & 323282 & -1563895 & -783662 & 155900 & 0\\
+\hline
+Net financial wealth & 4055488 & -1960123 & -2355115 & 20172 & -126873 & 366451 & 0\\
+\hline
+Column total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+\end{table}
+$$
+
+
 The second step is to upload data. This code takes the observed series from a Dropbox folder, containing Eurostat data for Italy over the period 1995-2021.
 
 ```R
@@ -52,28 +81,5 @@ Running this chunk of code allows creating the dataset used by the model to esti
 
 [work in progress] 🛠️
 
-\begin{table}
-\caption{Table 1. Balance sheet in period 2021}
-\centering
-\begin{tabular}[t]{l|r|r|r|r|r|r|r}
-\hline
-  & Households & Firms & Government & Banks & ECB & Foreign & Total\\
-\hline
-Cash and reserves & 200683 & 0 & 0 & 10817 & -211500 & 0 & 0\\
-\hline
-Deposits & 1428434 & 0 & 0 & -1428434 & 0 & 0 & 0\\
-\hline
-Securities & 233263 & 0 & -2678397 & 1366294 & 868289 & 210551 & 0\\
-\hline
-Loans & -763488 & -871902 & 0 & 1635390 & 0 & 0 & 0\\
-\hline
-Shares & 1372850 & -1372850 & 0 & 0 & 0 & 0 & 0\\
-\hline
-Other net FA & 1583746 & 284629 & 323282 & -1563895 & -783662 & 155900 & 0\\
-\hline
-Net financial wealth & 4055488 & -1960123 & -2355115 & 20172 & -126873 & 366451 & 0\\
-\hline
-Column total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-\hline
-\end{tabular}
-\end{table}
+
+
