@@ -1132,12 +1132,12 @@ The details of the other estimations can be visualised by scrolling up through t
 
 | Name     | Description                                                          | Value       |
 |----------|----------------------------------------------------------------------|-------------|
-| δ        | Depreciation rate (average 1996-2019)                                | 0.046       |
-| θ        | Share of undistributed profits                                       | 0.265       |
-| ϕ        | Elasticity of personal loans to consumption                          | 0.058       |
-| μ_b1^h   | Premium on gov. bills held by households: coefficient 1              | 0.793       |
-| μ_b2^h   | Premium on gov. bills held by households: coefficient 2              | 0.804       |
-| μ_l1     | Markup on loans to firms: coefficient 1                              | -0.014      |
+| $δ$        | Depreciation rate (average 1996-2019)                                | 0.046       |
+| $θ$        | Share of undistributed profits                                       | 0.265       |
+| $ϕ$        | Elasticity of personal loans to consumption                          | 0.058       |
+| $μ_b1^h$   | Premium on gov. bills held by households: coefficient 1              | 0.793       |
+| $μ_b2^h$   | Premium on gov. bills held by households: coefficient 2              | 0.804       |
+| $μ_l1$     | Markup on loans to firms: coefficient 1                              | -0.014      |
 | μ_l2     | Markup on loans to firms: coefficient 2                              | 0.49        |
 | μ_h1     | Markup on personal loans: coefficient 1                              | 0.029       |
 | μ_h2     | Markup on personal loans: coefficient 2                              | 0.23        |
