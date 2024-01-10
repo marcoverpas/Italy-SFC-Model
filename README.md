@@ -24,7 +24,7 @@ library(bimets)
 library(knitr)
 ```
 
-Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The balance sheet of Italy in 2021 is:
+Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The **balance sheet** of Italy in 2021 is:
 
 $$
 \begin{array}{lccccccc}
@@ -47,7 +47,7 @@ $$
 
 Figures are all expressed at current prices, million euros.
 
-Similarly, the transactions-flow matrix of Italy in 2021 is:
+Similarly, the **transactions-flow matrix** of Italy in 2021 is:
 
 $$
 \begin{array}{lcccccccc}
@@ -764,12 +764,29 @@ END"
 
 ```
 
-The fourth step is to load the model with the imported data. Note: a time series is required for each variable defined in the model, including dummies.
+The fourth step is to load the model.
 
 ```R
 #Load the model
 S_model=LOAD_MODEL(modelText = S_model.txt)
+```
 
+This allows displaying the structure of the model (including the number of behavioural equations, identities, and coefficients) in the *Console*.
+
+```TXT
+Analyzing behaviorals...
+Analyzing identities...
+Optimizing...
+Loaded model "S_model.txt":
+   40 behaviorals
+   81 identities
+   77 coefficients
+...LOAD MODEL OK
+```
+
+The fifth step is to associate the model with the imported data. Note: a time series is required for each variable defined in the model, including dummies.
+
+```R
 #Attribute values to model variables and coefficients
 S_modelData=list(  
   
@@ -1058,7 +1075,7 @@ S_modelData=list(
 S_model=LOAD_MODEL_DATA(S_model,S_modelData)
 ```
 
-The fifth step is to estimate model coefficients:
+The sixth step is to estimate model coefficients:
 
 ```R
 #Estimate model coefficients
