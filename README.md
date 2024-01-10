@@ -1678,7 +1678,7 @@ In-sample unadjusted simulations can be generated simply by running the followin
 
 Since we are conducting an in-sample simulation, we use a static prediction approach. This means that historical values for the lagged endogenous variables are utilised in the solutions of subsequent periods.
 
-We can plot the observed series against the simulated one for each variable. The figure below shows selected variables over the period 1998-2021.
+We can now plot the observed series against the simulated one for each variable. 
 
 ```R
 #Define layout
@@ -1731,11 +1731,13 @@ lines(S_modelData$p,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
 ```
 
+The figure below shows selected flow variables and ratios over the period 1998-2021.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big.png" alt="fig 1 ITA">
 </p>
 
-While the primary goal of our model is not to outperform existing prediction models (but rather to develop a new tool for creating and comparing alternative scenarios), it tracks past data reasonably well. The main issue appears to be the inclusion of annual lags, causing model predictions to lag when the static simulation is performed. Arguably, this drawback can be overcome by using quarterly data, although seasonality and data availability issues may arise in this case.
+While the primary goal of our model is not to outperform existing prediction models (but rather to provide a new tool for creating and comparing alternative scenarios), it tracks past data reasonably well. The main issue appears to be the inclusion of annual lags, causing model predictions to lag when the static simulation is performed. Arguably, this drawback can be overcome by using quarterly data, although seasonality and data availability issues may arise in this case.
 
 ### 4_Out_of_sample_predictions
 
