@@ -1636,10 +1636,8 @@ Italy_TFM_Matrix %>%
       col.names = c("Households","Firms (current)","Firms (capital)","Government","Banks","ECB","Foreign","Total"),
       align="r") %>%
   kable_classic(full_width = F, html_font = "helvetica")
-
-#Create csv
-#write.csv(Italy_TFM_Matrix,"italy_TFM_matrix_data.csv", row.names = T)
 ```
+The associated variables are those displayed in Section 1.
 
 ### 3_In_sample_predictions
 
