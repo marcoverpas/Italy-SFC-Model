@@ -1,0 +1,183 @@
+#Balance-sheet for Italy SFC model
+
+#Observed series
+
+################################################################################
+#Choose a year (26=2020)
+yr = 27
+
+#Create row names for BS matrix
+rownames<-c( "Cash and reserves",
+             "Deposits",
+             "Securities",
+             "Loans",
+             "Shares",
+             "Other net FA",
+             "Net financial wealth",
+             "Column total")
+
+################################################################################
+
+#Create firms aggregates
+Firms        <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  round(-S_modelData$lf[yr], digits = 0),                                                                    
+                  round(-S_modelData$es[yr], digits = 0),                                                                     
+                  round(S_modelData$oaf[yr], digits = 0),                                                                     
+                  round(S_modelData$vf[yr], digits = 0),
+                  round(-S_modelData$lf[yr]-S_modelData$es[yr]+S_modelData$oaf[yr]-S_modelData$vf[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+FirmDataBS<-as.data.frame(Firms,row.names=rownames)
+
+#Print firms column
+kable(FirmDataBS)
+
+################################################################################
+
+#Create banks aggregates
+Banks        <-c( round(S_modelData$hbd[yr], digits = 0),                                                                    
+                  -round(S_modelData$ms[yr], digits = 0),                                                                    
+                  round(S_modelData$bb[yr], digits = 0),                                                                    
+                  round(S_modelData$ls[yr], digits = 0),                                                                    
+                  0,                                                                     
+                  round(S_modelData$oab[yr], digits = 0),                                                                     
+                  round(S_modelData$vb[yr], digits = 0),
+                  round(S_modelData$hbd[yr]-S_modelData$ms[yr]+S_modelData$bb[yr]+S_modelData$ls[yr]+S_modelData$oab[yr]-S_modelData$vb[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+BankDataBS<-as.data.frame(Banks,row.names=rownames)
+
+#Print banks column
+kable(BankDataBS)
+
+################################################################################
+
+#Create ECB aggregates
+ECB          <-c( -round(S_modelData$hs[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  round(S_modelData$bcb[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_modelData$oacb[yr], digits = 0),                                                                     
+                  round(S_modelData$vcb[yr], digits = 0),
+                  round(-S_modelData$hs[yr]+S_modelData$bcb[yr]+S_modelData$oacb[yr]-S_modelData$vcb[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+ECBDataBS<-as.data.frame(ECB,row.names=rownames)
+
+#Print ECB column
+kable(ECBDataBS)
+
+################################################################################
+
+#Create government aggregates
+Government    <-c(0,                                                                    
+                  0,                                                                    
+                  round(-S_modelData$bs[yr], digits = 0),
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_modelData$oag[yr], digits = 0), 
+                  round(S_modelData$vg[yr], digits = 0),
+                  round(-S_modelData$bs[yr]+S_modelData$oag[yr]-S_modelData$vg[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+GovDataBS<-as.data.frame(Government,row.names=rownames)
+
+#Print government column
+kable(GovDataBS)
+
+################################################################################
+
+#Create household aggregates
+Households    <-c(round(S_modelData$hh[yr], digits = 0),                                                                    
+                  round(S_modelData$mh[yr], digits = 0),                                                                    
+                  round(S_modelData$bh[yr], digits = 0),                                                                    
+                  round(-S_modelData$lh[yr], digits = 0),                                                                    
+                  round(S_modelData$eh[yr], digits = 0),                                                                     
+                  round(S_modelData$oah[yr], digits = 0),
+                  round(S_modelData$vh[yr], digits = 0),
+                  round(S_modelData$hh[yr]+S_modelData$mh[yr]+S_modelData$bh[yr]-S_modelData$lh[yr]+S_modelData$eh[yr]+S_modelData$oah[yr]-S_modelData$vh[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+HouseDataBS<-as.data.frame(Households,row.names=rownames)
+
+#Print households column
+kable(HouseDataBS)
+
+################################################################################
+
+#Create foreign sector aggregates
+Foreign      <-c( 0,                                                                    
+                  0,                                                                    
+                  round(S_modelData$brow[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(S_modelData$oarow[yr], digits = 0),                                                                     
+                  round(S_modelData$vrow[yr], digits = 0),
+                  round(S_modelData$brow[yr]+S_modelData$oarow[yr]-S_modelData$vrow[yr], digits = 0)
+)                                                                    
+
+#Create table of results
+ROWDataBS<-as.data.frame(Foreign,row.names=rownames)
+
+#Print foreign sector column
+kable(ROWDataBS)
+
+################################################################################
+
+#Create row total (when entries > 2)
+Total        <-c( round(S_modelData$hh[yr]+S_modelData$hbd[yr]-S_modelData$hs[yr], digits = 0),                                                                    
+                  round(S_modelData$mh[yr]-S_modelData$ms[yr], digits = 0),                                                                    
+                  round(S_modelData$bh[yr]+S_modelData$bb[yr]+S_modelData$bcb[yr]+S_modelData$brow[yr]-S_modelData$bs[yr], digits = 0), 
+                  round(-S_modelData$lf[yr]-S_modelData$lh[yr]+S_modelData$ls[yr], digits = 0),                                                                    
+                  round(S_modelData$eh[yr]-S_modelData$es[yr], digits = 0),                                                                       
+                  round(S_modelData$oaf[yr]+S_modelData$oab[yr]+S_modelData$oacb[yr]+S_modelData$oag[yr]+S_modelData$oah[yr]+S_modelData$oarow[yr], digits = 0),                                                                     
+                  round(-(S_modelData$vf[yr]+S_modelData$vb[yr]+S_modelData$vcb[yr]+S_modelData$vg[yr]+S_modelData$vh[yr]+S_modelData$vrow[yr]), digits = 0),
+                  round(S_modelData$hh[yr]+S_modelData$hbd[yr]-S_modelData$hs[yr] +
+                          S_modelData$mh[yr]-S_modelData$ms[yr] +  
+                          S_modelData$bh[yr]+S_modelData$bb[yr]+S_modelData$bcb[yr]+S_modelData$brow[yr]-S_modelData$bs[yr] +
+                          -S_modelData$lf[yr]-S_modelData$lh[yr]+S_modelData$ls[yr] + 
+                          S_modelData$eh[yr]-S_modelData$es[yr]+ 
+                          S_modelData$oaf[yr]+S_modelData$oab[yr]+S_modelData$oacb[yr]+S_modelData$oag[yr]+S_modelData$oah[yr]+S_modelData$oarow[yr], digits = 0) 
+                  
+                  
+                  
+)                                                                    
+
+#Create table of results
+TotalDataBS<-as.data.frame(Total,row.names=rownames)
+
+#Print foreign sector column
+kable(TotalDataBS)
+
+
+################################################################################
+
+#Create BS matrix
+Italy_BS_Matrix<-cbind(HouseDataBS,FirmDataBS,GovDataBS,BankDataBS,ECBDataBS,ROWDataBS,TotalDataBS)
+kable(Italy_BS_Matrix)
+
+################################################################################
+
+#Upload libraries
+library(knitr)
+library(kableExtra)
+
+#Create caption
+captionBS <- paste("Table 1. Balance sheet in period", yr+1994)
+
+#Create html table for BS
+Italy_BS_Matrix %>%
+  kbl(caption=captionBS,
+      #format= "html",
+      format= "latex",
+      col.names = c("Households","Firms","Government","Banks","ECB","Foreign","Total"),
+      align="r") %>%
+  kable_classic(full_width = F, html_font = "helvetica")
