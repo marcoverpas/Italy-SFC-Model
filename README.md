@@ -1732,11 +1732,10 @@ legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big.png" alt="fig 1 PC">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big.png" alt="fig 1 ITA">
 </p>
 
-
-[work in progress] 🛠️
+While the primary goal of our model is not to outperform existing prediction models (but rather to develop a new tool for creating and comparing alternative scenarios), it tracks past data reasonably well. The main issue appears to be the inclusion of annual lags, causing model predictions to lag when the static simulation is performed. Arguably, this drawback can be overcome by using quarterly data, although seasonality and data availability issues may arise in this case.
 
 ### 4_Out_of_sample_predictions
 
