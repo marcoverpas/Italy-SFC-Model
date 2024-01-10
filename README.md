@@ -1087,7 +1087,7 @@ S_model=ESTIMATE(S_model
                  )
 ```
 
-Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the Console. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$), which was the last variable defined in the *txt* chunk. This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
+Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the *Console*. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$), which was the last variable defined in the *txt* chunk. This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
 
 
 ```TXT
