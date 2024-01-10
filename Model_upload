@@ -1,0 +1,985 @@
+##############################################################################
+
+# Empirical SFC macroeconomic model for Italy (1998-2026) using 'Bimets' package
+
+# Authors: Rosa Canelli and Marco Veronese Passarella
+
+# Last change: 10/01/2024
+
+##############################################################################
+
+#A) PREPARE THE ENVIRONMENT
+
+#Clear environment
+rm(list=ls(all=TRUE))
+
+#Set directory
+#setwd("C:/Users/...")
+
+#Clear plots
+if(!is.null(dev.list())) dev.off()
+
+#Clear console
+cat("\014")
+
+#Upload libraries
+library(bimets)
+library(knitr)
+
+#Upload data: time series for transactions-flow matrix and balance sheet
+DataEE <- read.csv("https://www.dropbox.com/scl/fi/58un32aub0asx1tu1t53c/Data_Aalborg.csv?rlkey=642w2hwa8qo069nmn1rc848i2&dl=1") 
+#Source: (our elaboration on) Eurostat data, December 2021
+
+##############################################################################
+
+#B) DEFINE MODEL EQUATIONS
+
+S_model.txt="MODEL
+
+COMMENT> FIRMS SECTOR ----------------------------------------------------------
+
+COMMENT> GDP
+IDENTITY> y
+EQ> y = cons + id + gov + nx                      
+
+COMMENT> Growth rate of nominal GDP (auxiliary) 
+IDENTITY> gy
+EQ> gy = (y/TSLAG(y,1))-1
+
+COMMENT> Depreciation rate (average value over the period 1996-2019)
+IDENTITY> deltak
+EQ> deltak = 0.046
+
+COMMENT> Real investment net of capital depreciation 
+IDENTITY> idR
+EQ> idR = exp(LidR)
+
+COMMENT> Nominal investment including capital depreciation 
+IDENTITY> id
+EQ> id = idR*p/100  + deltak*TSLAG(k,1)         
+
+COMMENT> Nominal capital stock
+IDENTITY> k
+EQ> k = TSLAG(k,1)*(1 - deltak) + id 
+
+COMMENT> Firms' profit
+IDENTITY> ff
+EQ> ff = y - intf - wb + opf
+
+COMMENT> Interest payments on loans to firms
+IDENTITY> intf
+EQ> intf = rl*lf  
+
+COMMENT> Interest rate on loans to firms
+IDENTITY> rl
+EQ> rl = rstar + mul 
+
+COMMENT> Firms' undistributed profit
+BEHAVIORAL> fuf
+TSRANGE 1998 1 2021 1
+EQ> fuf = theta*ff   
+COEFF> theta
+STORE> coe(3)
+
+COMMENT> Firms' distributed profit
+IDENTITY> fdf
+EQ> fdf = ff - fuf
+
+COMMENT> Firms' demand for bank loans  
+IDENTITY> lf
+EQ> lf = TSLAG(lf,1) + id - fuf - (es-TSLAG(es,1)) + (oaf-TSLAG(oaf,1))
+
+COMMENT> Supply of shares  
+IDENTITY> es
+EQ> es = eh
+
+COMMENT> Total wealth accumulated by firms
+IDENTITY> vf
+EQ> vf = oaf - (lf + es)
+
+
+COMMENT> HOUSEHOLD SECTOR ------------------------------------------------------
+
+COMMENT> Disposable income  
+IDENTITY> yd
+EQ> yd = wb - tax + tr + inth + fdf + fb + oph
+
+COMMENT> Real consumption
+IDENTITY> consR
+EQ> consR = exp(LconsR)
+
+COMMENT> Nominal consumption
+IDENTITY> cons
+EQ> cons = consR*p/100
+
+COMMENT> Net wealth of households    
+IDENTITY> vh
+EQ> vh = TSLAG(vh,1) + yd - cons
+
+COMMENT> Loans to households 
+BEHAVIORAL> lh
+TSRANGE 1998 1 2021 1
+EQ> TSDELTALOG(lh,1) = phi1*TSLAG(cons/yd,1)
+COEFF> phi1
+STORE> coe(6)
+
+COMMENT> Interests paid by households on personal loans 
+IDENTITY> intlh
+EQ> intlh = rlh*TSLAG(lh,1)  
+
+COMMENT> Premium on government bills held by households
+BEHAVIORAL> mubh
+TSRANGE 1998 1 2021 1
+EQ> mubh = mubh1*TSLAG(mubh,1) + mubh2*mub  
+COEFF> mubh1 mubh2
+STORE> coe(7)
+
+COMMENT> Interest rate received households on their government debt holdings
+IDENTITY> rbh
+EQ> rbh = rstar + mubh 
+
+COMMENT> Interests received by households on their government debt holdings 
+IDENTITY> intgh
+EQ> intgh = rbh * TSLAG(bh,1)  
+
+COMMENT> Markup on loans to firms
+BEHAVIORAL> mul
+TSRANGE 1998 1 2021 1
+EQ> mul = mul0 + mul1*TSLAG(mub,1)  
+COEFF> mul0 mul1
+STORE> coe(2)
+
+COMMENT> Net interest payments received by households 
+IDENTITY> inth
+EQ> inth = intgh + intmh - intlh
+
+COMMENT> Markup on personal loans to households
+BEHAVIORAL> mulh
+TSRANGE 1998 1 2021 1
+EQ> mulh = mulh0 + mulh1*TSLAG(mub,1)  
+COEFF> mulh0 mulh1
+STORE> coe(7)
+
+COMMENT> Interest rate on loans to households
+IDENTITY> rlh
+EQ> rlh = rstar + mulh 
+
+COMMENT> Wage share (endogenous) 
+IDENTITY> Omega
+EQ> Omega = wb/y
+
+COMMENT> Other assets of households 
+BEHAVIORAL> oah
+TSRANGE 1998 1 2021 1
+EQ> oah = oah0 + lambda_oah*TSLAG(oah,1)
+COEFF> oah0 lambda_oah
+STORE> coe(18)
+
+
+COMMENT> BANKING SECTOR --------------------------------------------------------
+
+COMMENT> Total supply of loans  
+IDENTITY> ls
+EQ> ls = lf + lh
+
+COMMENT> Supply of bank deposits  
+IDENTITY> ms
+EQ> ms = mh
+
+COMMENT> Banks profit 
+IDENTITY> fb
+EQ> fb = intb
+
+COMMENT> Total interests payments received by banks
+IDENTITY> intb
+EQ> intb = intgb + intf + intlh - intmh
+
+COMMENT> Net interest payments received by banks on government bills 
+IDENTITY> intgb
+EQ> intgb = rbb*TSLAG(bb,1) 
+
+COMMENT> Stock of bills held by banks 
+BEHAVIORAL> Lbb
+TSRANGE 1998 1 2021 1
+EQ> Lbb = lambdabb1*TSLAG(log(ls+hbd+bb),1) + lambdabb2*dum
+COEFF> lambdabb1 lambdabb2
+STORE> coe(33)
+
+COMMENT> bb
+IDENTITY> bb
+EQ> bb = exp(Lbb)
+
+COMMENT> Total wealth accumulated by banks     
+IDENTITY> vb
+EQ> vb = oab + hbd + bb + ls - ms  
+
+
+COMMENT> GOVERNMENT SECTOR -----------------------------------------------------
+
+COMMENT> Tax revenue  
+BEHAVIORAL> tax
+TSRANGE 1998 1 2021 1
+EQ> tax = tau1*(TSLAG(wb,1)) + tau2*(TSLAG((yd - wb),1)) + tau3*(TSLAG(vh,1))
+COEFF> tau1 tau2 tau3
+STORE> coe(10)
+
+COMMENT> Transfers and benefits 
+BEHAVIORAL> tr
+TSRANGE 1998 1 2021 1
+EQ> tr = tau4*TSLAG(tr,1) + tau5*TSDELTA(un,1)
+COEFF> tau4 tau5
+STORE> coe(11)
+
+COMMENT> Government deficit
+IDENTITY> def
+EQ> def = gov + tr + intg - tax - fcb
+
+COMMENT> Government debt stock
+IDENTITY> deb
+EQ> deb = bs 
+
+COMMENT> Interest payments on government debt 
+IDENTITY> intg
+EQ> intg = rb*TSLAG(deb,1)  
+
+COMMENT> Supply of government bills and bonds
+IDENTITY> bs
+EQ> bs = TSLAG(bs,1) + def
+
+COMMENT> Net wealth of goverment sector  (Note: negative value) 
+IDENTITY> vg
+EQ> vg = - bs + oag
+
+
+COMMENT> PORTFOLIO EQUATIONS ---------------------------------------------------
+
+COMMENT> Holdings of government bills (log) 
+BEHAVIORAL> Lbh
+TSRANGE 1998 1 2021 1
+EQ> Lbh = lambda20*TSLAG(log(vh),1) + lambda21*dum
+COEFF> lambda20 lambda21
+STORE> coe(16)
+
+COMMENT> Holdings of shares (log) 
+BEHAVIORAL> Leh
+TSRANGE 1998 1 2021 1
+EQ> Leh = lambda10*TSLAG(log(vh),1) 
+COEFF> lambda10 
+STORE> coe(15)
+
+COMMENT> Holding of shares 
+IDENTITY> eh
+EQ> eh = exp(Leh)
+
+COMMENT> Holding of government bills 
+IDENTITY> bh
+EQ> bh = exp(Lbh)
+
+COMMENT> Holdings of cash (log) 
+BEHAVIORAL> Lhh
+TSRANGE 1998 1 2021 1
+EQ> TSDELTA(Lhh,1) = lambdac*log(cons/pc)
+COEFF> lambdac
+STORE> coe(17)
+
+COMMENT> Holding of cash 
+IDENTITY> hh
+EQ> hh = exp(Lhh)
+
+COMMENT> Holdings of deposits 
+IDENTITY> mh
+EQ> mh = vh + lh - hh - bh - eh - oah
+
+
+COMMENT> CENTRAL BANK ----------------------------------------------------------
+
+COMMENT> CB holdings of government bills
+IDENTITY> bcb
+EQ> bcb = bs - bh - bb - brow 
+
+COMMENT> Supply of cash  
+IDENTITY> hs
+EQ> hs = bcb + oacb - vcb
+
+COMMENT> Profit realised and distributed by CB
+IDENTITY> fcb
+EQ> fcb = intg - intgh - intgb - introw
+
+COMMENT> Reserve requirement: demand
+IDENTITY> hbd
+EQ> hbd = rho*ms
+
+COMMENT> Reserve ratio 
+BEHAVIORAL> rho
+TSRANGE 1998 1 2021 1
+EQ> rho = rho_1*TSLAG(rho,1)
+COEFF> rho_1
+STORE> coe(56)
+
+COMMENT> Total demand for cash and reserves (auxiliary)
+IDENTITY> hd
+EQ> hd = hbd + hh
+
+
+COMMENT> FOREIGN SECTOR --------------------------------------------------------
+
+COMMENT> Nominal import
+IDENTITY> im
+EQ> im = exp(LimR) * p / 100
+
+COMMENT> Nominal export
+IDENTITY> x
+EQ> x = exp(LxR) * p / 100
+
+COMMENT> Foreign income. Note: yf1 = (1 + gF)
+BEHAVIORAL> yf
+TSRANGE 1998 1 2021 1
+EQ> yf = yf1*TSLAG(yf,1) 
+COEFF> yf1
+STORE> coe(22)
+
+COMMENT> Net export (trade balance)
+IDENTITY> nx
+EQ> nx = x - im
+
+COMMENT> Stock of Italian bills debt held by foreign agents
+IDENTITY> brow
+EQ> brow = lambdarow*bs 
+
+COMMENT> Total wealth accumulated by RoW
+IDENTITY> vrow
+EQ> vrow = brow + oarow
+
+COMMENT> Net interest payments received by RoW on government bills 
+IDENTITY> introw
+EQ> introw = rbrow * TSLAG(brow,1)
+
+COMMENT> Exchange rate: dollars per 1 euro   
+BEHAVIORAL> exr
+TSRANGE 1998 1 2021 1
+EQ> exr = exr1*MOVAVG(exr,2) 
+COEFF> exr1 
+STORE> coe(58)
+
+COMMENT> Share of government bills purchased by foreign agents
+BEHAVIORAL> lambdarow
+TSRANGE 1998 1 2021 1
+EQ> lambdarow = lambdarow1*TSLAG(lambdarow,1) + lambdarow2*TSLAG(rbrow,1)
+COEFF> lambdarow1 lambdarow2
+STORE> coe(31)
+
+
+COMMENT> INTEREST RATES --------------------------------------------------------
+
+COMMENT> Return rate on shares 
+IDENTITY> re
+EQ> re = fdf/TSLAG(eh,1)
+
+COMMENT> Policy rate
+BEHAVIORAL> rstar
+TSRANGE 1998 1 2021 1
+EQ> rstar = r0
+COEFF> r0
+STORE> coe(25)
+
+COMMENT> Average risk premium on government bond
+IDENTITY> rb
+EQ> rb = rstar + mub
+
+COMMENT> Interest rate received by banks on their government debt holdings
+IDENTITY> rbb
+EQ> rbb = rstar + mubb 
+
+COMMENT> Interest rate received by RoW on their government debt holdings
+IDENTITY> rbrow
+EQ> rbrow = rstar + mubrow 
+
+COMMENT> Premium on government bills held by banks
+BEHAVIORAL> mubb
+TSRANGE 1998 1 2021 1
+EQ> mubb = mubb1*TSLAG(mubb,1) + mubb2*mub  
+COEFF> mubb1 mubb2
+STORE> coe(45)
+
+COMMENT> Premium on government bills held by RoW
+BEHAVIORAL> mubrow
+TSRANGE 1998 1 2021 1
+EQ> mubrow = mubrow1*TSLAG(mubrow,1) + mubrow2*mub  
+COEFF> mubrow1 mubrow2
+STORE> coe(46)
+
+COMMENT> Interests paid by banks to households on deposits and other A/L 
+BEHAVIORAL> intmh
+TSRANGE 1998 1 2021 1
+EQ> intmh = intmh0 + intmh1*mh
+COEFF> intmh0 intmh1
+STORE> coe(47)
+
+
+COMMENT> LABOUR MARKET ---------------------------------------------------------
+
+COMMENT> Wage bill
+IDENTITY> wb
+EQ> wb = w*nd
+
+COMMENT> Labour productivity (real value added per employee) 
+BEHAVIORAL> prod
+EQ> TSDELTALOG(prod,1) = nu0  + nu1 * TSDELTALOG(100*w/p,1) + nu2 * TSDELTALOG(100*y/p,2)
+COEFF> nu0 nu1 nu2
+STORE> coe(51)
+
+COMMENT> Employment: demand for labour 
+IDENTITY> nd
+EQ> nd = (100*y)/(prod*p)
+
+COMMENT> Labour force (log) 
+BEHAVIORAL> Lns
+TSRANGE 1998 1 2021 1
+EQ> Lns = nu1*TSLAG(Lns,1) + nu2*( log(nd) -TSLAG(Lns,1))
+COEFF> nu1 nu2
+STORE> coe(27)
+
+COMMENT> Labour force 
+IDENTITY> ns
+EQ> ns = exp(Lns)
+
+COMMENT> Wage rate growth 
+BEHAVIORAL> gw
+TSRANGE 1998 1 2021 1
+EQ> gw = omega1*TSDELTAP(p/100,1) + omega2*TSDELTA(un,1)
+COEFF> omega1 omega2
+STORE> coe(28)
+
+COMMENT> Nominal wage rate
+IDENTITY> w
+EQ> w = TSLAG(w,1)*(1+gw)
+
+COMMENT> Unemployment rate
+IDENTITY> un
+EQ> un = 1-(nd/ns) 
+
+
+COMMENT> PRODUCTION AND PRICES -------------------------------------------------
+
+COMMENT> Price level (GDP deflator)
+IDENTITY> p
+EQ> p = exp(Lp)
+
+COMMENT> Consumer price index 
+IDENTITY> pc
+EQ> pc = exp(Lpc)
+
+COMMENT> Log foreign price level --- exogenous    
+BEHAVIORAL> Lp_row
+TSRANGE 1998 1 2021 1
+EQ> Lp_row = prow0 + prow1*TSLAG(Lp_row,1)
+COEFF> prow0 prow1
+STORE> coe(60)
+
+COMMENT> Foreign price level  
+IDENTITY> p_row
+EQ> p_row = exp(Lp_row)
+
+COMMENT> Price of import  
+IDENTITY> p_im
+EQ> p_im = exp(Lp_im)
+
+COMMENT> Inflation rate based on GDP deflator 
+IDENTITY> infl
+EQ> infl = (p - TSLAG(p,1))/TSLAG(p,1)
+
+COMMENT> Inflation rate based on CPI 
+IDENTITY> inflc
+EQ> inflc = (pc - TSLAG(pc,1))/TSLAG(pc,1)
+
+COMMENT> Deficit to GDP ratio
+IDENTITY> def_ratio
+EQ> def_ratio = def/y
+
+COMMENT> Debt to GDP ratio
+IDENTITY> deb_ratio
+EQ> deb_ratio = deb/y
+
+
+COMMENT> ENERGY IMPORT ---------------------------------------------------------
+
+COMMENT> Energy Price level  
+IDENTITY> p_en
+EQ> p_en = exp(Lp_en)
+
+COMMENT> Share of energy products to total import 
+BEHAVIORAL> perc_en
+TSRANGE 1998 1 2021 1
+EQ> perc_en = enm1*infl_en + enm2*TSLAG(log(y/p),1) 
+COEFF> enm1 enm2
+STORE> coe(54)
+
+COMMENT> Import of energy products 
+IDENTITY> im_en
+EQ> im_en = im * perc_en
+
+COMMENT> Energy inflation rate. Note: high values, so do not use dlog
+IDENTITY> infl_en
+EQ> infl_en = (p_en - TSLAG(p_en,1))/TSLAG(p_en,1)
+
+COMMENT> Log of energy price --- exogenous
+BEHAVIORAL> Lp_en
+TSRANGE 1998 1 2021 1
+EQ> Lp_en = ep1*TSLAG(Lp_en,1) 
+COEFF> ep1
+STORE> coe(53)
+
+
+COMMENT> OTHER ACCOUNTING-CONSISTENCY EQUATIONS --------------------------------
+
+COMMENT> Other payments or receipts received by firms  
+IDENTITY> opf
+EQ> opf = vf - TSLAG(vf,1) - (cons + gov + nx - wb - intf - fdf)
+
+COMMENT> Other payments or receipts received by banks 
+IDENTITY> opb
+EQ> opb = fb - intb + (vb - tslag(vb,1))
+
+COMMENT> Other payments or receipts by government
+IDENTITY> opg
+EQ> opg = vg - TSLAG(vg,1) - ( -gov + tax - tr - intg + fcb)
+
+COMMENT> Other payments or receipts received by CB   
+IDENTITY> opcb
+EQ> opcb = vcb - TSLAG(vcb,1)
+
+COMMENT> Other payments or receipts received by RoW   
+IDENTITY> oprow
+EQ> oprow = -(oph + opf + opg + opb + opcb) 
+
+COMMENT> Other payments or receipts of households  
+BEHAVIORAL> oph
+TSRANGE 1998 1 2021 1
+EQ> TSDELTAP(oph,1) = par_oph * TSDELTAP(oph,1) 
+COEFF> par_oph
+STORE> coe(57)
+
+COMMENT> Other financial assets held by RoW 
+IDENTITY> oarow
+EQ> oarow = - (oah + oaf + oab + oacb + oag) 
+
+COMMENT> Total wealth accumulated by central bank   
+IDENTITY> vcb
+EQ> vcb = -(vh + vf + vrow + vg + vb)
+
+COMMENT> Other financial assets/liabilities of firms 
+BEHAVIORAL> oaf
+TSRANGE 1998 1 2021 1
+EQ> oaf = oaf0 + lambda_oaf*TSLAG(oaf,1)
+COEFF> oaf0 lambda_oaf
+STORE> coe(38)
+
+COMMENT> Other financial assets/liabilities of government
+BEHAVIORAL> oag
+TSRANGE 1998 1 2021 1
+EQ> oag = oag0 + lambda_oag*TSLAG(oag,1)
+COEFF> oag0 lambda_oag
+STORE> coe(44)
+
+COMMENT> Other financial assets held by banks
+BEHAVIORAL> oab
+TSRANGE 1998 1 2021 1
+EQ> oab = oab0 + lambda_oab*TSLAG(oab,1)
+COEFF> oab0 lambda_oab
+STORE> coe(52)
+
+COMMENT> Other financial assets held by ECB
+BEHAVIORAL> oacb
+TSRANGE 1998 1 2021 1
+EQ> oacb = oacb0 + lambda_oacb*TSLAG(oacb,1)
+COEFF> oacb0 lambda_oacb
+STORE> coe(55)
+
+
+COMMENT> ADDITIONAL CALCULATIONS --------------------------------
+
+COMMENT> Real GDP 
+IDENTITY> yR
+EQ> yR = 100*y/p 
+
+COMMENT> Real investment including depreciation (note: iddR > idR)
+IDENTITY> iddR
+EQ> iddR = 100*id/p 
+
+COMMENT> Real export
+IDENTITY> xR
+EQ> xR = 100*x/p 
+
+COMMENT> Real investment including depreciation (note: different from idR)
+IDENTITY> imR
+EQ> imR = 100*im/p 
+
+
+COMMENT> KEY BEHAVIOURAL EQUATIONS --------------------------------
+
+COMMENT> Real consumption (log). Note: yd replaced with y because the latter is more stable over time 
+BEHAVIORAL> LconsR
+TSRANGE 1998 1 2021 1
+EQ> LconsR = alpha1*TSLAG(log(y*100/pc),1) + alpha2*TSLAG( log(vh*100/pc),1)  
+COEFF> alpha1 alpha2
+STORE> coe(5)
+
+COMMENT> Government consumption 
+BEHAVIORAL> gov
+TSRANGE 1998 1 2021 1
+EQ> gov = sigma1*TSLAG((gov/p),1)*p  
+COEFF> sigma1
+RESTRICT> sigma1 = 1.01
+STORE> coe(12)
+
+COMMENT> Real investment net of capital depreciation --- dropped:  + gamma2*TSLAG(rl,1)
+BEHAVIORAL> LidR
+TSRANGE 1998 1 2021 1
+EQ> LidR = gamma0 + gamma1*TSLAG(log(y)/log(k),1)
+COEFF> gamma0 gamma1 
+STORE> coe(1)
+
+COMMENT> Log of real export    
+BEHAVIORAL> LxR
+TSRANGE 1998 1 2021 1
+EQ> LxR = x0 + x1*TSLAG(log(yf),1) + x2*TSLAG(exr*p/p_row,1)
+COEFF> x0 x1 x2
+STORE> coe(21)
+
+COMMENT> Log of real import  
+BEHAVIORAL> LimR
+TSRANGE 1998 1 2021 1
+EQ> LimR = m0 + m1*TSLAG(log(y),1) + m2*TSLAG(p_im/p,1)
+COEFF> m0 m1 m2
+STORE> coe(20)
+
+COMMENT> Log of price of import    
+BEHAVIORAL> Lp_im
+TSRANGE 1998 1 2021 1
+EQ> Lp_im = pim0 + pim1*TSLAG(exr,1) + pim2*TSLAG(Lp_row,1)
+COEFF> pim0 pim1 pim2
+STORE> coe(59)
+
+COMMENT> Log of price level (GDP deflator) 
+BEHAVIORAL> Lp
+TSRANGE 1998 1 2021 1
+EQ> Lp = viy1*TSLAG(Lp_en,1) + viy2*TSLAG(Lp_row,1) + viy3*TSLAG(log(100*y/p),1) 
+COEFF> viy1 viy2 viy3 
+STORE> coe(30)
+
+COMMENT> Log of consumer price index 
+BEHAVIORAL> Lpc
+TSRANGE 1998 1 2021 1
+EQ> Lpc = vic1*TSLAG(Lp_en,1) + vic2*TSLAG(Lp_row,1) + vic3*TSLAG(log(100*y/p),1)
+COEFF> vic1 vic2 vic3
+STORE> coe(30)
+
+COMMENT> Average premium on government bills
+BEHAVIORAL> mub
+TSRANGE 1998 1 2021 1
+EQ> mub = mub2*TSLAG(deb/y,1) + mub3*bcb/bs + mub4*rstar
+COEFF> mub2 mub3 mub4
+STORE> coe(39)
+
+END"
+
+##############################################################################
+
+#C) LOAD THE MODEL AND ESTIMATE COEFFICIENTS
+
+#Load the model
+S_model=LOAD_MODEL(modelText = S_model.txt)
+
+#Attribute values to model variables and coefficients
+S_modelData=list(  
+  
+  pc = TIMESERIES(c(DataEE$Pc),   
+                 START=c(1995,1),FREQ=1),
+  Lpc = TIMESERIES(c(log(DataEE$Pc)),   
+                  START=c(1995,1),FREQ=1),
+  gid = TIMESERIES(c(DataEE$gid),   
+                    START=c(1995,1),FREQ=1),
+  gidR = TIMESERIES(c(DataEE$gid-DataEE$PI),   
+                   START=c(1995,1),FREQ=1),
+  infl = TIMESERIES(c(DataEE$PI),   
+                  START=c(1995,1),FREQ=1),
+  inflc = TIMESERIES(c(DataEE$CPI),   
+                    START=c(1995,1),FREQ=1),
+  Lp = TIMESERIES(c(log(DataEE$Py)),   
+                  START=c(1995,1),FREQ=1),
+  p_en = TIMESERIES(c(DataEE$Pen2 ),   
+                    START=c(1995,1),FREQ=1),
+  Lp_en = TIMESERIES(c(log(DataEE$Pen2)),   
+                     START=c(1995,1),FREQ=1),
+  infl_en = TIMESERIES(c(DataEE$PIen),   
+                  START=c(1995,1),FREQ=1),
+  im_en = TIMESERIES(c(DataEE$IMen),   
+                    START=c(1995,1),FREQ=1),
+  perc_en = TIMESERIES(c(DataEE$IMen/DataEE$IM),   
+                     START=c(1995,1),FREQ=1),
+  Lim_en = TIMESERIES(c(log(DataEE$IMen)),   
+                     START=c(1995,1),FREQ=1),
+  y = TIMESERIES(c(DataEE$Y),   
+                  START=c(1995,1),FREQ=1),
+  gy  = TIMESERIES(c(DataEE$gy),   
+                  START=c(1995,1),FREQ=1),
+  cons = TIMESERIES(c(DataEE$CONS),   
+                     START=c(1995,1),FREQ=1),
+  id = TIMESERIES(c(DataEE$INV),   
+                  START=c(1995,1),FREQ=1),
+  gov = TIMESERIES(c(DataEE$GOV),   
+                    START=c(1995,1),FREQ=1),
+  x = TIMESERIES(c(DataEE$X),   
+                  START=c(1995,1),FREQ=1),
+  im = TIMESERIES(c(DataEE$IM),   
+                   START=c(1995,1),FREQ=1),
+  Lx = TIMESERIES(c(log(DataEE$X)),   
+                   START=c(1995,1),FREQ=1),
+  Lim = TIMESERIES(c(log(DataEE$IM)),   
+                    START=c(1995,1),FREQ=1),
+  LxR = TIMESERIES(c(log(100*DataEE$X/DataEE$Py)),   
+                   START=c(1995,1),FREQ=1),
+  LimR = TIMESERIES(c(log(100*DataEE$IM/DataEE$Py)),   
+                   START=c(1995,1),FREQ=1),
+  consR  = TIMESERIES(c(DataEE$CONS*100/DataEE$Py),   
+                      START=c(1995,1),FREQ=1),
+  LconsR  = TIMESERIES(c(log(DataEE$CONS*100/DataEE$Py)),   
+                       START=c(1995,1),FREQ=1),
+  idR = TIMESERIES(c(DataEE$INVnet*100/DataEE$Py), 
+                   START=c(1995,1),FREQ=1),
+  LidR  = TIMESERIES(c(log(DataEE$INVnet*100/DataEE$Py)),   
+                     START=c(1995,1),FREQ=1),
+  nx  = TIMESERIES(c(DataEE$X-DataEE$IM),   
+                   START=c(1995,1),FREQ=1),
+  wb  = TIMESERIES(c(DataEE$WB),   
+                   START=c(1995,1),FREQ=1),
+  yd  = TIMESERIES(c(DataEE$YD),   
+                   START=c(1995,1),FREQ=1),
+  vh = TIMESERIES(c(DataEE$NVh),   
+                   START=c(1995,1),FREQ=1),
+  k = TIMESERIES(c(DataEE$K),   
+                  START=c(1995,1),FREQ=1),
+  deltak = TIMESERIES(c(DataEE$Delta ),   
+                 START=c(1995,1),FREQ=1),
+  intf = TIMESERIES(c(DataEE$INTf),   
+                    START=c(1995,1),FREQ=1),
+  lf  = TIMESERIES(c(-DataEE$Lf),   
+                   START=c(1995,1),FREQ=1),
+  fdf  = TIMESERIES(c(DataEE$DIV),   
+                    START=c(1995,1),FREQ=1),
+  ff  = TIMESERIES(c(DataEE$Ff),   
+                   START=c(1995,1),FREQ=1),
+  fuf  = TIMESERIES(c(DataEE$FUf),   
+                    START=c(1995,1),FREQ=1),
+  es  = TIMESERIES(c(-DataEE$Es),   
+                   START=c(1995,1),FREQ=1),
+  eh = TIMESERIES(c(DataEE$Eh),   
+                   START=c(1995,1),FREQ=1),
+  Leh = TIMESERIES(c(log(DataEE$Eh)),   
+                  START=c(1995,1),FREQ=1),
+  tax  = TIMESERIES(c(DataEE$TAX),   
+                    START=c(1995,1),FREQ=1),
+  tr  = TIMESERIES(c(DataEE$TR),   
+                   START=c(1995,1),FREQ=1),
+  Ltax  = TIMESERIES(c(log(DataEE$TAX)),   
+                    START=c(1995,1),FREQ=1),
+  Ltr  = TIMESERIES(c(log(DataEE$TR)),   
+                   START=c(1995,1),FREQ=1),
+  lh  = TIMESERIES(c(-DataEE$Lh),   
+                   START=c(1995,1),FREQ=1),
+  ls  = TIMESERIES(c(DataEE$Ls),   
+                   START=c(1995,1),FREQ=1),
+  mh  = TIMESERIES(c(DataEE$Mh),   
+                   START=c(1995,1),FREQ=1),
+  ms  = TIMESERIES(c(-DataEE$Ms),   
+                   START=c(1995,1),FREQ=1),
+  inth  = TIMESERIES(c(DataEE$INTh),   
+                     START=c(1995,1),FREQ=1),
+  un  = TIMESERIES(c( (DataEE$Ns-DataEE$Nd)/DataEE$Ns ),   
+                   START=c(1995,1),FREQ=1),
+  Omega  = TIMESERIES(c(DataEE$WB/DataEE$Y),   
+                      START=c(1995,1),FREQ=1),
+  ns  = TIMESERIES(c(DataEE$Ns),   
+                   START=c(1995,1),FREQ=1),
+  Lns  = TIMESERIES(c(log(DataEE$Ns)),   
+                   START=c(1995,1),FREQ=1),
+  bs  = TIMESERIES(c(-DataEE$Bs),   
+                   START=c(1995,1),FREQ=1),
+  bh = TIMESERIES(c(DataEE$Bh),   
+                  START=c(1995,1),FREQ=1),
+  Lbh = TIMESERIES(c(log(DataEE$Bh)),   
+                  START=c(1995,1),FREQ=1),
+  rbb = TIMESERIES(c(DataEE$Rbb ),         
+                   START=c(1995,1),FREQ=1),  
+  mubb = TIMESERIES(c(DataEE$Rbb-DataEE$Rstar),   
+                    START=c(1995,1),FREQ=1),
+  rbrow = TIMESERIES(c(DataEE$Rbrow ),         
+                     START=c(1995,1),FREQ=1),  
+  mubrow = TIMESERIES(c(DataEE$Rbrow-DataEE$Rstar),   
+                      START=c(1995,1),FREQ=1),
+  rbh = TIMESERIES(c(DataEE$Rbh ),         
+                   START=c(1995,1),FREQ=1),  
+  mubh = TIMESERIES(c(DataEE$Rbh-DataEE$Rstar),   
+                    START=c(1995,1),FREQ=1),
+  introw = TIMESERIES(c(DataEE$INTrow ),         
+                      START=c(1995,1),FREQ=1),  
+  fcb = TIMESERIES(c(DataEE$Fcb),                       
+                   START=c(1995,1),FREQ=1),
+  re = TIMESERIES(c(DataEE$Re),                
+                  START=c(1995,1),FREQ=1),
+  hh = TIMESERIES(c(DataEE$Hh),   
+                   START=c(1995,1),FREQ=1),
+  Lhh = TIMESERIES(c(log(DataEE$Hh)),   
+                  START=c(1995,1),FREQ=1),
+  rho  = TIMESERIES(c(DataEE$RHO),   
+                    START=c(1995,1),FREQ=1),
+  yf  = TIMESERIES(c(DataEE$Yrow/1000),   
+                   START=c(1995,1),FREQ=1),   
+  rstar  = TIMESERIES(c(DataEE$Rstar),   
+                      START=c(1995,1),FREQ=1),
+  mub  = TIMESERIES(c(DataEE$Rb-DataEE$Rstar),   
+                    START=c(1995,1),FREQ=1),
+  deb  = TIMESERIES(c(DataEE$Deb),   
+                    START=c(1995,1),FREQ=1),
+  vg = TIMESERIES(c(DataEE$Vg),   
+                  START=c(1995,1),FREQ=1),
+  def  = TIMESERIES(c(DataEE$DEF1),   
+                     START=c(1995,1),FREQ=1),
+  nd = TIMESERIES(c(DataEE$Nd),   
+                   START=c(1995,1),FREQ=1),
+  ndstar = TIMESERIES(c(DataEE$Y/DataEE$Prod),   
+                  START=c(1995,1),FREQ=1),
+  w = TIMESERIES(c(DataEE$w),   
+                 START=c(1995,1),FREQ=1),
+  gw = TIMESERIES(c(DataEE$gw),   
+                  START=c(1995,1),FREQ=1),
+  bb = TIMESERIES(c(DataEE$Bb),   
+                  START=c(1995,1),FREQ=1),
+  Lbb = TIMESERIES(c(log(DataEE$Bb)),   
+                  START=c(1995,1),FREQ=1),
+  bcb = TIMESERIES(c(DataEE$Bcb),   
+                   START=c(1995,1),FREQ=1),
+  bb_not = TIMESERIES(c(-DataEE$Ms - DataEE$Ls - DataEE$Hbd),                        
+                      START=c(1995,1),FREQ=1),
+  hbd = TIMESERIES(c(DataEE$Hbd),   
+                   START=c(1995,1),FREQ=1),
+  hs = TIMESERIES(c(-DataEE$Hs ),   
+                  START=c(1995,1),FREQ=1),
+  hd = TIMESERIES(c(-DataEE$Hs),   
+                  START=c(1995,1),FREQ=1),
+  fb = TIMESERIES(c(DataEE$Fb ), 
+                  START=c(1995,1),FREQ=1),
+  lambdacb = TIMESERIES(c(-DataEE$Bcb/DataEE$Bs),   
+                        START=c(1995,1),FREQ=1),
+  lambdarow = TIMESERIES(c(-DataEE$Brow/DataEE$Bs),   
+                        START=c(1995,1),FREQ=1),
+  oph = TIMESERIES(c(DataEE$OPh),   
+                   START=c(1995,1),FREQ=1),
+  opb = TIMESERIES(c(DataEE$OPb),
+                   START=c(1995,1),FREQ=1),
+  opcb = TIMESERIES(c(DataEE$OPcb),   
+                    START=c(1995,1),FREQ=1),
+  opf = TIMESERIES(c(DataEE$OPf),   
+                   START=c(1995,1),FREQ=1),
+  opg = TIMESERIES(c(DataEE$OPg),   
+                   START=c(1995,1),FREQ=1),
+  vf = TIMESERIES(c(DataEE$Vf),   
+                  START=c(1995,1),FREQ=1),
+  oprow = TIMESERIES(c(DataEE$OProw),   
+                     START=c(1995,1),FREQ=1),
+  vb = TIMESERIES(c(DataEE$Vb),                        
+                  START=c(1995,1),FREQ=1),
+  vrow = TIMESERIES(c(DataEE$Vrow),   
+                    START=c(1995,1),FREQ=1),
+  oah = TIMESERIES(c(DataEE$OAh),   
+                   START=c(1995,1),FREQ=1),
+  Loah = TIMESERIES(c(log(DataEE$OAh)),   
+                   START=c(1995,1),FREQ=1),
+  oaf = TIMESERIES(c(DataEE$OAf),   
+                   START=c(1995,1),FREQ=1),
+  oab = TIMESERIES(c(DataEE$OAb),   
+                   START=c(1995,1),FREQ=1),
+  oag = TIMESERIES(c(DataEE$OAg),   
+                   START=c(1995,1),FREQ=1),
+  oacb = TIMESERIES(c(DataEE$OAcb),   
+                    START=c(1995,1),FREQ=1),
+  oarow = TIMESERIES(c(DataEE$OArow),   
+                     START=c(1995,1),FREQ=1),
+  vcb = TIMESERIES(c(DataEE$Vcb),   
+                   START=c(1995,1),FREQ=1),
+  p = TIMESERIES(c(DataEE$Py),   
+                 START=c(1995,1),FREQ=1),
+  prod = TIMESERIES(c(DataEE$ProdR),   
+                    START=c(1995,1),FREQ=1),
+  rl = TIMESERIES(c(DataEE$Rl ),   
+                  START=c(1995,1),FREQ=1),
+  mul = TIMESERIES(c(DataEE$Rl - DataEE$Rstar ),   
+                   START=c(1995,1),FREQ=1),
+  intgb  = TIMESERIES(c(DataEE$INTgb),   
+                      START=c(1995,1),FREQ=1),   
+  intgh = TIMESERIES(c(DataEE$INTgh ),   
+                     START=c(1995,1),FREQ=1),            
+  intb  = TIMESERIES(c(DataEE$INTb),   
+                     START=c(1995,1),FREQ=1), 
+  intmh = TIMESERIES(c(DataEE$INTm ),   
+                     START=c(1995,1),FREQ=1),    
+  intlh = TIMESERIES(c(DataEE$INTlh ),   
+                     START=c(1995,1),FREQ=1),           
+  rlh = TIMESERIES(c(DataEE$Rlh ),   
+                   START=c(1995,1),FREQ=1),               
+  mulh = TIMESERIES(c(DataEE$Rlh - DataEE$Rstar ),   
+                    START=c(1995,1),FREQ=1),               
+  rb = TIMESERIES(c(DataEE$Rb),         
+                  START=c(1995,1),FREQ=1),   
+  mub  = TIMESERIES(c(DataEE$Rb-DataEE$Rstar),   
+                    START=c(1995,1),FREQ=1),
+  intg = TIMESERIES(c(DataEE$INTg),             
+                    START=c(1995,1),FREQ=1),
+  brow = TIMESERIES(c(DataEE$Brow),   
+                    START=c(1995,1),FREQ=1),
+  pc = TIMESERIES(c(DataEE$Pc),   
+                  START=c(1995,1),FREQ=1),
+  exr = TIMESERIES(c(DataEE$Exr),   
+                  START=c(1995,1),FREQ=1),
+  exr42 = TIMESERIES(c(DataEE$Exr42 ),   
+                   START=c(1995,1),FREQ=1),
+  exr42 = TIMESERIES(c(DataEE$Exr42 ),   
+                     START=c(1995,1),FREQ=1),
+  dum = TIMESERIES(c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1),   
+                  START=c(1995,1),FREQ=1),
+  p_im = TIMESERIES(c(DataEE$Pim ),   
+                    START=c(1995,1),FREQ=1),
+  Lp_im = TIMESERIES(c(log(DataEE$Pim)),   
+                     START=c(1995,1),FREQ=1),
+  p_im_en = TIMESERIES(c(DataEE$Pim_en ),   
+                       START=c(1995,1),FREQ=1),
+  Lp_im_en = TIMESERIES(c(log(DataEE$Pim_en)),   
+                        START=c(1995,1),FREQ=1),
+  p_row = TIMESERIES(c(DataEE$Py_row ),   
+                     START=c(1995,1),FREQ=1),
+  Lp_row = TIMESERIES(c(log(DataEE$Py_row)),   
+                      START=c(1995,1),FREQ=1),
+  yR = TIMESERIES(c(DataEE$Y*100/DataEE$Py),   
+                  START=c(1995,1),FREQ=1),
+  iddR = TIMESERIES(c(DataEE$INV*100/DataEE$Py),   
+                    START=c(1995,1),FREQ=1),
+  xR = TIMESERIES(c(DataEE$X*100/DataEE$Py),   
+                  START=c(1995,1),FREQ=1),
+  imR = TIMESERIES(c(DataEE$IM*100/DataEE$Py),   
+                   START=c(1995,1),FREQ=1),
+  def_ratio = TIMESERIES(c(DataEE$DEF1/DataEE$Y),   
+                         START=c(1995,1),FREQ=1),
+  deb_ratio = TIMESERIES(c(DataEE$Deb/DataEE$Y),   
+                         START=c(1995,1),FREQ=1)
+  )
+
+#Load the data into the model
+S_model=LOAD_MODEL_DATA(S_model,S_modelData)
+
+#Estimate model coefficients
+S_model=ESTIMATE(S_model
+                 ,TSRANGE = c(1998,1,2019,1)          #Choose time range for estimations
+                 ,forceTSRANGE = TRUE                 #If TRUE, the TSRANGE above takes precedence over individual equations TSRANGEs 
+                 ,CHOWTEST = FALSE                    #Chow test: stability analysis - reject H0 of "no structural break"
+                 ,CHOWPAR = NULL                      #If NULL, use last periods
+                 )
