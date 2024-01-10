@@ -1055,6 +1055,48 @@ S_model=ESTIMATE(S_model
                  )
 ```
 
+Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the Console. For instance, the following details pertain to the estimation of the risk premium for government securities ($$\mu_b$$). This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
+
+
+```R
+
+BEHAVIORAL EQUATION: mub
+Estimation Technique: OLS
+
+mub                 =   0.03222813  TSLAG(deb/y,1)
+                        T-stat. 12.05956    ***
+
+                    -   0.07942629  bcb/bs
+                        T-stat. -3.732844   **
+
+                    -   0.4223384   rstar
+                        T-stat. -6.374726   ***
+
+
+STATs:
+R-Squared                      : 0.9773436   
+Adjusted R-Squared             : 0.9737663   
+Durbin-Watson Statistic        : 0.9611077   
+Sum of squares of residuals    : 0.0002797596
+Standard Error of Regression   : 0.003837208 
+Log of the Likelihood Function : 92.7822     
+F-statistic                    : 273.2053    
+F-probability                  : 8.881784e-16
+Akaike's IC                    : -177.5644   
+Schwarz's IC                   : -173.2002   
+Mean of Dependent Variable     : 0.02246469  
+Number of Observations         : 22
+Number of Degrees of Freedom   : 19
+Current Sample (year-period)   : 1998-1 / 2019-1
+
+
+Signif. codes:   *** 0.001  ** 0.01  * 0.05  
+
+
+...ESTIMATE OK
+
+```
+
 
 [work in progress] 🛠️
 
