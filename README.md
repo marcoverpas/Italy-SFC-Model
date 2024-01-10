@@ -1875,7 +1875,7 @@ After checking the model's fit, in-sample predictions can be adjusted to the obs
 The figure below shows the *adjusted values* of selected flow variables and ratios over the period 1998-2021.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big_adj.png" alt="fig 1 ITA adj">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big_adj2.png" alt="fig 1 ITA adj">
 </p>
 
 
