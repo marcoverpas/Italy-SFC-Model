@@ -1675,7 +1675,10 @@ In-sample unadjusted simulations can be generated simply by running the followin
                       ,Exogenize=exogenizeList,
                       verbose = FALSE )
 ```
-We can plot the observed series against the simulated one for each variable. In the figure below, we selected nominal and real GDP.
+
+Since we are conducting an in-sample simulation, we use a static prediction approach. This means that historical values for the lagged endogenous variables are utilised in the solutions of subsequent periods.
+
+We can plot the observed series against the simulated one for each variable. The figure below shows the nominal and the real GDP over the period 1998-2021.
 
 ```R
 #Define the layout
