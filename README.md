@@ -82,7 +82,7 @@ Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \end{array}
 $$
 
-where the entry named 'Other payments' allows aligning each sector's saving, calculated based on *Eurostat*'s non-financial transactions, with the change in financial wealth as derived from *Eurostat*'s financial balance sheets. Note: The `R` code to create the tables above (using observed series) can be found in section 2
+where the entry named 'Other payments' allows aligning each sector's saving, calculated based on *Eurostat*'s non-financial transactions, with the change in financial wealth as derived from *Eurostat*'s financial balance sheets. Note: The `R` code to create the tables above (using observed series) can be found in [Section 2](#2_Accouting_tables).
 
 The second step to create the model is to import the data (observed series). Our code takes the observed series from a *Dropbox* folder, containing *Eurostat* data for Italy over the period 1995-2021.
 
@@ -1637,7 +1637,7 @@ Italy_TFM_Matrix %>%
       align="r") %>%
   kable_classic(full_width = F, html_font = "helvetica")
 ```
-The associated tables are those displayed in Section 1.
+The associated tables are those displayed in [Section 1](#1_Model_and_data).
 
 ### 3_In_sample_predictions
 
