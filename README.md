@@ -1678,27 +1678,61 @@ In-sample unadjusted simulations can be generated simply by running the followin
 
 Since we are conducting an in-sample simulation, we use a static prediction approach. This means that historical values for the lagged endogenous variables are utilised in the solutions of subsequent periods.
 
-We can plot the observed series against the simulated one for each variable. The figure below shows the nominal and the real GDP over the period 1998-2021.
+We can plot the observed series against the simulated one for each variable. The figure below shows selected variables over the period 1998-2021.
 
 ```R
-#Define the layout
-layout(matrix(c(1,2), 1, 2, byrow = TRUE))
+#Define layout
+layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
 
-# Show predicted nominal GDP
-plot(S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(a) Nominal GDP (current prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$y),max(S_model$simulation$y)))
+# Show predicted Nominal GDP
+plot(S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(a) Nominal GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$y),max(S_model$simulation$y)))
 lines(S_modelData$y,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
 abline(h=1795100,col=4)
 
-# Show predicted real GDP
-plot(100*S_model$simulation$y/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(b) Real GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$y/S_modelData$p),max(100*S_model$simulation$y/S_model$simulation$p)))
-lines(100*S_modelData$y/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+# Show predicted Nominal consumption
+plot(S_model$simulation$consR,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(b) Nominal consumption (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$cons),max(S_model$simulation$cons)))
+lines(S_modelData$consR,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
-abline(h=1795100,col=4)
+
+# Show predicted Nominal investment
+plot(S_model$simulation$id,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(c) Nominal investment (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$id),max(S_model$simulation$id)))
+lines(S_modelData$id,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted import
+plot(S_model$simulation$im,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(d) Nominal import (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$im),max(S_model$simulation$im)))
+lines(S_modelData$im,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted export
+plot(S_model$simulation$x,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(e) Nominal export (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$x),max(S_model$simulation$x)))
+lines(S_modelData$x,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted employment
+plot(S_model$simulation$nd,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(f) Employment",ylab = 'Number of employees',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(20000,24000))
+lines(S_modelData$nd,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Return rate on bonds
+plot(100*S_model$simulation$rb,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(g) Average yield on gov. securities",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(0,9))
+lines(100*S_modelData$rb,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Debt to GDP ratio
+plot(100*S_model$simulation$deb/S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(h) Government debt to GDP ratio",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(95,160))
+lines(100*S_modelData$deb/S_modelData$y,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# GDP deflator
+plot(S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(i) Price level (GDP deflator)",ylab = 'Index (2015=100)',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(70,110))
+lines(S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita.png" alt="fig 1 PC">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big.png" alt="fig 1 PC">
 </p>
 
 
