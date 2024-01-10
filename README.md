@@ -1063,11 +1063,10 @@ S_model=ESTIMATE(S_model
                  )
 ```
 
-Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the Console. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$). This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
+Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the Console. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$), which was the last variable defined in the *txt* chunk. This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
 
 
 ```TXT
-
 BEHAVIORAL EQUATION: mub
 Estimation Technique: OLS
 
@@ -1102,7 +1101,6 @@ Signif. codes:   *** 0.001  ** 0.01  * 0.05
 
 
 ...ESTIMATE OK
-
 ```
 
 The details of the other estimations can be visualised by scrolling up through the Console information.
@@ -1112,7 +1110,6 @@ The details of the other estimations can be visualised by scrolling up through t
 As mentioned earlier, the first step in defining the level of aggregation for the model and reclassifying available data is to create the balance sheet and the transactions-flow matrix of the economy. This process can also be used to double-check *ex-post* model consistency. The following code chunk facilitates the creation of the balance sheet using observed series (in both *HTML* and *LaTeX* format):
 
 ```R
-
 #Balance-sheet for Italy SFC model
 
 #Observed series
@@ -1260,18 +1257,13 @@ Total        <-c( round(S_modelData$hh[yr]+S_modelData$hbd[yr]-S_modelData$hs[yr
                           S_modelData$bh[yr]+S_modelData$bb[yr]+S_modelData$bcb[yr]+S_modelData$brow[yr]-S_modelData$bs[yr] +
                           -S_modelData$lf[yr]-S_modelData$lh[yr]+S_modelData$ls[yr] + 
                           S_modelData$eh[yr]-S_modelData$es[yr]+ 
-                          S_modelData$oaf[yr]+S_modelData$oab[yr]+S_modelData$oacb[yr]+S_modelData$oag[yr]+S_modelData$oah[yr]+S_modelData$oarow[yr], digits = 0) 
-                  
-                  
-                  
-)                                                                    
+                          S_modelData$oaf[yr]+S_modelData$oab[yr]+S_modelData$oacb[yr]+S_modelData$oag[yr]+S_modelData$oah[yr]+S_modelData$oarow[yr], digits = 0) )                                                                    
 
 #Create table of results
 TotalDataBS<-as.data.frame(Total,row.names=rownames)
 
 #Print foreign sector column
 kable(TotalDataBS)
-
 
 ################################################################################
 
@@ -1296,13 +1288,11 @@ Italy_BS_Matrix %>%
       col.names = c("Households","Firms","Government","Banks","ECB","Foreign","Total"),
       align="r") %>%
   kable_classic(full_width = F, html_font = "helvetica")
-
 ```
 
 Similarly the code chunk for the transactions-flow matrix is:
 
 ```R
-
 #TFM matrix for Italy SFC model
 
 #Observed series
@@ -1359,9 +1349,7 @@ Firms_c      <-c( round(S_modelData$cons[yr], digits = 0),
                   0,
                   0,
                   0,
-                  paste(round(S_modelData$y[yr]-S_modelData$wb[yr]-S_modelData$intf[yr]-S_modelData$ff[yr]+S_modelData$opf[yr] , digits = 0))
-                  
-)    
+                  paste(round(S_modelData$y[yr]-S_modelData$wb[yr]-S_modelData$intf[yr]-S_modelData$ff[yr]+S_modelData$opf[yr] , digits = 0)))    
 
 #Create table of results
 FirmData_c<-as.data.frame(Firms_c,row.names=rownames)
@@ -1399,15 +1387,11 @@ Firms_k      <-c( 0,
 )                                                                    
 
 
-######## RESTART HERE! CHECK "Change in non-firm capital" AND THEN MOVE TO OTHER COLUMNS
-
-
 #Create table of results
 FirmData_k<-as.data.frame(Firms_k,row.names=rownames)
 
 #Print firms column
 kable(FirmData_k)
-
 
 ################################################################################
 
@@ -1433,9 +1417,7 @@ Banks        <-c( 0,
                   0,
                   round(S_modelData$oab[yr]-S_modelData$oab[yr-1], digits = 0),
                   round(S_modelData$vb[yr]-S_modelData$vb[yr-1], digits = 0),
-                  paste(round(S_modelData$opb[yr]-(S_modelData$vb[yr]-S_modelData$vb[yr-1])+S_modelData$intb[yr]-S_modelData$fb[yr], digits = 0))
-)                                                                    
-
+                  paste(round(S_modelData$opb[yr]-(S_modelData$vb[yr]-S_modelData$vb[yr-1])+S_modelData$intb[yr]-S_modelData$fb[yr], digits = 0)))                                                                    
 
 #Create table of results
 BankData<-as.data.frame(Banks,row.names=rownames)
@@ -1467,9 +1449,7 @@ ECB          <-c( 0,
                   0,
                   round(S_modelData$oacb[yr]-S_modelData$oacb[yr-1], digits = 0),
                   round(S_modelData$vcb[yr]-S_modelData$vcb[yr-1], digits = 0),
-                  paste(round(S_modelData$opcb[yr]-(S_modelData$vcb[yr]-S_modelData$vcb[yr-1]), digits = 0))
-)                                                                    
-
+                  paste(round(S_modelData$opcb[yr]-(S_modelData$vcb[yr]-S_modelData$vcb[yr-1]), digits = 0)))                                                                    
 
 #Create table of results
 CBData<-as.data.frame(ECB,row.names=rownames)
@@ -1501,11 +1481,7 @@ Government   <-c( 0,
                   0,
                   round(S_modelData$oag[yr]-S_modelData$oag[yr-1], digits = 0),
                   round(S_modelData$vg[yr]-S_modelData$vg[yr-1], digits = 0),
-                  paste(round(-S_modelData$gov[yr]+S_modelData$tax[yr]-S_modelData$tr[yr]-(S_modelData$intg[yr])+S_modelData$fcb[yr]+S_modelData$opg[yr]-(S_modelData$vg[yr]-S_modelData$vg[yr-1]), digits = 0))
-)                 
-
-
-
+                  paste(round(-S_modelData$gov[yr]+S_modelData$tax[yr]-S_modelData$tr[yr]-(S_modelData$intg[yr])+S_modelData$fcb[yr]+S_modelData$opg[yr]-(S_modelData$vg[yr]-S_modelData$vg[yr-1]), digits = 0)))                 
 
 #Create table of results
 GovData<-as.data.frame(Government,row.names=rownames)
@@ -1537,9 +1513,7 @@ Households   <-c( round(-S_modelData$cons[yr], digits = 0),
                   round(S_modelData$eh[yr]-S_modelData$eh[yr-1], digits = 0),
                   round(S_modelData$oah[yr]-S_modelData$oah[yr-1], digits = 0),
                   round(S_modelData$vh[yr]-S_modelData$vh[yr-1], digits = 0),
-                  paste(round(-S_modelData$cons[yr]-S_modelData$tax[yr]+S_modelData$tr[yr]+S_modelData$wb[yr]+S_modelData$inth[yr]+S_modelData$fdf[yr]+S_modelData$fb[yr]+S_modelData$oph[yr]-(S_modelData$vh[yr]-S_modelData$vh[yr-1]), digits = 0))
-)                                                                    
-
+                  paste(round(-S_modelData$cons[yr]-S_modelData$tax[yr]+S_modelData$tr[yr]+S_modelData$wb[yr]+S_modelData$inth[yr]+S_modelData$fdf[yr]+S_modelData$fb[yr]+S_modelData$oph[yr]-(S_modelData$vh[yr]-S_modelData$vh[yr-1]), digits = 0)))                                                                    
 
 #Create table of results
 HouseData<-as.data.frame(Households,row.names=rownames)
@@ -1571,10 +1545,7 @@ Foreign      <-c( 0,
                   0,
                   round(S_modelData$oarow[yr]-S_modelData$oarow[yr-1], digits = 0),
                   round(S_modelData$vrow[yr]-S_modelData$vrow[yr-1], digits = 0),
-                  paste(round(-S_modelData$x[yr]+S_modelData$im[yr]+S_modelData$introw[yr]+S_modelData$oprow[yr]-(S_modelData$vrow[yr]-S_modelData$vrow[yr-1]), digits = 0))
-)                                                                    
-
-
+                  paste(round(-S_modelData$x[yr]+S_modelData$im[yr]+S_modelData$introw[yr]+S_modelData$oprow[yr]-(S_modelData$vrow[yr]-S_modelData$vrow[yr-1]), digits = 0)))                                                                    
 #Create table of results
 ROWData<-as.data.frame(Foreign,row.names=rownames)
 
@@ -1610,9 +1581,7 @@ Total        <-c( 0,
                           +(S_modelData$oab[yr]-S_modelData$oab[yr-1])+(S_modelData$oacb[yr]-S_modelData$oacb[yr-1])+(S_modelData$oarow[yr]-S_modelData$oarow[yr-1]), digits = 0),
                   round((S_modelData$vh[yr]-S_modelData$vh[yr-1])+(S_modelData$vf[yr]-S_modelData$vf[yr-1])+(S_modelData$vg[yr]-S_modelData$vg[yr-1])+
                           +(S_modelData$vb[yr]-S_modelData$vb[yr-1])+(S_modelData$vcb[yr]-S_modelData$vcb[yr-1])+(S_modelData$vrow[yr]-S_modelData$vrow[yr-1]), digits = 0),
-                  0
-)                                                                    
-
+                  0)                                                                    
 
 #Create table of results
 TotalData<-as.data.frame(Total,row.names=rownames)
@@ -1646,13 +1615,67 @@ Italy_TFM_Matrix %>%
 
 #Create csv
 #write.csv(Italy_TFM_Matrix,"italy_TFM_matrix_data.csv", row.names = T)
-
 ```
 
-
-[work in progress] 🛠️
-
 ### 3_In_sample_predictions
+
+The model is now ready to perform simulations. In fact, we can use in-sample simulations of model variables to verify how well the model replicates observed data for the past years. The first step is to define the exogenization list, which comprises the variables kept exogenous in the simulations. In this regard, we have chosen the variables named 'Other payments', 'Other financial assets', the policy rate, the foreign price level, and the energy price level. The associated code chunk is:
+
+```R
+# Define exogenization list to 2021
+  exogenizeList <- list(
+    
+    #Adjusted endogenous variables in 1998-2021
+    oph = TRUE,                                 #Other payments associated with households
+    opf = TRUE,                                 #Other payments associated with firms
+    opb = TRUE,                                 #Other payments associated with banks
+    opcb = TRUE,                                #Other payments associated with ECB
+    oacb = TRUE,                                #Other financial assets of ECB
+    oaf = TRUE,                                 #Other financial assets held by firms
+    oab = TRUE,                                 #Other financial assets held by banks
+    oag = TRUE,                                 #Other financial assets held by government
+    oah = TRUE,                                 #Other financial assets held by households
+    rstar = TRUE,                               #ECB refinancing rate
+    Lp_row = TRUE,                              #Log of foreign price level
+    Lp_en = TRUE                                #Log of price of energy 
+  )
+```
+
+In-sample unadjusted simulations can be generated simply by running the following additional code:
+
+```R
+# In-sample prediction (no add factors)
+  S_model <- SIMULATE(S_model
+                      ,simType='STATIC'
+                      ,TSRANGE=c(1998,1,2021,1)
+                      ,simConvergence=0.00001
+                      ,simIterLimit=100
+                      ,Exogenize=exogenizeList,
+                      verbose = FALSE )
+```
+We can plot the observed series against the simulated one for each variable. In the figure below, we selected nominal and real GDP.
+
+```R
+#Define the layout
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
+
+# Show predicted nominal GDP
+plot(S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(a) Nominal GDP (current prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$y),max(S_model$simulation$y)))
+lines(S_modelData$y,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+abline(h=1795100,col=4)
+
+# Show predicted real GDP
+plot(100*S_model$simulation$y/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(b) Real GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$y/S_modelData$p),max(100*S_model$simulation$y/S_model$simulation$p)))
+lines(100*S_modelData$y/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+abline(h=1795100,col=4)
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita.png" alt="fig 1 PC">
+</p>
+
 
 [work in progress] 🛠️
 
