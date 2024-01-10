@@ -12,10 +12,7 @@
 The first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the balance sheet and the transactions-flow matrix. [...]
 
 $$
-\begin{table}
-\caption{Table 1. Balance sheet in period 2021}
-\centering
-\begin{tabular}[t]{l|r|r|r|r|r|r|r}
+\begin{array}{l|r|r|r|r|r|r|r}
 \hline
   & Households & Firms & Government & Banks & ECB & Foreign & Total\\
 \hline
@@ -35,8 +32,7 @@ Net financial wealth & 4055488 & -1960123 & -2355115 & 20172 & -126873 & 366451 
 \hline
 Column total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
-\end{tabular}
-\end{table}
+\end{array}
 $$
 
 
