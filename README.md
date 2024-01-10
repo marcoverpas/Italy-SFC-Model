@@ -1684,6 +1684,9 @@ We can now plot the observed series against the simulated one for each variable.
 #Define layout
 layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
 
+#Define colour of simulated series
+color <- "red1"
+
 # Show predicted Nominal GDP
 plot(S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(a) Nominal GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(S_modelData$y),max(S_model$simulation$y)))
 lines(S_modelData$y,col="darkorchid4",lty=3,lwd=3)
@@ -1738,6 +1741,71 @@ The figure below shows selected flow variables and ratios over the period 1998-2
 </p>
 
 While the primary goal of our model is not to outperform existing prediction models (but rather to provide a new tool for creating and comparing alternative scenarios), it tracks past data reasonably well. The main issue appears to be the inclusion of annual lags, causing model predictions to lag when the static simulation is performed. Arguably, this drawback can be overcome by using quarterly data, although seasonality and data availability issues may arise in this case.
+
+After checking the model's fit, in-sample predictions can be adjusted to the observed series using prediction errors. This is done by exogenizing the endogenous variables of the model.
+
+```R
+# Define exogenization list to 2021
+  exogenizeList <- list(
+    
+    #Adjusted endogenous variables in 1998-2021
+    Lpc = c(1998,1,2021,1),                     #Log of consumer price index
+    Lp_en = c(1998,1,2021,1),                   #Log of price of energy 
+    mul = c(1998,1,2021,1),                     #Markup on loans to firms 
+    mulh = c(1998,1,2021,1),                    #Markup on personal loans    
+    mubb = c(1998,1,2021,1),                    #Average premium on bills held by banks 
+    mubrow = c(1998,1,2021,1),                  #Average premium on bills held by foreign sector 
+    mubh = c(1998,1,2021,1),                    #Average premium on bills held by households 
+    fuf = c(1998,1,2021,1),                     #Firms undistributed profit
+    lh = c(1998,1,2021,1),                      #Personal loans to households
+    gov = c(1998,1,2021,1),                     #Government spending
+    tr = c(1998,1,2021,1),                      #Transfers
+    Leh = c(1998,1,2021,1),                     #Log of household demand for shares 
+    Lbh = c(1998,1,2021,1),                     #Log of household demand for government bills
+    Lhh = c(1998,1,2021,1),                     #Log of household demand for cash
+    Lbb = c(1998,1,2021,1),                     #Log of bank demand for bills
+    prod = c(1998,1,2021,1),                    #Labour productivity
+    Lns = c(1998,1,2021,1),                     #Log of labour force
+    gw = c(1998,1,2021,1),                      #Growth rate of wages
+    Lp = c(1998,1,2021,1),                      #Log of price level
+    LidR = c(1998,1,2021,1),                    #Log of real investment
+    LimR = c(1998,1,2021,1),                    #Log of real import
+    LconsR = c(1998,1,2021,1),                  #Log of real consumption 
+    intmh = c(1998,1,2021,1),                   #Interests received by households on bank deposits
+    rstar = c(1998,1,2021,1),                   #ECB refinancing rate
+    tax = c(1998,1,2021,1),                     #Tax revenue
+    LxR = c(1998,1,2021,1),                     #Log of real export
+    Lp_im = c(1998,1,2021,1),                   #Log of price of import
+    Lp_row = c(1998,1,2021,1),                  #Log of foreign price level
+    oph = TRUE,                                 #Other payments associated with households
+    oacb = TRUE,                                #Other financial assets of ECB
+    oaf = TRUE,                                 #Other financial assets held by firms
+    oab = TRUE,                                 #Other financial assets of banks
+    oag = TRUE,                                 #Other financial assets of government
+    oah = TRUE,                                 #Other financial assets of households
+    mub = TRUE,                                 #Average premium paid by the government 
+    perc_en = TRUE,                             #Percentage of energy import to total import 
+    lambdarow = TRUE,                           #Share of government bills held by foreign sector
+    yf = TRUE,                                  #Foreign income  
+    rho = TRUE                                  #Reserve ratio   
+  )
+  
+  # Simulate again model
+  S_model <- SIMULATE(S_model
+                      ,simType='STATIC'
+                      ,TSRANGE=c(1998,1,2021,1)
+                      ,simConvergence=0.00001
+                      ,simIterLimit=100
+                      ,Exogenize=exogenizeList
+                      ,quietly=TRUE)
+```
+
+The figure below shows the *adjusted values* of selected flow variables and ratios over the period 1998-2021.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_1_ita_big_adj.png" alt="fig 1 ITA adj">
+</p>
+
 
 ### 4_Out_of_sample_predictions
 
