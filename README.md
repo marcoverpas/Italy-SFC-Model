@@ -1809,7 +1809,102 @@ The figure below shows the *adjusted values* of selected flow variables and rati
 
 ### 4_Out_of_sample_predictions
 
-[work in progress] 🛠️
+The model allows performing out-of-sample predictions, which can be used as the baseline scenario.
+
+The first step is to extend exogenous variables up to the end of the forecasting period, which, in this exercise, is 2028.
+
+```R
+# Extend exogenous and conditionally evaluated variables up to 2028
+S_model$modelData <- within(S_model$modelData,{ 
+                     dum = TSEXTEND(dum,  UPTO=c(2028,1))       #Dummy for Bb
+})
+```
+
+Similar to what we did for adjusted in-sample predictions, the second step is to create an 'exogenization list', encompassing all the endogenous variables of the model. These variables are adjusted up to 2021 and then set free to follow the dynamics implied by the model equations.
+
+```R
+# Define exogenization list to 2021
+exogenizeList <- list(
+  
+  Lpc = c(1998,1,2021,1),                     #Log of consumer price index
+  Lp_en = c(1998,1,2021,1),                   #Log of price of energy 
+  mul = c(1998,1,2021,1),                     #Markup on loans to firms 
+  mulh = c(1998,1,2021,1),                    #Markup on personal loans    
+  mubb = c(1998,1,2021,1),                    #Average premium on bills held by banks 
+  mubrow = c(1998,1,2021,1),                  #Average premium on bills held by foreign sector 
+  mubh = c(1998,1,2021,1),                    #Average premium on bills held by households 
+  fuf = c(1998,1,2021,1),                     #Firms undistributed profit
+  lh = c(1998,1,2021,1),                      #Personal loans to households
+  gov = c(1998,1,2021,1),                     #Government spending
+  tr = c(1998,1,2021,1),                      #Transfers
+  prod = c(1998,1,2021,1),                    #Labour productivity
+  Lns = c(1998,1,2021,1),                     #Log of labour force
+  gw = c(1998,1,2021,1),                      #Growth rate of wages
+  Lp = c(1998,1,2021,1),                      #Log of price level
+  LidR = c(1998,1,2021,1),                    #Log of real investment
+  intmh = c(1998,1,2021,1),                   #Interests received by households on bank deposits
+  rstar = c(1998,1,2021,1),                   #ECB refinancing rate
+  LimR = c(1998,1,2021,1),                    #Log of real import
+  LxR = c(1998,1,2021,1),                     #Log of real export 
+  tax = c(1998,1,2021,1),                     #Tax revenue
+  Leh = c(1998,1,2021,1),                     #Log of household demand for shares
+  Lhh = c(1998,1,2021,1),                     #Log of household demand for cash
+  Lbh = c(1998,1,2021,1),                     #Log of household demand for government bills
+  Lbb = c(1998,1,2021,1),                     #Log of bank demand for bills
+  LconsR = c(1998,1,2021,1),                  #Log of real consumption 
+  yf = c(1998,1,2021,1),                      #Foreign income
+  perc_en = c(1998,1,2021,1),                 #Percentage of energy import to total import 
+  lambdarow = c(1998,1,2021,1),               #Share of government bills held by foreign agents   
+  mub = c(1998,1,2021,1),                     #Average premium paid by the government
+  Lp_im = c(1998,1,2021,1),                   #Log of price of import
+  Lp_row = c(1998,1,2021,1),                  #Log of foreign price level
+  oph = TRUE,                                 #Other payments associated with households
+  oacb = TRUE,                                #Other financial assets of ECB
+  oaf = TRUE,                                 #Other financial assets held by firms
+  oab = TRUE,                                 #Other financial assets of banks
+  oag = TRUE,                                 #Other financial assets of government
+  oah = TRUE,                                 #Other financial assets of households
+  rho = TRUE,                                 #Reserve ratio
+  exr = TRUE                                  #Exchange rate
+)
+```
+
+The next step is to create the list of 'add factors,' which includes both the necessary adjustments to fit the 2022 observed series and the expected shocks and institutional changes.
+
+```R
+# Define add-factor list (defining exogenous adjustments: policy + available predictions)
+constantAdjList <- list(
+  
+  #Adjustments for 2022
+  Lp = TIMESERIES(0,-0.017,-0.01,0.006,0.018,0.03, 0.04,0.045,START=c(2021,1), FREQ='A'),  #GDP deflator correction
+  LimR = TIMESERIES(0,0.156,0.156-0.031,0.156-0.045,0.156-0.045,0.156-0.045,0.156-0.045,0.156-0.045,START=c(2021,1), FREQ='A'),  
+  LxR = TIMESERIES(0,0.075,0.075-0.012,0.075-0.01,0.075-0.01,0.075-0.01,0.075-0.01,0.075-0.01,START=c(2021,1), FREQ='A'),  
+  LconsR = TIMESERIES(0,0,0.01,0.05,0.05,0.05,0.045,0.045, START=c(2021,1), FREQ='A'), 
+  deltak = TIMESERIES(0,0.0126,0.0069,0.0011,-0.0016,-0.0033,-0.0033,-0.0033,START=c(2021,1), FREQ='A'),
+   
+  #Shocks and institutional changes
+  Lp_en = TIMESERIES(0,0.38,0.055,0.06,0,0,0,0, START=c(2021,1), FREQ='A'),  #Shock to energy price log-level
+  rstar = TIMESERIES(-0.01858333+0,-0.01858333+0.0156,-0.01858333+0.038,-0.01858333+0.03,-0.01858333+0.025,-0.01858333+0.025,-0.01858333+0.025,-0.01858333+0.025 ,START=c(2021,1), FREQ='A'),  
+  mub = TIMESERIES(0,-0.004,-0.02,-0.014,-0.010,-0.008,-0.008,-0.008 ,START=c(2021,1), FREQ='A') )
+```
+
+Afterward, we simulate the model out of sample using the function `DYNAMIC`, which employs simulated values for the lagged endogenous variables in the solutions of subsequent periods.
+
+```R
+# Simulate model
+S_model <- SIMULATE(S_model
+                    ,simType='DYNAMIC' #'FORECAST'
+                    ,TSRANGE=c(1998,1,2028,1)
+                    ,simConvergence=0.00001
+                    ,simIterLimit=1000
+                    ,Exogenize=exogenizeList
+                    ,ConstantAdjustment=constantAdjList
+                    ,quietly=TRUE)
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_2_ita_big.png" alt="fig 2 ITA">
+</p>
 
 ### 5_Additional_diagrams_and_figures
 
