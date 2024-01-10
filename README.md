@@ -1637,7 +1637,7 @@ Italy_TFM_Matrix %>%
       align="r") %>%
   kable_classic(full_width = F, html_font = "helvetica")
 ```
-The associated variables are those displayed in Section 1.
+The associated tables are those displayed in Section 1.
 
 ### 3_In_sample_predictions
 
