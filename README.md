@@ -1135,40 +1135,40 @@ The details of the other estimations can be visualised by scrolling up through t
 | $δ$        | Depreciation rate (average 1996-2019)                                | 0.046       |
 | $θ$        | Share of undistributed profits                                       | 0.265       |
 | $ϕ$        | Elasticity of personal loans to consumption                          | 0.058       |
-| $μ_b1^h$   | Premium on gov. bills held by households: coefficient 1              | 0.793       |
-| $μ_b2^h$   | Premium on gov. bills held by households: coefficient 2              | 0.804       |
-| $μ_l1$     | Markup on loans to firms: coefficient 1                              | -0.014      |
-| μ_l2     | Markup on loans to firms: coefficient 2                              | 0.49        |
-| μ_h1     | Markup on personal loans: coefficient 1                              | 0.029       |
-| μ_h2     | Markup on personal loans: coefficient 2                              | 0.23        |
-| λ_h0^oa  | Other financial assets of households: coefficient 1                  | 134828.967  |
-| λ_h1^oa  | Other financial assets of households: coefficient 2                  | 0.908       |
-| λ_b^b    | Stock of bills held by banks: coefficient 1                          | 0.918       |
-| τ_1^T    | Average tax rate on labour incomes                                   | 0.514       |
-| τ_2^T    | Average tax rate on non-labour incomes                               | 0.061       |
-| τ_3^T    | Average tax rate on wealth                                           | 0.042       |
-| τ_1^TR   | Transfers and benefits: auto-regressive component                    | 1.043       |
-| τ_2^TR   | Transfers and benefits: elasticity to unemployment rate              | 374169.858  |
-| λ_B      | Holdings of government bills: coefficient 1                          | 0.903       |
-| λ_E      | Holdings of shares as a ratio to total wealth                        | 0.925       |
-| λ_c      | Elasticity of cash holdings to real consumption                      | 0.006       |
-| ρ        | Reserve ratio                                                        | 1.004       |
-| g_y^row  | Foreign growth rate                                                  | 0.037       |
-| exr      | Exchange rate coefficient                                            | 1           |
-| r^*      | Policy rate                                                          | 0.019       |
-| μ_b1     | Premium on government bills held by banks: coefficient 1             | 0.924       |
-| μ_b2     | Premium on government bills held by banks: coefficient 2             | 0.248       |
-| μ_b1^row | Premium on government bills held by RoW: coefficient 1               | 0.554       |
-| μ_b2^row | Premium on government bills held by RoW: coefficient 2               | 0.916       |
-| ν_0      | Labour productivity: autonomous component                            | -0.004      |
-| ν_1      | Labour productivity: elasticity to real wage rate                    | 0.397       |
-| ν_2      | Labour productivity: elasticity to real output                       | 0.183       |
-| ν_s1     | Labour force: auto-regressive component                              | 1.001       |
-| ν_s2     | Labour force: elasticity to labour demand gap                        | 0.031       |
-| ω_1      | Wage growth rate: elasticity to inflation                            | 0.009       |
-| ω_2      | Wage growth rate: elasticity to unemployment rate                    | -0.786      |
-| p_row^0  | Foreign price level: coefficient 1                                   | 0.207       |
-| p_row    | Foreign price level: coefficient 2                                   | 0.959       |
+| $μ_{b1}^h$   | Premium on gov. bills held by households: coefficient 1              | 0.793       |
+| $μ_{b2}^h$   | Premium on gov. bills held by households: coefficient 2              | 0.804       |
+| $μ_{l1}$     | Markup on loans to firms: coefficient 1                              | -0.014      |
+| $μ_{l2}$     | Markup on loans to firms: coefficient 2                              | 0.49        |
+| $μ_{h1}$     | Markup on personal loans: coefficient 1                              | 0.029       |
+| $μ_{h2}$     | Markup on personal loans: coefficient 2                              | 0.23        |
+| $λ_{h0}^{oa}$  | Other financial assets of households: coefficient 1                  | 134828.967  |
+| $λ_{h1}^{oa}$  | Other financial assets of households: coefficient 2                  | 0.908       |
+| $λ_b^b$    | Stock of bills held by banks: coefficient 1                          | 0.918       |
+| $τ_1^T$    | Average tax rate on labour incomes                                   | 0.514       |
+| $τ_2^T$    | Average tax rate on non-labour incomes                               | 0.061       |
+| $τ_3^T$    | Average tax rate on wealth                                           | 0.042       |
+| $τ_1^{TR}$   | Transfers and benefits: auto-regressive component                    | 1.043       |
+| $τ_2^{TR}$   | Transfers and benefits: elasticity to unemployment rate              | 374169.858  |
+| $λ_B$      | Holdings of government bills: coefficient 1                          | 0.903       |
+| $λ_E$      | Holdings of shares as a ratio to total wealth                        | 0.925       |
+| $λ_c$      | Elasticity of cash holdings to real consumption                      | 0.006       |
+| $ρ$        | Reserve ratio                                                        | 1.004       |
+| $g_y^{row}$  | Foreign growth rate                                                  | 0.037       |
+| $exr$      | Exchange rate coefficient                                            | 1           |
+| $r^*$      | Policy rate                                                          | 0.019       |
+| $μ_{b1}$     | Premium on government bills held by banks: coefficient 1             | 0.924       |
+| $μ_{b2}$     | Premium on government bills held by banks: coefficient 2             | 0.248       |
+| $μ_{b1}^{row}$ | Premium on government bills held by RoW: coefficient 1               | 0.554       |
+| $μ_{b2}^{row}$ | Premium on government bills held by RoW: coefficient 2               | 0.916       |
+| $ν_0$      | Labour productivity: autonomous component                            | -0.004      |
+| $ν_1$      | Labour productivity: elasticity to real wage rate                    | 0.397       |
+| $ν_2$      | Labour productivity: elasticity to real output                       | 0.183       |
+| $ν_{s1}$     | Labour force: auto-regressive component                              | 1.001       |
+| $ν_{s2}$     | Labour force: elasticity to labour demand gap                        | 0.031       |
+| $ω_1$      | Wage growth rate: elasticity to inflation                            | 0.009       |
+| $ω_2$      | Wage growth rate: elasticity to unemployment rate                    | -0.786      |
+| $p_{row}^0$  | Foreign price level: coefficient 1                                   | 0.207       |
+| $p_{row}$    | Foreign price level: coefficient 2                                   | 0.959       |
 | ϵ_2^en   | Share of energy prod. to tot. import: elasticity to energy inflation | -0.002      |
 | ϵ_1^en   | Share of energy prod. to tot. import: elasticity to real output      | 0.013       |
 | p_en     | Energy price coefficient                                             | 1.006       |
