@@ -6,6 +6,14 @@
 
 **Description**: This repository contains two types of code. The file named `Italy_SFC_model.r` replicates the baseline and the experiments discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2022) [Is the Italian government debt sustainable? Scenarios after the Covid-19 shock](https://academic.oup.com/cje/article-abstract/46/3/581/6584486), *Cambridge Journal of Economics*. Notice that an early version of it was used to produce the simulations discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2021) [Are EU Policies Effective to Tackle the Covid-19 Crisis? The Case of Italy](https://www.tandfonline.com/doi/full/10.1080/09538259.2021.1876477), *Review of Political Economy*. The other files allow replicating the baseline and the experiments discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2024) [Energy crisis, economic growth and public finance in Italy](https://www.sciencedirect.com/journal/energy-economics), *Energy Economics*. A detailed description of the latter is provided below.
 
+## Table of Contents
+
+- [1 Model and data](#1_Model_and_data)
+- [2 Accounting tables](2_Accouting_tables)
+- [3 In-sample predictions](3_In_sample_predictions)
+- [4 Out-of-sample predictions](4_Out_of_sample_predictions)
+- [5 Additional diagrams and figures](5_Additional_diagrams_and_figures)
+- [6 Experiments](6_Experiments)
 
 ### 1_Model_and_data
 
@@ -1097,8 +1105,24 @@ Signif. codes:   *** 0.001  ** 0.01  * 0.05
 
 ```
 
+### 2_Accouting_tables
 
 [work in progress] 🛠️
 
+### 3_In_sample_predictions
+
+[work in progress] 🛠️
+
+### 4_Out_of_sample_predictions
+
+[work in progress] 🛠️
+
+### 5_Additional_diagrams_and_figures
+
+[work in progress] 🛠️
+
+### 6_Experiments
+
+[work in progress] 🛠️
 
 
