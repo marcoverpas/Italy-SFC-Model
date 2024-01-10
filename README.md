@@ -9,11 +9,11 @@
 ## Table of Contents
 
 - [1 Model and data](#1_Model_and_data)
-- [2 Accounting tables](2_Accouting_tables)
-- [3 In-sample predictions](3_In_sample_predictions)
-- [4 Out-of-sample predictions](4_Out_of_sample_predictions)
-- [5 Additional diagrams and figures](5_Additional_diagrams_and_figures)
-- [6 Experiments](6_Experiments)
+- [2 Accounting tables](#2_Accouting_tables)
+- [3 In-sample predictions](#3_In_sample_predictions)
+- [4 Out-of-sample predictions](#4_Out_of_sample_predictions)
+- [5 Additional diagrams and figures](#5_Additional_diagrams_and_figures)
+- [6 Experiments](#6_Experiments)
 
 ### 1_Model_and_data
 
