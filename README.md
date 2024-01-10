@@ -76,7 +76,7 @@ The second step to create the model is to upload the data (observed series). Our
 DataEE <- read.csv("https://www.dropbox.com/scl/fi/58un32aub0asx1tu1t53c/Data_Aalborg.csv?rlkey=642w2hwa8qo069nmn1rc848i2&dl=1") 
 ```
 
-Running this chunk of code allows creating the dataset used by the model to estimate the coefficients and attribute initial values to the variables.
+Running this chunk of code allows creating the dataset used by the model to estimate the coefficients and attribute initial values to the variables. Data are already classified to fit the two tables above.
 
 | Year | CONS    | INV    | GOV    | X      | IM     | Y       | TAX         | INVnet      | TR     | WB     | INTh  | INTlh       | INTgh       | INTm         | INTf  | INTg        | INTgb        | INTb        | INTcb        | INTrow | Ff          | DIV         | FUf    | Fb          | Fcb          | YD      | OPh          | OPf         | OPg         | OPb         | OPcb   | OProw        | Yrow        | DEF1        | Hh     | Hbd   | Hs      | Mh      | Ms       | Bh     | Deb         | Bb      | Bcb    | Bs           | Brow       | Lf       | Lh      | Ls      | Eh      | Es       | OAh     | OAf    | OAg        | OAb      | OAcb    | OArow      | Vh      | NVh     | Vf       | Vg       | Vb      | Vcb     | Vrow    | K           | Rlh         | Rl          | Rb          | Rstar       | Prod        | ProdR       | Delta | Kappa       | KappaN      | Py      | Pc    | Exr   | Exr42 | Exr42R    | IMen      | Pen         | Pen2        | Pim         | Pim_en      | Py_row      | RHO         | w           | gid          | gkn         | gy           | Rbb          | Rbrow       | Rbh         | Re          | gw           | CPI          | PI          | PIen         | Nd      | Ns      |
 |------|---------|--------|--------|--------|--------|---------|-------------|-------------|--------|--------|-------|-------------|-------------|--------------|-------|-------------|--------------|-------------|--------------|--------|-------------|-------------|--------|-------------|--------------|---------|--------------|-------------|-------------|-------------|--------|--------------|-------------|-------------|--------|-------|---------|---------|----------|--------|-------------|---------|--------|--------------|------------|----------|---------|---------|---------|----------|---------|--------|------------|----------|---------|------------|---------|---------|----------|----------|---------|---------|---------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|-------|-------------|-------------|---------|-------|-------|-------|-----------|-----------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|-------------|--------------|--------------|-------------|-------------|-------------|--------------|--------------|-------------|--------------|---------|---------|
@@ -107,6 +107,647 @@ Running this chunk of code allows creating the dataset used by the model to esti
 | 2019 | 1074680 | 327703 | 334512 | 567784 | 508031 | 1796648 | 506154.8658 | 84149.38931 | 146882 | 681104 | 14113 | 18527.37968 | 29505.85369 | 3134.525981  | 3429  | 56871.99979 | 12795.62011  | 31617.4738  | 3134.525981  | 11436  | 1082293     | 869739      | 212554 | 31617.4738  | 3134.525981  | 1426904 | 189603.392   | -29822      | -124910.392 | -98786      | -18379 | 82294        | 28774461.9  | 28976.608   | 165890 | 12654 | -178544 | 1286064 | -1286064 | 289695 | 2409771.072 | 1370663 | 573547 | -2409771.072 | 175866.072 | -995791  | -728244 | 1724035 | 1228692 | -1228692 | 1541288 | 186937 | 139239.072 | -1780685 | -501746 | 414966.928 | 4511629 | 3783385 | -2037546 | -2270532 | 40603   | -106743 | 590833  | 5378793.1   | 0.026025    | 0.003443494 | 0.023887824 | 0           | 77.17560137 | 74.26229167 | 0.046 | 0.334024374 | 0.3556951   | 103.923 | 103.2 | 1.12  | 105.8 | 101.08213 | 55150.68  | 108.25      | 107.02      | 101.5       | 108.3       | 108.7763154 | 0.009839324 | 29.25704467 | -0.001496066 | 0.015893305 | 0.014258286  | 0.010643114  | 0.035347303 | 0.094225457 | 0.808649568 | 0.017457043  | 0.006829268  | 0.009382558 | -0.059785755 | 23280   | 25861.5 |
 | 2020 | 963726  | 293530 | 343580 | 488941 | 429156 | 1660621 | 428608.9298 | 46105.51741 | 202196 | 642972 | 10558 | 16955.9478  | 19250.6187  | 8263.329099  | 3779  | 54290.99891 | 16112.05111  | 28583.66981 | 8263.329099  | 10665  | 1126688     | 801632      | 325056 | 28583.66981 | 8263.329099  | 1149580 | -107752.74   | 112818      | -91533.26   | 130876      | -14959 | -29449       | 26993213.3  | 163194.74   | 185433 | 11474 | -196907 | 1371058 | -1371058 | 263335 | 2572965.812 | 1443952 | 764972 | -2572965.812 | 100706.812 | -1041503 | -736292 | 1777795 | 1234134 | -1234134 | 1651571 | 269617 | 47705.812  | -1690684 | -689767 | 411557.188 | 4705531 | 3969239 | -2006020 | -2525260 | 171479  | -121702 | 512264  | 5424898.617 | 0.023283333 | 0.00362841  | 0.022529526 | 0           | 72.73822717 | 68.88024466 | 0.046 | 0.306110974 | 0.323621459 | 105.601 | 103   | 1.142 | 108.1 | 101.91719 | 31741.38  | 78.45       | 99.6        | 96.3        | 78.5        | 111.9985301 | 0.00836872  | 28.16334576 | -0.1042804   | 0.008571722 | -0.075711547 | 0.011754933  | 0.060642737 | 0.066451332 | 0.652427134 | -0.037382413 | -0.001937984 | 0.01614657  | -0.275288684 | 22830.1 | 25140.6 |
 | 2021 | 1030124 | 357215 | 352718 | 582192 | 540198 | 1782051 | 483365.7672 | 107669.6636 | 188601 | 692915 | 10905 | 14916.66234 | 12622.01724 | 13199.6451   | 2326  | 60678.00031 | 25091.33797  | 29134.35521 | 13199.6451   | 9765   | 1141970.282 | 738858.2821 | 403112 | 29134.35521 | 13199.6451   | 1116373 | -60674.87011 | 55160.28211 | 275576.588  | -151307     | -5171  | -113584      | 29441497.75 | 105431.588  | 200683 | 10817 | -211500 | 1428434 | -1428434 | 233263 | 2678397.4   | 1366294 | 868289 | -2678397.4   | 210551.4   | -871902  | -763488 | 1635390 | 1372850 | -1372850 | 1583746 | 284629 | 323282.4   | -1563895 | -783662 | 155899.6   | 4818976 | 4055488 | -1960123 | -2355115 | 20172   | -126873 | 366451  | 5532568.281 | 0.020259167 | 0.002667731 | 0.023582902 | 0           | 79.33378445 | 74.72335354 | 0.046 | 0.322101944 | 0.344334175 | 106.17  | 105   | 1.183 | 109.3 | 101.53931 | 64858.995 | 112.4833333 | 125.39      | 105         | 85.59190031 | 114.2006256 | 0.007572628 | 30.84736029 | 0.216962491  | 0.019847314 | 0.073123247  | 0.01737685   | 0.096964642 | 0.047931408 | 0.598685623 | 0.095301693  | 0.019417476  | 0.005388207 | 0.433821967  | 22462.7 | 24829.5 |
+
+The next step is to create a text file (txt) defining model equations. For a comprehensive description, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024). Note: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, during the estimation of model coefficients, the R console displays related details in a 'last in, first out' order.
+
+```R
+S_model.txt="MODEL
+
+COMMENT> FIRMS SECTOR ----------------------------------------------------------
+
+COMMENT> GDP
+IDENTITY> y
+EQ> y = cons + id + gov + nx                      
+
+COMMENT> Growth rate of nominal GDP (auxiliary) 
+IDENTITY> gy
+EQ> gy = (y/TSLAG(y,1))-1
+
+COMMENT> Depreciation rate (average value over the period 1996-2019)
+IDENTITY> deltak
+EQ> deltak = 0.046
+
+COMMENT> Real investment net of capital depreciation 
+IDENTITY> idR
+EQ> idR = exp(LidR)
+
+COMMENT> Nominal investment including capital depreciation 
+IDENTITY> id
+EQ> id = idR*p/100  + deltak*TSLAG(k,1)         
+
+COMMENT> Nominal capital stock
+IDENTITY> k
+EQ> k = TSLAG(k,1)*(1 - deltak) + id 
+
+COMMENT> Firms' profit
+IDENTITY> ff
+EQ> ff = y - intf - wb + opf
+
+COMMENT> Interest payments on loans to firms
+IDENTITY> intf
+EQ> intf = rl*lf  
+
+COMMENT> Interest rate on loans to firms
+IDENTITY> rl
+EQ> rl = rstar + mul 
+
+COMMENT> Firms' undistributed profit
+BEHAVIORAL> fuf
+TSRANGE 1998 1 2021 1
+EQ> fuf = theta*ff   
+COEFF> theta
+STORE> coe(3)
+
+COMMENT> Firms' distributed profit
+IDENTITY> fdf
+EQ> fdf = ff - fuf
+
+COMMENT> Firms' demand for bank loans  
+IDENTITY> lf
+EQ> lf = TSLAG(lf,1) + id - fuf - (es-TSLAG(es,1)) + (oaf-TSLAG(oaf,1))
+
+COMMENT> Supply of shares  
+IDENTITY> es
+EQ> es = eh
+
+COMMENT> Total wealth accumulated by firms
+IDENTITY> vf
+EQ> vf = oaf - (lf + es)
+
+COMMENT> HOUSEHOLD SECTOR ------------------------------------------------------
+
+COMMENT> Disposable income  
+IDENTITY> yd
+EQ> yd = wb - tax + tr + inth + fdf + fb + oph
+
+COMMENT> Real consumption
+IDENTITY> consR
+EQ> consR = exp(LconsR)
+
+COMMENT> Nominal consumption
+IDENTITY> cons
+EQ> cons = consR*p/100
+
+COMMENT> Net wealth of households    
+IDENTITY> vh
+EQ> vh = TSLAG(vh,1) + yd - cons
+
+COMMENT> Loans to households 
+BEHAVIORAL> lh
+TSRANGE 1998 1 2021 1
+EQ> TSDELTALOG(lh,1) = phi1*TSLAG(cons/yd,1)
+COEFF> phi1
+STORE> coe(6)
+
+COMMENT> Interests paid by households on personal loans 
+IDENTITY> intlh
+EQ> intlh = rlh*TSLAG(lh,1)  
+
+COMMENT> Premium on government bills held by households
+BEHAVIORAL> mubh
+TSRANGE 1998 1 2021 1
+EQ> mubh = mubh1*TSLAG(mubh,1) + mubh2*mub  
+COEFF> mubh1 mubh2
+STORE> coe(7)
+
+COMMENT> Interest rate received households on their government debt holdings
+IDENTITY> rbh
+EQ> rbh = rstar + mubh 
+
+COMMENT> Interests received by households on their government debt holdings 
+IDENTITY> intgh
+EQ> intgh = rbh * TSLAG(bh,1)  
+
+COMMENT> Markup on loans to firms
+BEHAVIORAL> mul
+TSRANGE 1998 1 2021 1
+EQ> mul = mul0 + mul1*TSLAG(mub,1)  
+COEFF> mul0 mul1
+STORE> coe(2)
+
+COMMENT> Net interest payments received by households 
+IDENTITY> inth
+EQ> inth = intgh + intmh - intlh
+
+COMMENT> Markup on personal loans to households
+BEHAVIORAL> mulh
+TSRANGE 1998 1 2021 1
+EQ> mulh = mulh0 + mulh1*TSLAG(mub,1)  
+COEFF> mulh0 mulh1
+STORE> coe(7)
+
+COMMENT> Interest rate on loans to households
+IDENTITY> rlh
+EQ> rlh = rstar + mulh 
+
+COMMENT> Wage share (endogenous) 
+IDENTITY> Omega
+EQ> Omega = wb/y
+
+COMMENT> Other assets of households 
+BEHAVIORAL> oah
+TSRANGE 1998 1 2021 1
+EQ> oah = oah0 + lambda_oah*TSLAG(oah,1)
+COEFF> oah0 lambda_oah
+STORE> coe(18)
+
+COMMENT> BANKING SECTOR --------------------------------------------------------
+
+COMMENT> Total supply of loans  
+IDENTITY> ls
+EQ> ls = lf + lh
+
+COMMENT> Supply of bank deposits  
+IDENTITY> ms
+EQ> ms = mh
+
+COMMENT> Banks profit 
+IDENTITY> fb
+EQ> fb = intb
+
+COMMENT> Total interests payments received by banks
+IDENTITY> intb
+EQ> intb = intgb + intf + intlh - intmh
+
+COMMENT> Net interest payments received by banks on government bills 
+IDENTITY> intgb
+EQ> intgb = rbb*TSLAG(bb,1) 
+
+COMMENT> Stock of bills held by banks 
+BEHAVIORAL> Lbb
+TSRANGE 1998 1 2021 1
+EQ> Lbb = lambdabb1*TSLAG(log(ls+hbd+bb),1) + lambdabb2*dum
+COEFF> lambdabb1 lambdabb2
+STORE> coe(33)
+
+COMMENT> bb
+IDENTITY> bb
+EQ> bb = exp(Lbb)
+
+COMMENT> Total wealth accumulated by banks     
+IDENTITY> vb
+EQ> vb = oab + hbd + bb + ls - ms  
+
+COMMENT> GOVERNMENT SECTOR -----------------------------------------------------
+
+COMMENT> Tax revenue  
+BEHAVIORAL> tax
+TSRANGE 1998 1 2021 1
+EQ> tax = tau1*(TSLAG(wb,1)) + tau2*(TSLAG((yd - wb),1)) + tau3*(TSLAG(vh,1))
+COEFF> tau1 tau2 tau3
+STORE> coe(10)
+
+COMMENT> Transfers and benefits 
+BEHAVIORAL> tr
+TSRANGE 1998 1 2021 1
+EQ> tr = tau4*TSLAG(tr,1) + tau5*TSDELTA(un,1)
+COEFF> tau4 tau5
+STORE> coe(11)
+
+COMMENT> Government deficit
+IDENTITY> def
+EQ> def = gov + tr + intg - tax - fcb
+
+COMMENT> Government debt stock
+IDENTITY> deb
+EQ> deb = bs 
+
+COMMENT> Interest payments on government debt 
+IDENTITY> intg
+EQ> intg = rb*TSLAG(deb,1)  
+
+COMMENT> Supply of government bills and bonds
+IDENTITY> bs
+EQ> bs = TSLAG(bs,1) + def
+
+COMMENT> Net wealth of goverment sector  (Note: negative value) 
+IDENTITY> vg
+EQ> vg = - bs + oag
+
+COMMENT> PORTFOLIO EQUATIONS ---------------------------------------------------
+
+COMMENT> Holdings of government bills (log) 
+BEHAVIORAL> Lbh
+TSRANGE 1998 1 2021 1
+EQ> Lbh = lambda20*TSLAG(log(vh),1) + lambda21*dum
+COEFF> lambda20 lambda21
+STORE> coe(16)
+
+COMMENT> Holdings of shares (log) 
+BEHAVIORAL> Leh
+TSRANGE 1998 1 2021 1
+EQ> Leh = lambda10*TSLAG(log(vh),1) 
+COEFF> lambda10 
+STORE> coe(15)
+
+COMMENT> Holding of shares 
+IDENTITY> eh
+EQ> eh = exp(Leh)
+
+COMMENT> Holding of government bills 
+IDENTITY> bh
+EQ> bh = exp(Lbh)
+
+COMMENT> Holdings of cash (log) 
+BEHAVIORAL> Lhh
+TSRANGE 1998 1 2021 1
+EQ> TSDELTA(Lhh,1) = lambdac*log(cons/pc)
+COEFF> lambdac
+STORE> coe(17)
+
+COMMENT> Holding of cash 
+IDENTITY> hh
+EQ> hh = exp(Lhh)
+
+COMMENT> Holdings of deposits 
+IDENTITY> mh
+EQ> mh = vh + lh - hh - bh - eh - oah
+
+COMMENT> CENTRAL BANK ----------------------------------------------------------
+
+COMMENT> CB holdings of government bills
+IDENTITY> bcb
+EQ> bcb = bs - bh - bb - brow 
+
+COMMENT> Supply of cash  
+IDENTITY> hs
+EQ> hs = bcb + oacb - vcb
+
+COMMENT> Profit realised and distributed by CB
+IDENTITY> fcb
+EQ> fcb = intg - intgh - intgb - introw
+
+COMMENT> Reserve requirement: demand
+IDENTITY> hbd
+EQ> hbd = rho*ms
+
+COMMENT> Reserve ratio 
+BEHAVIORAL> rho
+TSRANGE 1998 1 2021 1
+EQ> rho = rho_1*TSLAG(rho,1)
+COEFF> rho_1
+STORE> coe(56)
+
+COMMENT> Total demand for cash and reserves (auxiliary)
+IDENTITY> hd
+EQ> hd = hbd + hh
+
+COMMENT> FOREIGN SECTOR --------------------------------------------------------
+
+COMMENT> Nominal import
+IDENTITY> im
+EQ> im = exp(LimR) * p / 100
+
+COMMENT> Nominal export
+IDENTITY> x
+EQ> x = exp(LxR) * p / 100
+
+COMMENT> Foreign income. Note: yf1 = (1 + gF)
+BEHAVIORAL> yf
+TSRANGE 1998 1 2021 1
+EQ> yf = yf1*TSLAG(yf,1) 
+COEFF> yf1
+STORE> coe(22)
+
+COMMENT> Net export (trade balance)
+IDENTITY> nx
+EQ> nx = x - im
+
+COMMENT> Stock of Italian bills debt held by foreign agents
+IDENTITY> brow
+EQ> brow = lambdarow*bs 
+
+COMMENT> Total wealth accumulated by RoW
+IDENTITY> vrow
+EQ> vrow = brow + oarow
+
+COMMENT> Net interest payments received by RoW on government bills 
+IDENTITY> introw
+EQ> introw = rbrow * TSLAG(brow,1)
+
+COMMENT> Exchange rate: dollars per 1 euro   
+BEHAVIORAL> exr
+TSRANGE 1998 1 2021 1
+EQ> exr = exr1*MOVAVG(exr,2) 
+COEFF> exr1 
+STORE> coe(58)
+
+COMMENT> Share of government bills purchased by foreign agents
+BEHAVIORAL> lambdarow
+TSRANGE 1998 1 2021 1
+EQ> lambdarow = lambdarow1*TSLAG(lambdarow,1) + lambdarow2*TSLAG(rbrow,1)
+COEFF> lambdarow1 lambdarow2
+STORE> coe(31)
+
+COMMENT> INTEREST RATES --------------------------------------------------------
+
+COMMENT> Return rate on shares 
+IDENTITY> re
+EQ> re = fdf/TSLAG(eh,1)
+
+COMMENT> Policy rate
+BEHAVIORAL> rstar
+TSRANGE 1998 1 2021 1
+EQ> rstar = r0
+COEFF> r0
+STORE> coe(25)
+
+COMMENT> Average risk premium on government bond
+IDENTITY> rb
+EQ> rb = rstar + mub
+
+COMMENT> Interest rate received by banks on their government debt holdings
+IDENTITY> rbb
+EQ> rbb = rstar + mubb 
+
+COMMENT> Interest rate received by RoW on their government debt holdings
+IDENTITY> rbrow
+EQ> rbrow = rstar + mubrow 
+
+COMMENT> Premium on government bills held by banks
+BEHAVIORAL> mubb
+TSRANGE 1998 1 2021 1
+EQ> mubb = mubb1*TSLAG(mubb,1) + mubb2*mub  
+COEFF> mubb1 mubb2
+STORE> coe(45)
+
+COMMENT> Premium on government bills held by RoW
+BEHAVIORAL> mubrow
+TSRANGE 1998 1 2021 1
+EQ> mubrow = mubrow1*TSLAG(mubrow,1) + mubrow2*mub  
+COEFF> mubrow1 mubrow2
+STORE> coe(46)
+
+COMMENT> Interests paid by banks to households on deposits and other A/L 
+BEHAVIORAL> intmh
+TSRANGE 1998 1 2021 1
+EQ> intmh = intmh0 + intmh1*mh
+COEFF> intmh0 intmh1
+STORE> coe(47)
+
+COMMENT> LABOUR MARKET ---------------------------------------------------------
+
+COMMENT> Wage bill
+IDENTITY> wb
+EQ> wb = w*nd
+
+COMMENT> Labour productivity (real value added per employee) 
+BEHAVIORAL> prod
+EQ> TSDELTALOG(prod,1) = nu0  + nu1 * TSDELTALOG(100*w/p,1) + nu2 * TSDELTALOG(100*y/p,2)
+COEFF> nu0 nu1 nu2
+STORE> coe(51)
+
+COMMENT> Employment: demand for labour 
+IDENTITY> nd
+EQ> nd = (100*y)/(prod*p)
+
+COMMENT> Labour force (log) 
+BEHAVIORAL> Lns
+TSRANGE 1998 1 2021 1
+EQ> Lns = nu1*TSLAG(Lns,1) + nu2*( log(nd) -TSLAG(Lns,1))
+COEFF> nu1 nu2
+STORE> coe(27)
+
+COMMENT> Labour force 
+IDENTITY> ns
+EQ> ns = exp(Lns)
+
+COMMENT> Wage rate growth 
+BEHAVIORAL> gw
+TSRANGE 1998 1 2021 1
+EQ> gw = omega1*TSDELTAP(p/100,1) + omega2*TSDELTA(un,1)
+COEFF> omega1 omega2
+STORE> coe(28)
+
+COMMENT> Nominal wage rate
+IDENTITY> w
+EQ> w = TSLAG(w,1)*(1+gw)
+
+COMMENT> Unemployment rate
+IDENTITY> un
+EQ> un = 1-(nd/ns) 
+
+COMMENT> PRODUCTION AND PRICES -------------------------------------------------
+
+COMMENT> Price level (GDP deflator)
+IDENTITY> p
+EQ> p = exp(Lp)
+
+COMMENT> Consumer price index 
+IDENTITY> pc
+EQ> pc = exp(Lpc)
+
+COMMENT> Log foreign price level --- exogenous    
+BEHAVIORAL> Lp_row
+TSRANGE 1998 1 2021 1
+EQ> Lp_row = prow0 + prow1*TSLAG(Lp_row,1)
+COEFF> prow0 prow1
+STORE> coe(60)
+
+COMMENT> Foreign price level  
+IDENTITY> p_row
+EQ> p_row = exp(Lp_row)
+
+COMMENT> Price of import  
+IDENTITY> p_im
+EQ> p_im = exp(Lp_im)
+
+COMMENT> Inflation rate based on GDP deflator 
+IDENTITY> infl
+EQ> infl = (p - TSLAG(p,1))/TSLAG(p,1)
+
+COMMENT> Inflation rate based on CPI 
+IDENTITY> inflc
+EQ> inflc = (pc - TSLAG(pc,1))/TSLAG(pc,1)
+
+COMMENT> Deficit to GDP ratio
+IDENTITY> def_ratio
+EQ> def_ratio = def/y
+
+COMMENT> Debt to GDP ratio
+IDENTITY> deb_ratio
+EQ> deb_ratio = deb/y
+
+COMMENT> ENERGY IMPORT ---------------------------------------------------------
+
+COMMENT> Energy Price level  
+IDENTITY> p_en
+EQ> p_en = exp(Lp_en)
+
+COMMENT> Share of energy products to total import 
+BEHAVIORAL> perc_en
+TSRANGE 1998 1 2021 1
+EQ> perc_en = enm1*infl_en + enm2*TSLAG(log(y/p),1) 
+COEFF> enm1 enm2
+STORE> coe(54)
+
+COMMENT> Import of energy products 
+IDENTITY> im_en
+EQ> im_en = im * perc_en
+
+COMMENT> Energy inflation rate. Note: high values, so do not use dlog
+IDENTITY> infl_en
+EQ> infl_en = (p_en - TSLAG(p_en,1))/TSLAG(p_en,1)
+
+COMMENT> Log of energy price --- exogenous
+BEHAVIORAL> Lp_en
+TSRANGE 1998 1 2021 1
+EQ> Lp_en = ep1*TSLAG(Lp_en,1) 
+COEFF> ep1
+STORE> coe(53)
+
+COMMENT> OTHER ACCOUNTING-CONSISTENCY EQUATIONS --------------------------------
+
+COMMENT> Other payments or receipts received by firms  
+IDENTITY> opf
+EQ> opf = vf - TSLAG(vf,1) - (cons + gov + nx - wb - intf - fdf)
+
+COMMENT> Other payments or receipts received by banks 
+IDENTITY> opb
+EQ> opb = fb - intb + (vb - tslag(vb,1))
+
+COMMENT> Other payments or receipts by government
+IDENTITY> opg
+EQ> opg = vg - TSLAG(vg,1) - ( -gov + tax - tr - intg + fcb)
+
+COMMENT> Other payments or receipts received by CB   
+IDENTITY> opcb
+EQ> opcb = vcb - TSLAG(vcb,1)
+
+COMMENT> Other payments or receipts received by RoW   
+IDENTITY> oprow
+EQ> oprow = -(oph + opf + opg + opb + opcb) 
+
+COMMENT> Other payments or receipts of households  
+BEHAVIORAL> oph
+TSRANGE 1998 1 2021 1
+EQ> TSDELTAP(oph,1) = par_oph * TSDELTAP(oph,1) 
+COEFF> par_oph
+STORE> coe(57)
+
+COMMENT> Other financial assets held by RoW 
+IDENTITY> oarow
+EQ> oarow = - (oah + oaf + oab + oacb + oag) 
+
+COMMENT> Total wealth accumulated by central bank   
+IDENTITY> vcb
+EQ> vcb = -(vh + vf + vrow + vg + vb)
+
+COMMENT> Other financial assets/liabilities of firms 
+BEHAVIORAL> oaf
+TSRANGE 1998 1 2021 1
+EQ> oaf = oaf0 + lambda_oaf*TSLAG(oaf,1)
+COEFF> oaf0 lambda_oaf
+STORE> coe(38)
+
+COMMENT> Other financial assets/liabilities of government
+BEHAVIORAL> oag
+TSRANGE 1998 1 2021 1
+EQ> oag = oag0 + lambda_oag*TSLAG(oag,1)
+COEFF> oag0 lambda_oag
+STORE> coe(44)
+
+COMMENT> Other financial assets held by banks
+BEHAVIORAL> oab
+TSRANGE 1998 1 2021 1
+EQ> oab = oab0 + lambda_oab*TSLAG(oab,1)
+COEFF> oab0 lambda_oab
+STORE> coe(52)
+
+COMMENT> Other financial assets held by ECB
+BEHAVIORAL> oacb
+TSRANGE 1998 1 2021 1
+EQ> oacb = oacb0 + lambda_oacb*TSLAG(oacb,1)
+COEFF> oacb0 lambda_oacb
+STORE> coe(55)
+
+COMMENT> ADDITIONAL CALCULATIONS --------------------------------
+
+COMMENT> Real GDP 
+IDENTITY> yR
+EQ> yR = 100*y/p 
+
+COMMENT> Real investment including depreciation (note: iddR > idR)
+IDENTITY> iddR
+EQ> iddR = 100*id/p 
+
+COMMENT> Real export
+IDENTITY> xR
+EQ> xR = 100*x/p 
+
+COMMENT> Real investment including depreciation (note: different from idR)
+IDENTITY> imR
+EQ> imR = 100*im/p 
+
+COMMENT> KEY BEHAVIOURAL EQUATIONS --------------------------------
+
+COMMENT> Real consumption (log). Note: yd replaced with y because the latter is more stable over time 
+BEHAVIORAL> LconsR
+TSRANGE 1998 1 2021 1
+EQ> LconsR = alpha1*TSLAG(log(y*100/pc),1) + alpha2*TSLAG( log(vh*100/pc),1)  
+COEFF> alpha1 alpha2
+STORE> coe(5)
+
+COMMENT> Government consumption 
+BEHAVIORAL> gov
+TSRANGE 1998 1 2021 1
+EQ> gov = sigma1*TSLAG((gov/p),1)*p  
+COEFF> sigma1
+RESTRICT> sigma1 = 1.01
+STORE> coe(12)
+
+COMMENT> Real investment net of capital depreciation 
+BEHAVIORAL> LidR
+TSRANGE 1998 1 2021 1
+EQ> LidR = gamma0 + gamma1*TSLAG(log(y)/log(k),1)
+COEFF> gamma0 gamma1 
+STORE> coe(1)
+
+COMMENT> Log of real export    
+BEHAVIORAL> LxR
+TSRANGE 1998 1 2021 1
+EQ> LxR = x0 + x1*TSLAG(log(yf),1) + x2*TSLAG(exr*p/p_row,1)
+COEFF> x0 x1 x2
+STORE> coe(21)
+
+COMMENT> Log of real import  
+BEHAVIORAL> LimR
+TSRANGE 1998 1 2021 1
+EQ> LimR = m0 + m1*TSLAG(log(y),1) + m2*TSLAG(p_im/p,1)
+COEFF> m0 m1 m2
+STORE> coe(20)
+
+COMMENT> Log of price of import    
+BEHAVIORAL> Lp_im
+TSRANGE 1998 1 2021 1
+EQ> Lp_im = pim0 + pim1*TSLAG(exr,1) + pim2*TSLAG(Lp_row,1)
+COEFF> pim0 pim1 pim2
+STORE> coe(59)
+
+COMMENT> Log of price level (GDP deflator) 
+BEHAVIORAL> Lp
+TSRANGE 1998 1 2021 1
+EQ> Lp = viy1*TSLAG(Lp_en,1) + viy2*TSLAG(Lp_row,1) + viy3*TSLAG(log(100*y/p),1) 
+COEFF> viy1 viy2 viy3 
+STORE> coe(30)
+
+COMMENT> Log of consumer price index 
+BEHAVIORAL> Lpc
+TSRANGE 1998 1 2021 1
+EQ> Lpc = vic1*TSLAG(Lp_en,1) + vic2*TSLAG(Lp_row,1) + vic3*TSLAG(log(100*y/p),1)
+COEFF> vic1 vic2 vic3
+STORE> coe(30)
+
+COMMENT> Average premium on government bills
+BEHAVIORAL> mub
+TSRANGE 1998 1 2021 1
+EQ> mub = mub2*TSLAG(deb/y,1) + mub3*bcb/bs + mub4*rstar
+COEFF> mub2 mub3 mub4
+STORE> coe(39)
+
+END"
+
+```R
 
 [work in progress] 🛠️
 
