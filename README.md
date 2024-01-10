@@ -17,7 +17,14 @@
 
 ### 1_Model_and_data
 
-The first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The balance sheet of Italy in 2021 is:
+The model presented here is created using the `R` package named [Bimets](https://github.com/cran/bimets). You can install it from the *Packages* sub-pane within `RStudio`. We also recommend installing and loading the `knitr` package.
+
+```R
+library(bimets)
+library(knitr)
+```
+
+Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The balance sheet of Italy in 2021 is:
 
 $$
 \begin{array}{lccccccc}
