@@ -30,7 +30,9 @@ Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \end{array}
 $$
 
-Figures are all expressed at current prices, million euros. Similarly, the transactions flow matrix is:
+Figures are all expressed at current prices, million euros.
+
+Similarly, the transactions-flow matrix of Italy in 2021 is:
 
 $$
 \begin{array}{lcccccccc}
@@ -57,7 +59,7 @@ Change ~ in ~ deposits & 57376 & 0 & 0 & 0 & -57376 & 0 & 0 & 0\\
 Change ~ in ~ securities & -30072 & 0 & 0 & -105432 & -77658 & 103317 & 109845 & 0\\
 Change ~ in ~ loans & -27196 & 0 & 169601 & 0 & -142405 & 0 & 0 & 0\\
 Change ~ in ~ shares & 138716 & 0 & -138716 & 0 & 0 & 0 & 0 & 0\\
-Change ~ in ~ other ~ net ~ financial assets & -67825 & 0 & 15012 & 275577 & 126789 & -93895 & -255658 & 0\\
+Change ~ in ~ other ~ net ~ financial ~ assets & -67825 & 0 & 15012 & 275577 & 126789 & -93895 & -255658 & 0\\
 Change ~ in ~ net ~ wealth & 86249 & 0 & 45897 & 170145 & -151307 & -5171 & -145813 & 0\\
 \hline
 Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -65,7 +67,9 @@ Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \end{array}
 $$
 
-The second step is to upload the data (observed series). This code takes the observed series from a Dropbox folder, containing Eurostat data for Italy over the period 1995-2021.
+where the entry named 'Other payments' allows aligning each sector's saving, calculated based on *Eurostat*'s non-financial transactions, with the change in financial wealth as derived from *Eurostat*'s financial balance sheets.
+
+The second step to create the model is to upload the data (observed series). Our code takes the observed series from a *Dropbox* folder, containing *Eurostat* data for Italy over the period 1995-2021.
 
 ```R
 #Upload data: time series for transactions-flow matrix and balance sheet
