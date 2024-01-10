@@ -1127,7 +1127,7 @@ Signif. codes:   *** 0.001  ** 0.01  * 0.05
 ...ESTIMATE OK
 ```
 
-The details of the other estimations can be visualised by scrolling up through the Console information. The complete list of estimated coefficients is provided below:
+The details of the other estimations can be visualised by scrolling up through the *Console* information. The complete list of estimated coefficients is provided below:
 
 
 | Name     | Description                                                          | Value       |
@@ -1169,40 +1169,37 @@ The details of the other estimations can be visualised by scrolling up through t
 | $ω_2$      | Wage growth rate: elasticity to unemployment rate                    | -0.786      |
 | $p_{row}^0$  | Foreign price level: coefficient 1                                   | 0.207       |
 | $p_{row}$    | Foreign price level: coefficient 2                                   | 0.959       |
-| ϵ_2^en   | Share of energy prod. to tot. import: elasticity to energy inflation | -0.002      |
-| ϵ_1^en   | Share of energy prod. to tot. import: elasticity to real output      | 0.013       |
-| p_en     | Energy price coefficient                                             | 1.006       |
-| λ_f0^oa  | Other financial assets/liabilities of firms: coefficient 1           | 16702.341   |
-| λ_f1^oa  | Other financial assets/liabilities of firms: coefficient 2           | 0.897       |
-| λ_g0^oa  | Other financial assets/liabilities of government: coefficient 1      | 86022.616   |
-| λ_g1^oa  | Other financial assets/liabilities of government: coefficient 2      | 0.583       |
-| λ_b0^oa  | Other financial assets held by banks: coefficient 1                  | -431517.076 |
-| λ_b1^oa  | Other financial assets held by banks: coefficient 2                  | 0.745       |
-| λ_cb0^oa | Other financial assets held by ECB: coefficient 1                    | -4533.844   |
-| λ_cb1^oa | Other financial assets held by ECB: coefficient 2                    | 1.141       |
-| α_1      | Marginal propensity to consume out of real income                    | 0.906       |
-| α_2      | Marginal propensity to consume out of real wealth                    | 0.055       |
-| σ_1      | Real government spending: auto-regressive coefficient                | 1.01        |
-| γ_0      | Real net investment: autonomous component                            | -117.512    |
-| γ_1      | Real net investment: elasticity to output to capital ratio           | 138.616     |
-| ε_0      | Real export: autonomous component                                    | 7.879       |
-| ε_1      | Real export: elasticity to foreign income                            | 0.512       |
-| ε_2      | Real export: elasticity to relative price of export                  | 0.08        |
-| μ_0      | Real import: autonomous component                                    | 4.092       |
-| μ_1      | Real import: elasticity to domestic income                           | 0.633       |
-| μ_2      | Real import: elasticity to relative price of import                  | -0.106      |
-| π_y^2    | GDP deflator: elasticity to energy price level                       | 0.058       |
-| π_y^1    | GDP deflator: elasticity to foreign price level                      | 0.619       |
-| π_y^3    | GDP deflator: elasticity to real output                              | 0.104       |
-| π_c^2    | Consumer price index: elasticity to energy price level               | 0.182       |
-| π_c^1    | Consumer price index: elasticity to foreign price level              | 0.505       |
-| π_c^3    | Consumer price index: elasticity to real output                      | 0.101       |
-| μ_b1     | Av. premium on gov. bills: elasticity to debt to GDP ratio           | 0.032       |
-| μ_b2     | Av. premium on gov. bills: elasticity to ECB’s holdings              | -0.079      |
-| μ_b3     | Av. premium on gov. bills: elasticity to policy rate                 | -0.422      |
-|          |                                                                      |             |
-
-
+| $ϵ_2^{en}$   | Share of energy prod. to tot. import: elasticity to energy inflation | -0.002      |
+| $ϵ_1^{en}$   | Share of energy prod. to tot. import: elasticity to real output      | 0.013       |
+| $p_{en}$     | Energy price coefficient                                             | 1.006       |
+| $λ_{f0}^{oa}$  | Other financial assets/liabilities of firms: coefficient 1           | 16702.341   |
+| $λ_{f1}^{oa}$  | Other financial assets/liabilities of firms: coefficient 2           | 0.897       |
+| $λ_{g0}^{oa}$  | Other financial assets/liabilities of government: coefficient 1      | 86022.616   |
+| $λ_{g1}^{oa}$  | Other financial assets/liabilities of government: coefficient 2      | 0.583       |
+| $λ_{b0}^{oa}$  | Other financial assets held by banks: coefficient 1                  | -431517.076 |
+| $λ_{b1}^{oa}$  | Other financial assets held by banks: coefficient 2                  | 0.745       |
+| $λ_{cb0}^{oa}$ | Other financial assets held by ECB: coefficient 1                    | -4533.844   |
+| $λ_{cb1}^{oa}$ | Other financial assets held by ECB: coefficient 2                    | 1.141       |
+| $α_1$      | Marginal propensity to consume out of real income                    | 0.906       |
+| $α_2$      | Marginal propensity to consume out of real wealth                    | 0.055       |
+| $σ_1$      | Real government spending: auto-regressive coefficient                | 1.01        |
+| $γ_0$      | Real net investment: autonomous component                            | -117.512    |
+| $γ_1$      | Real net investment: elasticity to output to capital ratio           | 138.616     |
+| $ε_0$      | Real export: autonomous component                                    | 7.879       |
+| $ε_1$      | Real export: elasticity to foreign income                            | 0.512       |
+| $ε_2$      | Real export: elasticity to relative price of export                  | 0.08        |
+| $μ_0$      | Real import: autonomous component                                    | 4.092       |
+| $μ_1$      | Real import: elasticity to domestic income                           | 0.633       |
+| $μ_2$      | Real import: elasticity to relative price of import                  | -0.106      |
+| $π_y^2$    | GDP deflator: elasticity to energy price level                       | 0.058       |
+| $π_y^1$    | GDP deflator: elasticity to foreign price level                      | 0.619       |
+| $π_y^3$    | GDP deflator: elasticity to real output                              | 0.104       |
+| $π_c^2$    | Consumer price index: elasticity to energy price level               | 0.182       |
+| $π_c^1$    | Consumer price index: elasticity to foreign price level              | 0.505       |
+| $π_c^3$    | Consumer price index: elasticity to real output                      | 0.101       |
+| $μ_{b1}$     | Av. premium on gov. bills: elasticity to debt to GDP ratio           | 0.032       |
+| $μ_{b2}$     | Av. premium on gov. bills: elasticity to ECB’s holdings              | -0.079      |
+| $μ_{b3}$     | Av. premium on gov. bills: elasticity to policy rate                 | -0.422      |
 
 ### 2_Accouting_tables
 
