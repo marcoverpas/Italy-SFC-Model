@@ -75,6 +75,7 @@ Other ~ payments & -60675 & 55160 & 0 & 275577 & -151307 & -5171 & -113584 & 0\\
 \Delta ~ in ~ loans & -27196 & 0 & 169601 & 0 & -142405 & 0 & 0 & 0\\
 \Delta ~ in ~ shares & 138716 & 0 & -138716 & 0 & 0 & 0 & 0 & 0\\
 \Delta ~ in ~ other ~ net ~ f.a. & -67825 & 0 & 15012 & 275577 & 126789 & -93895 & -255658 & 0\\
+\hline
 \Delta ~ in ~ net ~ wealth & 86249 & 0 & 45897 & 170145 & -151307 & -5171 & -145813 & 0\\
 \hline
 Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -2032,12 +2033,37 @@ Other ~ payments & -60675 & -254531 & 0 & 0 & 299391 & -6552 & 22367 & 0\\
 \Delta ~ in ~ shares & 3044 & 0 & -3044 & 0 & 0 & 0 & 0 & 0\\
 \Delta ~ in ~ other ~ net ~ f.a. & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
-\Delta ~ in net wealth & 939 & 0 & -165822 & -132111 & 299391 & -6552 & 4156 & 0\\
+\Delta ~ in ~ net ~ wealth & 939 & 0 & -165822 & -132111 & 299391 & -6552 & 4156 & 0\\
 \hline
 Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{array}
 $$
+
+An alternative method to verify model consistency is to create a checking mechanism based on the redundant equation of the model ($H_d = H_s$). Specifically, one can either plot the difference between $H_s$ and $H_d$ or create a consistency statement like the following:
+
+```R
+#Create consistency statement
+error=0
+for (i in 1:31){  error = error + (S_model$simulation$hs[i]-S_model$simulation$hd[i])^2    }
+if ( error<0.1 ){cat(" *************************************************************** \n Good news! The model is watertight!. Error =", error, "< 0.1 \n ***************************************************************")} else{
+  if ( error<1 ){cat(" ******************************************************** \n Double-check model consistency. Error =", error, "> 0.1 \n ********************************************************")}
+  else{cat(" *************************************************************** \n Warning: the model is not fully consistent! Error =", error, "> 1 \n ***************************************************************")} }      
+```
+
+which, in this case, yields:
+
+```TXT
+*************************************************************** 
+ Good news! The model is watertight!. Error = 0.04068899 < 0.1 
+ ***************************************************************
+```
+
+Note that a small error is always likely to be present due to rounding.
+
+Lastly, note that a fancier representation of the transactions-flow matrix can be obtained using a Sankey diagram:
+
+
 
 
 ### 6_Experiments
