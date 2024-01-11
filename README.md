@@ -1974,6 +1974,8 @@ S_model <- SIMULATE(S_model
                     ,quietly=TRUE)
 ```
 
+A few amendments to the plotting chunk used in [Section 3](#3_In_sample_predictions) allow extending the chart of the selected variables (here expressed in real terms) until 2028.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_2_ita_big.png" alt="fig 2 ITA">
 </p>
