@@ -765,7 +765,37 @@ END"
 
 ```
 
-The fourth step is to load the model.
+Notice that the two price equations have been defined including real GDP among the deflators. This choice is due to four reasons:
+
+1) *Income effect*. Real GDP can be considered a proxy for the overall volume of activity or income in an economy. Changes in income can affect the demand for goods and services, thus indirectly affecting the price level. 
+
+2) *Aggregate demand effect*. Real GDP reflects the aggregate demand. When aggregate demand increases, it can put direct upward pressure on prices, particularly when supply is constrained (as it happened in recent years). Therefore, including real GDP in the price equation allows capturing this demand-pressure effect. 
+
+3) *Macroeconomic and labour market conditions*. Real GDP can be taken as a key indicator of the overall health of the economy, hence labour market conditions. A higher employment rate and a lower unemployment rate are usually associated with higher nominal wages. Real GDP serves as a summary measure of these macroeconomic and labour market conditions. 
+
+4) *Medium-term trend*: Real GDP can also be used to capture medium-term trend in the economy, which can in turn influence the price level.
+
+An alternative specification of these equations, including the unit labour cost among the regressors (instead of real GDP), could be:
+
+```R
+COMMENT> Log of price level (GDP deflator) 
+BEHAVIORAL> Lp
+TSRANGE 1998 1 2021 1
+EQ> TSDELTA(Lp,1) = viy1*TSDELTA(Lp_en,1) + viy2*TSDELTA(Lp_row,1) + viy3*TSDELTA(log(w),1) + viy4*TSDELTA(log(prod),1)
+COEFF> viy1 viy2 viy3 viy4
+STORE> coe(30)
+
+COMMENT> Log of consumer price index 
+BEHAVIORAL> Lpc
+TSRANGE 1998 1 2021 1
+EQ> TSDELTA(Lpc,1) = vic1*TSDELTA(Lp_en,1) + vic2*TSDELTA(Lp_row,1) + vic3*TSDELTA(log(w),1) + vic4*TSDELTA(log(prod),1)
+COEFF> vic1 vic2 vic3 vic4
+STORE> coe(30)
+```
+
+While our qualitative results would not be affected, and the coefficients exhibit the correct signs, the latter are barely significant. This may be attributed to the specific situation of the Italian labour market, where workers have lost most of their bargaining power, while the goods market is characterised by an oligopolistic structure. This is why we pragmatically opted for real GDP in the final specification of the model. 
+
+Having clarified that, the fourth step is to load the model.
 
 ```R
 #Load the model
