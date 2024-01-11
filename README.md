@@ -1386,7 +1386,7 @@ Italy_BS_Matrix %>%
   kable_classic(full_width = F, html_font = "helvetica")
 ```
 
-Similarly the code chunk for the transactions-flow matrix is:
+Similarly, the code chunk for the transactions-flow matrix is:
 
 ```R
 #TFM matrix for Italy SFC model
@@ -1941,7 +1941,7 @@ exogenizeList <- list(
 )
 ```
 
-The next step is to create the list of 'add factors,' which includes both the necessary adjustments to fit the 2022 observed series and the expected shocks and institutional changes.
+The next step is to create the list of 'add factors,' encompassing both the necessary adjustments to align with the 2022 series as predicted by the Italian government and other major institutions (for which we did not have all the series from *Eurostat*) and the expected shocks and institutional changes.
 
 ```R
 # Define add-factor list (defining exogenous adjustments: policy + available predictions)
