@@ -1986,6 +1986,7 @@ The definition of the model baseline is complete. Before we move to alternative 
 
 One may want to double-check whether the model remains consistent when it is simulated out of sample. This can be done in two ways. The first is to modify slightly the code used in [Section 2](#2_Accouting_tables) to create the accounting matrices. All it takes is to replace `S_modelData` with `S_model$simulation` as a preamble for each model variable. The reference year must be adjusted as well. For instance, the predicted balance sheet and transactions-flow matrix for Italy in 2025 are, respectively:
 
+$$
 \begin{array}{lccccccc}
 \hline
   & Households & Firms & Government & Banks & ECB & Foreign & Total\\
@@ -2002,6 +2003,42 @@ Net ~ financial ~ wealth & 4378921 & -2730141 & -3026546 & 1148638 & -255945 & 4
 Column total & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{array}
+$$
+
+$$
+\begin{array}{lcccccccc}
+\hline
+  & Households & Firms ~ (current) & Firms ~ (capital) & Government & Banks & ECB & Foreign & Total\\
+\hline
+Consumption & -1352755 & 1352755 & 0 & 0 & 0 & 0 & 0 & 0\\
+Total ~ investment & 0 & 467972 & -467972 & 0 & 0 & 0 & 0 & 0\\
+Government ~ spending & 0 & 444072 & 0 & -444072 & 0 & 0 & 0 & 0\\
+Export & 0 & 830971 & 0 & 0 & 0 & 0 & -830971 & 0\\
+Import & 0 & -799597 & 0 & 0 & 0 & 0 & 799597 & 0\\
+[GDP] & 0 & [ 2296174 ] & 0 & 0 & 0 & 0 & 0 & 0\\
+Taxes & -647708 & 0 & 0 & 647708 & 0 & 0 & 0 & 0\\
+Transfers & 232271 & 0 & 0 & -232271 & 0 & 0 & 0 & 0\\
+Wages & 874860 & -874860 & 0 & 0 & 0 & 0 & 0 & 0\\
+Interest ~ payments & -6777 & -24812 & 0 & -107594 & 121903 & 4118 & 13163 & 0\\
+Corporate ~ profit & 839820 & -1141970 & 302150 & 0 & 0 & 0 & 0 & 0\\
+Bank ~ profit & 121903 & 0 & 0 & 0 & -121903 & 0 & 0 & 0\\
+CB ~ seigniorage & 0 & 0 & 0 & 4118 & 0 & -4118 & 0 & 0\\
+Other ~ payments & -60675 & -254531 & 0 & 0 & 299391 & -6552 & 22367 & 0\\
+\hline
+\Delta ~ in ~ cash ~ and ~ res. & 15812 & 0 & 0 & 0 & 309 & -16121 & 0 & 0\\
+\Delta ~ in ~ deposits & 40803 & 0 & 0 & 0 & -40803 & 0 & 0 & 0\\
+\Delta ~ in ~ securities & 991 & 0 & 0 & -132111 & 117395 & 9569 & 4156 & 0\\
+\Delta ~ in ~ loans & -59712 & 0 & -162778 & 0 & 222490 & 0 & 0 & 0\\
+\Delta ~ in ~ shares & 3044 & 0 & -3044 & 0 & 0 & 0 & 0 & 0\\
+\Delta ~ in ~ other ~ net ~ f.a. & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\Delta ~ in net wealth & 939 & 0 & -165822 & -132111 & 299391 & -6552 & 4156 & 0\\
+\hline
+Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{array}
+$$
+
 
 ### 6_Experiments
 
