@@ -1980,11 +1980,12 @@ A few amendments to the plotting chunk used in [Section 3](#3_In_sample_predicti
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_2_ita_big.png" alt="fig 2 ITA">
 </p>
 
-The model baseline is ready. Before we move to alternative scenarios, additional diagrams and tables can be created.
+The definition of the model baseline is complete. Before we move to alternative scenarios, additional diagrams and tables can be created.
 
 ### 5_Additional_diagrams_and_tables
 
-[work in progress] 🛠️
+One may want to double-check whther the model reamins consistent when it is simulated out of sample. This can be done in two ways. The first is to modify slighly the code used in [Section 2](#2_Accouting_tables) to create the accounting matrices. All it takes is to replace `S_modelData` with `S_model$simulation` as path for each model variables. 
+
 
 ### 6_Experiments
 
