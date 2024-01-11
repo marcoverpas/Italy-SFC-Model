@@ -1884,7 +1884,7 @@ The figure below shows the *adjusted values* of selected flow variables and rati
 
 The model allows performing out-of-sample predictions, which can be used as the baseline scenario.
 
-The first step is to extend exogenous variables up to the end of the forecasting period, which, in this exercise, is 2028.
+The first step is to extend exogenous variables up to the end of the forecasting period, which, in this exercise, is 2028. 
 
 ```R
 # Extend exogenous and conditionally evaluated variables up to 2028
@@ -1892,6 +1892,7 @@ S_model$modelData <- within(S_model$modelData,{
                      dum = TSEXTEND(dum,  UPTO=c(2028,1))       #Dummy for Bb
 })
 ```
+Note: the only exogenous variable to be extended is the dummy variable named $dum$.
 
 Similar to what we did for adjusted in-sample predictions, the second step is to create an 'exogenization list', encompassing all the endogenous variables of the model. These variables are adjusted up to 2021 and then set free to follow the dynamics implied by the model equations.
 
