@@ -777,7 +777,7 @@ Notice that the two price equations have been defined including real GDP among t
 
 An alternative specification of these equations, including the unit labour cost among the regressors (instead of real GDP), could be:
 
-```R
+```TXT
 COMMENT> Log of price level (GDP deflator) 
 BEHAVIORAL> Lp
 TSRANGE 1998 1 2021 1
