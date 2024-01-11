@@ -12,7 +12,7 @@
 - [2 Accounting tables](#2_Accouting_tables)
 - [3 In-sample predictions](#3_In_sample_predictions)
 - [4 Out-of-sample predictions](#4_Out_of_sample_predictions)
-- [5 Additional diagrams and tables](#5_Additional_diagrams_and_tables)
+- [5 Model watertightness](#5_Model_watertightness)
 - [6 Experiments](#6_Experiments)
 
 ### 1_Model_and_data
@@ -1983,7 +1983,7 @@ A few amendments to the plotting chunk used in [Section 3](#3_In_sample_predicti
 
 The definition of the model baseline is complete. Before we move to alternative scenarios, additional diagrams and tables can be created.
 
-### 5_Additional_diagrams_and_tables
+### 5_Model_watertightness
 
 One may want to double-check whether the model remains consistent when it is simulated out of sample. This can be done in two ways. The first is to modify slightly the code used in [Section 2](#2_Accouting_tables) to create the accounting matrices. All it takes is to replace `S_modelData` with `S_model$simulation` as a preamble for each model variable. The reference year must be adjusted as well. For instance, the predicted balance sheet and transactions-flow matrix for Italy in 2025 are, respectively:
 
@@ -2067,7 +2067,7 @@ Lastly, note that a more sophisticated representation of the transactions-flow m
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/sankey_ita.png" alt="fig 3 ITA">
 </p>
 
-The associated code is:
+This diagram illustrates that each flow (and change in stock) originates from and leads to specific sources. The related code is:
 
 ```R
 #Choose a year. Note: 1 = 1998, 26 = 2021
