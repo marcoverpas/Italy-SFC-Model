@@ -773,7 +773,7 @@ Notice that the two price equations have been defined including real GDP among t
 
 3) *Macroeconomic and labour market conditions*. Real GDP can be taken as a key indicator of the overall health of the economy, hence labour market conditions. A higher employment rate and a lower unemployment rate are usually associated with higher nominal wages. Real GDP serves as a summary measure of these macroeconomic and labour market conditions. 
 
-4) *Medium-term trend*: Real GDP can also be used to capture medium-term trend in the economy, which can in turn influence the price level.
+4) *Medium-term trend*. Real GDP can also be used to capture medium-term trend in the economy, which can in turn influence the price level.
 
 An alternative specification of these equations, including the unit labour cost among the regressors (instead of real GDP), could be:
 
