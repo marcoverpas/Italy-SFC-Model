@@ -1941,7 +1941,7 @@ exogenizeList <- list(
 )
 ```
 
-The next step is to create the list of 'add factors,' encompassing both the necessary adjustments to align with the 2022 series as predicted by the Italian government and other major institutions (for which we did not have all the series from *Eurostat*) and the expected shocks and institutional changes.
+The next step is to create the list of 'add factors', encompassing both the necessary adjustments to align with the 2022 series as predicted by the Italian government and other major institutions (for which we did not have all the series from *Eurostat*) and the expected shocks and institutional changes.
 
 ```R
 # Define add-factor list (defining exogenous adjustments: policy + available predictions)
