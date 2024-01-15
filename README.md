@@ -2238,7 +2238,32 @@ sankeyNetwork(Links = links, Nodes = nodes,
 
 ### 6_Experiments
 
-[work in progress] 🛠️
+Three alternative scenarios are considered and compared with the baseline scenario:
+
+1) a more persistent (energy) inflation;
+2) a higher policy rate;
+3) austerity policies.
+
+The way scenarios are created is by adding shocks to model variables in the `constantAdjList`. Therefore, the first scenario is obtained by exogenously increasing the (log) series of the energy price:
+
+```R
+ Lp_en = TIMESERIES(0,0.38,0.2,0.2,0.2,0.2,0.2,0.1, START=c(2021,1), FREQ='A')
+```
+
+Analogously, the second scenario the is obtained by exogenously increasing the risk premium on government securities (which here translates into a lower reduction with respect to the baseline scenario), in addition to the change in the energy price index:
+
+```R
+mub = TIMESERIES(0,-0.004,-0.02,-0.014,-0.010,-0.008,-0.008,-0.008 ,START=c(2021,1), FREQ='A')
+```
+
+Besides, the real consumption volume is negatively corrected to account for the elasticiy of it to the policy rate, which we estimate to be 0.58. Therefore:
+
+```R
+LconsR = TIMESERIES(0,0,0.01,0.05-0.07*(0.58/2),0.05-0.07*(0.58/2),0.05-0.07*(0.58/2),0.045-0.07*(0.58/2),0.045-0.07*(0.58/2), START=c(2021,1), FREQ='A')
+```
+
+Lastly, the third scenario is obtained ...
+
 
 ### 7_Quick_execution
 
