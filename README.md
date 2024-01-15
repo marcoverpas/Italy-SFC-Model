@@ -2252,10 +2252,10 @@ The scenarios are created by adding shocks to model variables in the `constantAd
  Lp_en = TIMESERIES(0,0.38,0.2,0.2,0.2,0.2,0.2,0.1, START=c(2021,1), FREQ='A')
 ```
 
-Similarly, the second scenario is obtained by exogenously increasing the risk premium on government securities (which, in this case, results in a less pronounced reduction compared to the baseline scenario), in addition to the change in the energy price index
+Similarly, the second scenario is obtained by exogenously increasing the policy rate set by the ECB, in addition to the change in the energy price index
 
 ```R
-mub = TIMESERIES(0,-0.004,-0.02,-0.014,-0.010,-0.008,-0.008,-0.008 ,START=c(2021,1), FREQ='A')
+rstar = TIMESERIES(-0.01858333+0,-0.01858333+0.0156,-0.01858333+0.038,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045 ,START=c(2021,1), FREQ='A')  
 ```
 
 Besides, the real consumption volume is negatively corrected to account for the elasticiy of it to the policy rate, which we estimate to be 0.58. Therefore:
