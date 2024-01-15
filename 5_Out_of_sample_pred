@@ -128,53 +128,53 @@ mycol1 <- rgb(255,0,0, max = 255, alpha = 90)
 layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
 
 # Show predicted real GDP
-plot(100*S_model$simulation$y/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(a) Real GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$y/S_modelData$p),max(100*S_model$simulation$y/S_model$simulation$p)))
+plot(100*S_model$simulation$y/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(a) Real GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$y/S_modelData$p),max(100*S_model$simulation$y/S_model$simulation$p)))
 lines(100*S_modelData$y/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 abline(h=1795100,col=4)
 
 # Show predicted real consumption
-plot(S_model$simulation$consR,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(b) Real consumption (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$cons/S_modelData$p),max(100*S_model$simulation$cons/S_model$simulation$p)))
+plot(S_model$simulation$consR,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(b) Real consumption (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$cons/S_modelData$p),max(100*S_model$simulation$cons/S_model$simulation$p)))
 lines(S_modelData$consR,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
 # Show predicted real investment
-plot(100*S_model$simulation$id/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(c) Real investment (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$id/S_modelData$p),max(100*S_model$simulation$id/S_model$simulation$p)))
+plot(100*S_model$simulation$id/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(c) Real investment (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$id/S_modelData$p),max(100*S_model$simulation$id/S_model$simulation$p)))
 lines(100*S_modelData$id/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
 # Show predicted import
-plot(100*S_model$simulation$im/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(d) Real import and export (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$im/S_modelData$p),max(100*S_model$simulation$x/S_model$simulation$p)))
+plot(100*S_model$simulation$im/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(d) Real import and export (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$im/S_modelData$p),max(100*S_model$simulation$x/S_model$simulation$p)))
 lines(100*S_modelData$im/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
 lines(100*S_model$simulation$x/S_model$simulation$p,col="orange",lty=1,lwd=1)
 lines(100*S_modelData$x/S_modelData$p,col="red4",lty=3,lwd=3)
 legend("bottom",c("Observed import","Simulated import","Observed export","Simulated export"),  bty = "n", cex=1, lty=c(3,1,3,1), lwd=c(3,1,3,1), col = c("darkorchid4","green4","red4","orange"), box.lty=0)
 
 # Show predicted government spending
-plot(100*S_model$simulation$gov/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(e) Government spending (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$gov/S_modelData$p),max(100*S_model$simulation$gov/S_model$simulation$p)))
+plot(100*S_model$simulation$gov/S_model$simulation$p,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(e) Government spending (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(min(100*S_modelData$gov/S_modelData$p),max(100*S_model$simulation$gov/S_model$simulation$p)))
 lines(100*S_modelData$gov/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
 # Show predicted employment
-plot(S_model$simulation$nd,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(f) Employment",ylab = 'Number of employees',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(19000,25000))
+plot(S_model$simulation$nd,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(f) Employment",ylab = 'Number of employees',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(19000,25000))
 lines(S_modelData$nd,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
 # Return rate on bonds
 time=c(1995:2028)
-plot(100*S_model$simulation$rb,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(g) Average yield on gov. securities",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(0,9))
+plot(100*S_model$simulation$rb,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(g) Average yield on gov. securities",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(0,9))
 lines(100*S_modelData$rb,col="darkorchid4",lty=3,lwd=3)
 lines(100*S_model$simulation$rstar,col=mycol1,lty=1,lwd=1)
 lines(time[1:4],100*S_modelData$rstar[1:4],col=mycol1,lty=1,lwd=1)
 legend("bottom",c("Observed","Simulated","Policy rate"),  bty = "n", cex=1, lty=c(3,1,1), lwd=c(3,1,1), col = c("darkorchid4","green4",mycol1), box.lty=0)
 
 # Debt to GDP ratio
-plot(100*S_model$simulation$deb/S_model$simulation$y,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(h) Government debt to GDP ratio",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2028),ylim=range(95,180))
+plot(100*S_model$simulation$deb/S_model$simulation$y,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(h) Government debt to GDP ratio",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2028),ylim=range(95,180))
 lines(100*S_modelData$deb/S_modelData$y,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
 # GDP deflator
-plot(S_model$simulation$pc,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(i) Price level (CPI)",ylab = 'Index (2015=100)',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(65,140))
+plot(S_model$simulation$pc,col="green4",lty=1,lwd=1,font.main=1,cex.main=1,main="(i) Price level (CPI)",ylab = 'Index (2015=100)',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1996,2028),ylim=range(65,140))
 lines(S_modelData$pc,col="darkorchid4",lty=3,lwd=3)
 legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4","green4"), box.lty=0)
 
