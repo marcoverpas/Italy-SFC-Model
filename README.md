@@ -2238,19 +2238,21 @@ sankeyNetwork(Links = links, Nodes = nodes,
 
 ### 6_Experiments
 
-Three alternative scenarios are considered and compared with the baseline scenario:
+Three additional scenarios are considered and compared with the baseline scenario.
 
-1) a more persistent (energy) inflation;
-2) a higher policy rate;
-3) austerity policies.
+**Alternative Scenario 1**: The energy-led price shock has a more persistent effect on inflation, with the inflation rate (CPI) still projected to be around 5% for the foreseeable years.
 
-The way scenarios are created is by adding shocks to model variables in the `constantAdjList`. Therefore, the first scenario is obtained by exogenously increasing the (log) series of the energy price:
+**Alternative Scenario 2**: The economy is affected by two shocks—namely, a persistent inflation rate and a robust policy response by the ECB, which maintains the policy rate at 4.5% over the 2024-2026 period.
+
+**Alternative Scenario 3**: Effects of policy austerity measures that, in accordance with the Maastricht Treaty, bring the government deficit to GDP ratio to 3% in 2024 (and subsequent years).
+
+The scenarios are created by adding shocks to model variables in the `constantAdjList`. Therefore, the first scenario is obtained by exogenously increasing the (log) series of the energy price:
 
 ```R
  Lp_en = TIMESERIES(0,0.38,0.2,0.2,0.2,0.2,0.2,0.1, START=c(2021,1), FREQ='A')
 ```
 
-Analogously, the second scenario the is obtained by exogenously increasing the risk premium on government securities (which here translates into a lower reduction with respect to the baseline scenario), in addition to the change in the energy price index:
+Similarly, the second scenario is obtained by exogenously increasing the risk premium on government securities (which, in this case, results in a less pronounced reduction compared to the baseline scenario), in addition to the change in the energy price index
 
 ```R
 mub = TIMESERIES(0,-0.004,-0.02,-0.014,-0.010,-0.008,-0.008,-0.008 ,START=c(2021,1), FREQ='A')
