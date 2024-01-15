@@ -2268,6 +2268,8 @@ Lastly, the third scenario is obtained by cutting government spending:
 gov = TIMESERIES(0,0,0,-47000,-15000,-33000,-39000,-40000, START=c(2021,1), FREQ='A')
 ```
 
+Once again, a visual representation of the experiments can be obtained by introducing a few amendments to the plotting chunk used in [Section 3](#3_In_sample_predictions).
+
 
 ### 7_Quick_execution
 
