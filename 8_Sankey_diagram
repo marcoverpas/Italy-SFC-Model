@@ -1,0 +1,132 @@
+#CREATE A SANKEY DIAGRAM FOR Italy TFC Model
+
+#Choose a year. Note: 1 = 1998, 26 = 2021
+yr=26
+
+#Upload libraries for Sankey diagram
+library(networkD3)
+library(htmlwidgets)
+library(htmltools)
+
+#Create nodes: source, target and flows
+nodes = data.frame("name" = 
+                     c("Firms outflow", # Node 0
+                       "Banks outflow", # Node 1
+                       "ECB outflow", # Node 2
+                       "Government outflow", # Node 3
+                       "Households outflow", # Node 4
+                       "Foreign outflow", # Node 5
+                       
+                       "Firms inflow", # Node 6
+                       "Banks inflow", # Node 7
+                       "ECB inflow", # Node 8
+                       "Government inflow", # Node 9
+                       "Households inflow", # Node 10
+                       "Foreign inflow", # Node 11
+                       
+                       "Consumption", # Node 12
+                       "Investment", # Node 13
+                       "Government spending", # Node 14
+                       "Export", # Node 15
+                       "Other import", # Node 16
+                       
+                       "Taxes", # Node 17
+                       "Transfers", # Node 18
+                       "Wages", # Node 19
+                       "Interest payments", # Node 20
+                       "Corporate profit", # Node 21
+                       "Bank profit", # Node 22
+                       "CB seigniorage", # Node 23
+                       "Other payments", # Node 24
+                       
+                       "Change in net wealth", # Node 25
+                       "Gross energy import" #Node 26
+                       )) 
+
+#Create the flows
+links = as.data.frame(matrix(c(
+  
+  4, 12, S_model$simulation$cons[yr],
+  12, 6, S_model$simulation$cons[yr],
+  
+  0, 13, S_model$simulation$id[yr],
+  13, 6, S_model$simulation$id[yr],
+  
+  3, 14, S_model$simulation$gov[yr],
+  14, 6, S_model$simulation$gov[yr],
+  
+  5, 15, S_model$simulation$x[yr],
+  15, 6, S_model$simulation$x[yr],
+  
+  0, 16, S_model$simulation$im[yr]-S_model$simulation$im_en[yr],
+  16, 11, S_model$simulation$im[yr]-S_model$simulation$im_en[yr],
+  
+  0, 26, S_model$simulation$im_en[yr],
+  26, 11, S_model$simulation$im_en[yr],
+  
+  4, 17, S_model$simulation$tax[yr],
+  17, 9, S_model$simulation$tax[yr],
+  
+  3, 18, S_model$simulation$tr[yr],
+  18, 10, S_model$simulation$tr[yr],
+  
+  0, 19, S_model$simulation$wb[yr],
+  19, 10, S_model$simulation$wb[yr],
+  
+  0, 20, S_model$simulation$intf[yr],
+  3, 20, S_model$simulation$intg[yr],
+  20, 7, S_model$simulation$fb[yr],
+  20, 8, S_model$simulation$fcb[yr],
+  20, 10, S_model$simulation$inth[yr],
+  
+  0, 21, S_model$simulation$fdf[yr],  
+  21, 10, S_model$simulation$fdf[yr],
+  
+  1, 22, S_model$simulation$fb[yr],  
+  22, 10, S_model$simulation$fb[yr],
+  
+  2, 23, S_model$simulation$fcb[yr],  
+  23, 9, S_model$simulation$fcb[yr],
+  
+  0, 24, if (S_model$simulation$opf[yr]<0){-S_model$simulation$opf[yr]}else{0},  
+  1, 24, if (S_model$simulation$opb[yr]<0){-S_model$simulation$opb[yr]}else{0},
+  2, 24, if (S_model$simulation$opcb[yr]<0){-S_model$simulation$opcb[yr]}else{0},
+  3, 24, if (S_model$simulation$opg[yr]<0){-S_model$simulation$opg[yr]}else{0},
+  4, 24, if (S_model$simulation$oph[yr]<0){-S_model$simulation$oph[yr]}else{0},
+  5, 24, if (S_model$simulation$oprow[yr]<0){-S_model$simulation$oprow[yr]}else{0},
+  
+  24, 6, if (S_model$simulation$opf[yr]>=0){S_model$simulation$opf[yr]}else{0},
+  24, 7, if (S_model$simulation$opb[yr]>=0){S_model$simulation$opb[yr]}else{0},
+  24, 8, if (S_model$simulation$opcb[yr]>=0){S_model$simulation$opcb[yr]}else{0},
+  24, 9, if (S_model$simulation$opg[yr]>=0){S_model$simulation$opg[yr]}else{0},
+  24, 10, if (S_model$simulation$oph[yr]>=0){S_model$simulation$oph[yr]}else{0},
+  24, 11, if (S_model$simulation$oprow[yr]>=0){S_model$simulation$oprow[yr]}else{0},
+  
+  0, 25, if (S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1]<0){-S_model$simulation$vf[yr]+S_model$simulation$vf[yr-1]}else{0},  
+  1, 25, if (S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1]<0){-S_model$simulation$vb[yr]+S_model$simulation$vb[yr-1]}else{0},
+  2, 25, if (S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1]<0){-S_model$simulation$vcb[yr]+S_model$simulation$vcb[yr-1]}else{0},  
+  3, 25, if (S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1]<0){-S_model$simulation$vg[yr]+S_model$simulation$vg[yr-1]}else{0},  
+  4, 25, if (S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1]<0){-S_model$simulation$vh[yr]+S_model$simulation$vh[yr-1]}else{0},
+  5, 25, if (S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]<0){-S_model$simulation$vrow[yr]+S_model$simulation$vrow[yr-1]}else{0},  
+  
+  25, 6, if (S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1]>=0){S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1]}else{0},  
+  25, 7, if (S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1]>=0){S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1]}else{0},
+  25, 8, if (S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1]>=0){S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1]}else{0},  
+  25, 9, if (S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1]>=0){S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1]}else{0},  
+  25, 10, if (S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1]>=0){S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1]}else{0},
+  25, 11, if (S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]>=0){S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]}else{0}  
+  ), 
+
+  #Note: each row represents a link. The first number represents the node being
+  #connected from. The second number represents the node connected to. The third
+  #number is the value of the node.  
+      
+  byrow = TRUE, ncol = 3))
+names(links) = c("source", "target", "value")
+my_color <- 'd3.scaleOrdinal() .domain([]) .range(["chartreuse","red","green","yellow","dodgerblue","darkorchid","khaki","peru","violet","cyan","pink","orange","beige","gray","blue","black","darkorchid4","goldenrod4"])'
+
+#Create and plot the network
+sankeyNetwork(Links = links, Nodes = nodes,
+              Source = "source", Target = "target",
+              Value = "value", NodeID = "name", colourScale=my_color,
+              fontSize= 20, nodeWidth = 30)
