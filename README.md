@@ -2273,7 +2273,7 @@ Once again, a visual representation of the experiments can be obtained by introd
 
 ### 7_Quick_execution
 
-This approach is recommended for experienced users. Simply execute the *numbered* files in sequence.
+This approach is recommended for experienced users. Simply execute the *numbered* files in sequence. We recommend executing the `R` code paragraph by paragraph for better clarity and control.
 
 
 
