@@ -2258,13 +2258,13 @@ Similarly, the second scenario is obtained by exogenously increasing the policy 
 rstar = TIMESERIES(-0.01858333+0,-0.01858333+0.0156,-0.01858333+0.038,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045,-0.01858333+0.045 ,START=c(2021,1), FREQ='A')  
 ```
 
-Besides, the real consumption volume is negatively corrected to account for the elasticiy of it to the policy rate, which we estimate to be 0.58. Therefore:
+Moreover, the real consumption volume is adjusted downward to account for its elasticity to the policy rate, which we estimate to be 0.58. Therefore:
 
 ```R
 LconsR = TIMESERIES(0,0,0.01,0.05-0.07*(0.58/2),0.05-0.07*(0.58/2),0.05-0.07*(0.58/2),0.045-0.07*(0.58/2),0.045-0.07*(0.58/2), START=c(2021,1), FREQ='A')
 ```
 
-Lastly, the third scenario is obtained by cutting government spending:
+Finally, the third scenario is derived by cutting government spending in comparison to the baseline scenario:
 
 ```R
 gov = TIMESERIES(0,0,0,-47000,-15000,-33000,-39000,-40000, START=c(2021,1), FREQ='A')
