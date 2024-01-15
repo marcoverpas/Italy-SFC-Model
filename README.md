@@ -2276,11 +2276,11 @@ Once again, a visual representation of the experiments can be obtained by introd
   <img src="https://raw.githubusercontent.com/marcoverpas/figures/main/fig_3_ita_big.png" alt="fig 3 ITA">
 </p>
 
-Summing up, in Scenario 1, a persistent inflation rate of around 5% leads Italy into a recession with rising unemployment, accompanied by a deterioration of public finance. By 2028, economic growth is projected to drop to -2.5%, unemployment to exceed 10%, and government debt and deficit ratios to reach 159% and 8.4%, respectively.
+Summing up, in **scenario 1**, a persistent inflation rate of around 5% leads Italy into a recession with rising unemployment, accompanied by a deterioration of public finance. By 2028, economic growth is projected to drop to -2.5%, unemployment to exceed 10%, and government debt and deficit ratios to reach 159% and 8.4%, respectively.
 
-Scenario 2 explores similar effects of persistent inflation but with a robust ECB response, resulting in an immediate and prolonged economic recession and higher government debt and deficit ratios of 173% and 10.1% by 2028.
+**Scenario 2** explores similar effects of persistent inflation but with a robust ECB response, resulting in an immediate and prolonged economic recession and higher government debt and deficit ratios of 173% and 10.1% by 2028.
 
-Lastly, Scenario 3 depicts the impact of austerity measures to comply with the 3% Maastricht rule, causing a severe recession, an annual drop of around 3% in economic growth, and an unemployment rate exceeding 15% by 2028.
+Lastly, **scenario 3** depicts the impact of austerity measures to comply with the 3% Maastricht rule, causing a severe recession, an annual drop of around 3% in economic growth, and an unemployment rate exceeding 15% by 2028.
 
 
 ### 7_Quick_execution
