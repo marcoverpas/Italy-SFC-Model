@@ -1,0 +1,175 @@
+#RUN AND SAVE IN-SAMPLE PREDICTIONS
+
+##############################################################################
+
+#CHOOSE TYPE OF IN-SAMPLE PREDICTIONS
+
+type_pred = 0       #Note: 0 = no adjustment; 1 = adjustment (add factors)
+
+##############################################################################
+
+if (type_pred ==0){
+  
+  # Define exogenization list to 2021
+  exogenizeList <- list(
+    
+    #Adjusted endogenous variables in 1998-2021
+    oph = TRUE,                                 #Other payments associated with households
+    opf = TRUE,                                 #Other payments associated with firms
+    opb = TRUE,                                 #Other payments associated with banks
+    opcb = TRUE,                                #Other payments associated with ECB
+    oacb = TRUE,                                #Other financial assets of ECB
+    oaf = TRUE,                                 #Other financial assets held by firms
+    oab = TRUE,                                 #Other financial assets held by banks
+    oag = TRUE,                                 #Other financial assets held by government
+    oah = TRUE,                                 #Other financial assets held by households
+    rstar = TRUE,                               #ECB refinancing rate
+    Lp_row = TRUE,                              #Log of foreign price level
+    Lp_en = TRUE                                #Log of price of energy 
+  )
+  
+  # In-sample prediction (no add factors)
+  S_model <- SIMULATE(S_model
+                      ,simType='STATIC'
+                      ,TSRANGE=c(1998,1,2021,1)
+                      ,simConvergence=0.00001
+                      ,simIterLimit=100
+                      ,Exogenize=exogenizeList,
+                      verbose = FALSE )
+}
+
+##############################################################################
+
+#D) FORECAST SERIES USING IN-SAMPLE ADJUSTMENT
+
+if (type_pred ==1){
+  
+  # Define exogenization list to 2021
+  exogenizeList <- list(
+    
+    #Adjusted endogenous variables in 1998-2021
+    Lpc = c(1998,1,2021,1),                     #Log of consumer price index
+    Lp_en = c(1998,1,2021,1),                   #Log of price of energy 
+    mul = c(1998,1,2021,1),                     #Markup on loans to firms 
+    mulh = c(1998,1,2021,1),                    #Markup on personal loans    
+    mubb = c(1998,1,2021,1),                    #Average premium on bills held by banks 
+    mubrow = c(1998,1,2021,1),                  #Average premium on bills held by foreign sector 
+    mubh = c(1998,1,2021,1),                    #Average premium on bills held by households 
+    fuf = c(1998,1,2021,1),                     #Firms undistributed profit
+    lh = c(1998,1,2021,1),                      #Personal loans to households
+    gov = c(1998,1,2021,1),                     #Government spending
+    tr = c(1998,1,2021,1),                      #Transfers
+    Leh = c(1998,1,2021,1),                     #Log of household demand for shares 
+    Lbh = c(1998,1,2021,1),                     #Log of household demand for government bills
+    Lhh = c(1998,1,2021,1),                     #Log of household demand for cash
+    Lbb = c(1998,1,2021,1),                     #Log of bank demand for bills
+    prod = c(1998,1,2021,1),                    #Labour productivity
+    Lns = c(1998,1,2021,1),                     #Log of labour force
+    gw = c(1998,1,2021,1),                      #Growth rate of wages
+    Lp = c(1998,1,2021,1),                      #Log of price level
+    LidR = c(1998,1,2021,1),                    #Log of real investment
+    LimR = c(1998,1,2021,1),                    #Log of real import
+    LconsR = c(1998,1,2021,1),                  #Log of real consumption 
+    intmh = c(1998,1,2021,1),                   #Interests received by households on bank deposits
+    rstar = c(1998,1,2021,1),                   #ECB refinancing rate
+    tax = c(1998,1,2021,1),                     #Tax revenue
+    LxR = c(1998,1,2021,1),                     #Log of real export
+    Lp_im = c(1998,1,2021,1),                   #Log of price of import
+    Lp_row = c(1998,1,2021,1),                  #Log of foreign price level
+    oph = TRUE,                                 #Other payments associated with households
+    oacb = TRUE,                                #Other financial assets of ECB
+    oaf = TRUE,                                 #Other financial assets held by firms
+    oab = TRUE,                                 #Other financial assets of banks
+    oag = TRUE,                                 #Other financial assets of government
+    oah = TRUE,                                 #Other financial assets of households
+    mub = TRUE,                                 #Average premium paid by the government 
+    perc_en = TRUE,                             #Percentage of energy import to total import 
+    lambdarow = TRUE,                           #Share of government bills held by foreign sector
+    yf = TRUE,                                  #Foreign income  
+    rho = TRUE                                  #Reserve ratio
+    )
+  
+  # Simulate model
+  S_model <- SIMULATE(S_model
+                      ,simType='STATIC'
+                      ,TSRANGE=c(1998,1,2021,1)
+                      ,simConvergence=0.00001
+                      ,simIterLimit=100
+                      ,Exogenize=exogenizeList
+                      ,quietly=TRUE)
+  
+}
+
+#Define color of predicted series
+if (type_pred ==0){color="red1"} else{color="green4"}
+
+#Plot in-sample predictions of key behavioural variables
+layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
+
+# Show predicted real GDP
+plot(100*S_model$simulation$y/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(a) Real GDP (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$y/S_modelData$p),max(100*S_model$simulation$y/S_model$simulation$p)))
+lines(100*S_modelData$y/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+abline(h=1795100,col=4)
+
+# Show predicted real consumption
+plot(S_model$simulation$consR,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(b) Real consumption (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$cons/S_modelData$p),max(100*S_model$simulation$cons/S_model$simulation$p)))
+lines(S_modelData$consR,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted real investment
+plot(100*S_model$simulation$id/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(c) Real investment (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$id/S_modelData$p),max(100*S_model$simulation$id/S_model$simulation$p)))
+lines(100*S_modelData$id/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted import
+plot(100*S_model$simulation$im/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(d) Real import (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$im/S_modelData$p),max(100*S_model$simulation$im/S_model$simulation$p)))
+lines(100*S_modelData$im/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted export
+plot(100*S_model$simulation$x/S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 2(e) Real export (constant prices)",ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(min(100*S_modelData$x/S_modelData$p),max(100*S_model$simulation$x/S_model$simulation$p)))
+lines(100*S_modelData$x/S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Show predicted employment
+plot(S_model$simulation$nd,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(f) Employment",ylab = 'Number of employees',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(20000,24000))
+lines(S_modelData$nd,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Return rate on bonds
+plot(100*S_model$simulation$rb,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(g) Average yield on gov. securities",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(0,9))
+lines(100*S_modelData$rb,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# Debt to GDP ratio
+plot(100*S_model$simulation$deb/S_model$simulation$y,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(h) Government debt to GDP ratio",ylab = '%',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(95,160))
+lines(100*S_modelData$deb/S_modelData$y,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+# GDP deflator
+plot(S_model$simulation$p,col=color,lty=1,lwd=1,font.main=1,cex.main=1,main="Fig. 1(i) Price level (GDP deflator)",ylab = 'Index (2015=100)',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(70,110))
+lines(S_modelData$p,col="darkorchid4",lty=3,lwd=3)
+legend("bottom",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c("darkorchid4",color), box.lty=0)
+
+###############################################################################
+
+#Consistency check
+maintitle="Hs - Hd \n (in-sample, static, adjusted)"
+if (type_pred ==0 ){maintitle="Hs - Hd \n (in-sample, static, no adjustment)"}
+layout(matrix(c(1), 1, 1, byrow = TRUE))
+plot(S_model$simulation$hs-S_model$simulation$hd,col=2,lty=1,lwd=1,font.main=1,cex.main=1,main=maintitle,ylab = 'Million Euro',xlab = '', cex.axis=1,cex.lab=1,xlim=range(1998,2020),ylim=range(-1,1))
+lines(S_modelData$hs-S_modelData$hd,col=3,lty=3,lwd=3)
+abline(h=0,col="gray50")
+lines(S_model$simulation$hs-S_model$simulation$hd,col=2,lty=1,lwd=1)
+abline(h=0.1,col=4,lty=3)
+abline(h=-0.1,col=4,lty=3)
+legend("bottomleft",c("Observed","Simulated"),  bty = "n", cex=1, lty=c(3,1), lwd=c(3,1), col = c(3,2), box.lty=0)
+
+#Create consistency statement
+error=0
+for (i in 1:24){  error = error + (S_model$simulation$hs[i]-S_model$simulation$hd[i])^2    }
+if ( error<0.01 ){cat(" *************************************************************** \n Good news! The model is watertight!. Error =", error, "< 0.01 \n ***************************************************************")} else{
+  if ( error<1 ){cat(" ******************************************************** \n Double-check model consistency. Error =", error, "> 0.01 \n ********************************************************")}
+  else{cat(" *************************************************************** \n Warning: the model is not fully consistent! Error =", error, "> 1 \n ***************************************************************")} }      
+
