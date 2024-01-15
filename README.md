@@ -15,6 +15,8 @@
 - [5 Model watertightness](#5_Model_watertightness)
 - [6 Experiments](#6_Experiments)
 
+[Warning: work in progress] 🛠️
+
 ### 1_Model_and_data
 
 The model presented here is created using the `R` package named [Bimets](https://github.com/cran/bimets). You can install it from the *Packages* sub-pane within `RStudio`. We also recommend installing and loading the `knitr` package.
