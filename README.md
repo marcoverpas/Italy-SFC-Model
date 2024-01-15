@@ -14,6 +14,7 @@
 - [4 Out-of-sample predictions](#4_Out_of_sample_predictions)
 - [5 Model watertightness](#5_Model_watertightness)
 - [6 Experiments](#6_Experiments)
+- [7 Quick execution](#7_Quick_execution)
 
 [Warning: work in progress] 🛠️
 
@@ -2238,5 +2239,10 @@ sankeyNetwork(Links = links, Nodes = nodes,
 ### 6_Experiments
 
 [work in progress] 🛠️
+
+### 7_Quick_execution
+
+This approach is recommended for experienced users. Simply execute the files in numerical order, following the sequence of numbers.
+
 
 
