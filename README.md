@@ -2242,9 +2242,9 @@ Three additional scenarios are considered and compared with the baseline scenari
 
 **Alternative Scenario 1**: The energy-led price shock has a more persistent effect on inflation, with the inflation rate (CPI) still projected to be around 5% for the foreseeable years.
 
-**Alternative Scenario 2**: The economy is affected by two shocks—namely, a persistent inflation rate and a robust policy response by the ECB, which maintains the policy rate at 4.5% over the 2024-2026 period.
+**Alternative Scenario 2**: The economy is affected by two shocks, namely, a persistent inflation rate and a robust policy response by the ECB, which maintains the policy rate at 4.5% over the 2024-2026 period.
 
-**Alternative Scenario 3**: Effects of policy austerity measures that, in accordance with the Maastricht Treaty, bring the government deficit to GDP ratio to 3% in 2024 (and subsequent years).
+**Alternative Scenario 3**: Effects of policy austerity measures that, in accordance with the *Maastricht Treaty*, bring the government deficit to GDP ratio to 3% in 2024 (and subsequent years).
 
 The scenarios are created by adding shocks to model variables in the `constantAdjList`. Therefore, the first scenario is obtained by exogenously increasing the (log) series of the energy price:
 
