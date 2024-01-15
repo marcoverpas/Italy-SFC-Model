@@ -2221,10 +2221,6 @@ links = as.data.frame(matrix(c(
   25, 11, if (S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]>=0){S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]}else{0}  
   ), 
 
-  #Note: each row represents a link. The first number represents the node being
-  #connected from. The second number represents the node connected to. The third
-  #number is the value of the node.  
-      
   byrow = TRUE, ncol = 3))
 names(links) = c("source", "target", "value")
 my_color <- 'd3.scaleOrdinal() .domain([]) .range(["chartreuse","red","green","yellow","dodgerblue","darkorchid","khaki","peru","violet","cyan","pink","orange","beige","gray","blue","black","darkorchid4","goldenrod4"])'
