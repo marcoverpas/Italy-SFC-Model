@@ -1,0 +1,318 @@
+#TFM matrix for Italy SFC model
+
+#Simulated series
+
+################################################################################
+
+#Choose a year (note: 25 = 2020)
+yr=30
+
+#Create row names for TFM matrix
+rownames<-c( "Consumption",
+             "Total investment",
+             "Government spending",
+             "Export",
+             "Import",
+             "[GDP]",
+             "Taxes",
+             "Transfers",
+             "Wages",
+             "Interest payments",
+             "Corporate profit",
+             "Bank profit",
+             "CB seigniorage",
+             "Other payments",
+             "Change in cash and reserves",
+             "Change in deposits",
+             "Change in securities",
+             "Change in loans",
+             "Change in shares",
+             "Change in other net FA",
+             "Change in net wealth",
+             "Column total")
+
+################################################################################
+
+#Create firms (current) aggregates
+Firms_c      <-c( round(S_model$simulation$cons[yr], digits = 0),                                                                    
+                  round(S_model$simulation$id[yr], digits = 0), 
+                  round(S_model$simulation$gov[yr], digits = 0),                                                                    
+                  round(S_model$simulation$x[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$im[yr], digits = 0),                                                                    
+                  paste("[",round(S_model$simulation$cons[yr]+S_model$simulation$id[yr]+S_model$simulation$gov[yr]+S_model$simulation$x[yr]-S_model$simulation$im[yr], digits = 0),"]"),                                                                 
+                  0,                                                                    
+                  0,                                                                  
+                  round(-S_model$simulation$wb[yr], digits = 0),                                                                     
+                  round(-S_model$simulation$intf[yr], digits = 0),                                                                     
+                  round(-S_model$simulation$ff[yr], digits = 0),                                                                    
+                  0,
+                  0,
+                  round(S_model$simulation$opf[yr], digits = 0),
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  paste(round(S_model$simulation$y[yr]-S_model$simulation$wb[yr]-S_model$simulation$intf[yr]-S_model$simulation$ff[yr]+S_model$simulation$opf[yr] , digits = 0)) )    
+
+#Create table of results
+FirmData_c<-as.data.frame(Firms_c,row.names=rownames)
+
+#Print firms column
+kable(FirmData_c)
+
+################################################################################
+
+#Create firms (capital) aggregates
+Firms_k      <-c( 0,                                                                    
+                  round(-S_model$simulation$id[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  0,
+                  0,
+                  0,                                                                    
+                  0,                                                                     
+                  0,                                                                    
+                  round(S_model$simulation$fu[yr], digits = 0),                                                                      
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  round(S_model$simulation$lf[yr-1]-S_model$simulation$lf[yr], digits = 0),
+                  round(S_model$simulation$es[yr-1]-S_model$simulation$es[yr], digits = 0),
+                  round(-(S_model$simulation$oaf[yr-1]-S_model$simulation$oaf[yr]), digits = 0),
+                  round(S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1], digits = 0),
+                  round(-S_model$simulation$id[yr] + S_model$simulation$fu[yr]-
+                          -(S_model$simulation$vf[yr-1]-S_model$simulation$vf[yr]), digits = 0) )                                                                    
+
+#Create table of results
+FirmData_k<-as.data.frame(Firms_k,row.names=rownames)
+
+#Print firms column
+kable(FirmData_k)
+
+################################################################################
+
+#Create banks aggregates
+Banks        <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,
+                  round(S_model$simulation$intb[yr], digits = 0), #^^
+                  0,                                                                    
+                  round(-S_model$simulation$fb[yr], digits = 0),                                                                    
+                  0,
+                  round(S_model$simulation$opb[yr], digits = 0),
+                  round(S_model$simulation$hbd[yr]-S_model$simulation$hbd[yr-1], digits = 0),
+                  round(-(S_model$simulation$ms[yr]-S_model$simulation$ms[yr-1]), digits = 0),
+                  round(S_model$simulation$bb[yr]-S_model$simulation$bb[yr-1], digits = 0),
+                  round(S_model$simulation$ls[yr]-S_model$simulation$ls[yr-1], digits = 0),
+                  0,
+                  round(S_model$simulation$oab[yr]-S_model$simulation$oab[yr-1], digits = 0),
+                  round(S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1], digits = 0),
+                  paste(round(S_model$simulation$opb[yr]-(S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1])+S_model$simulation$intb[yr]-S_model$simulation$fb[yr], digits = 0)) )                                                                    
+
+#Create table of results
+BankData<-as.data.frame(Banks,row.names=rownames)
+
+#Print banks column
+kable(BankData)
+
+################################################################################
+
+#Create ECB aggregates
+ECB          <-c( 0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0, 
+                  round(S_model$simulation$fcb[yr], digits = 0),                                                           
+                  0,                                    
+                  0,                                                          
+                  round(-S_model$simulation$fcb[yr], digits = 0), # 
+                  round(S_model$simulation$opcb[yr], digits = 0),
+                  round(-(S_model$simulation$hs[yr]-S_model$simulation$hs[yr-1]), digits = 0),
+                  0,
+                  round((S_model$simulation$bcb[yr]-S_model$simulation$bcb[yr-1]), digit = 0),
+                  0,
+                  0,
+                  round(S_model$simulation$oacb[yr]-S_model$simulation$oacb[yr-1], digits = 0),
+                  round(S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1], digits = 0),
+                  paste(round(S_model$simulation$opcb[yr]-(S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1]), digits = 0)) )                                                                    
+
+#Create table of results
+CBData<-as.data.frame(ECB,row.names=rownames)
+
+#Print ECB column
+kable(CBData)
+
+################################################################################
+
+#Create government aggregates
+Government   <-c( 0,                                                                    
+                  0,
+                  round(-S_model$simulation$gov[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  round(S_model$simulation$tax[yr], digits = 0),                                                                    
+                  round(-S_model$simulation$tr[yr], digits = 0),                                                                    
+                  0,                                                                     
+                  round(-(S_model$simulation$intg[yr]), digits = 0),                                                                   
+                  0,
+                  0,                                                          
+                  round(S_model$simulation$fcb[yr], digits = 0), 
+                  round(S_model$simulation$opg[yr], digits = 0),
+                  0,
+                  0,
+                  round(-(S_model$simulation$bs[yr]-S_model$simulation$bs[yr-1]), digits = 0),
+                  0,
+                  0,
+                  round(S_model$simulation$oag[yr]-S_model$simulation$oag[yr-1], digits = 0),
+                  round(S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$gov[yr]+S_model$simulation$tax[yr]-S_model$simulation$tr[yr]-(S_model$simulation$intg[yr])+S_model$simulation$fcb[yr]+S_model$simulation$opg[yr]-(S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1]), digits = 0)) )                 
+
+#Create table of results
+GovData<-as.data.frame(Government,row.names=rownames)
+
+#Print government column
+kable(GovData)
+
+################################################################################
+
+#Create households aggregates
+Households   <-c( round(-S_model$simulation$cons[yr], digits = 0),                                                                    
+                  0,                                                                    
+                  0,
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                 
+                  round(-S_model$simulation$tax[yr], digits = 0),                                                                    
+                  round(S_model$simulation$tr[yr], digits = 0),                                                                    
+                  round(S_model$simulation$wb[yr], digits = 0),                                                                     
+                  round(S_model$simulation$inth[yr], digits = 0), 
+                  round(S_model$simulation$fdf[yr], digits = 0),                                                                    
+                  round(S_model$simulation$fb[yr], digits = 0),                                                          
+                  0,
+                  round(S_model$simulation$oph[yr], digits = 0),
+                  round(S_model$simulation$hh[yr]-S_model$simulation$hh[yr-1], digits = 0),
+                  round(S_model$simulation$mh[yr]-S_model$simulation$mh[yr-1], digits = 0),
+                  round(S_model$simulation$bh[yr]-S_model$simulation$bh[yr-1], digits = 0),
+                  round(-(S_model$simulation$lh[yr]-S_model$simulation$lh[yr-1]), digits = 0),
+                  round(S_model$simulation$eh[yr]-S_model$simulation$eh[yr-1], digits = 0),
+                  round(S_model$simulation$oah[yr]-S_model$simulation$oah[yr-1], digits = 0),
+                  round(S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$cons[yr]-S_model$simulation$tax[yr]+S_model$simulation$tr[yr]+S_model$simulation$wb[yr]+S_model$simulation$inth[yr]+S_model$simulation$fdf[yr]+S_model$simulation$fb[yr]+S_model$simulation$oph[yr]-(S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1]), digits = 0)) )                                                                    
+
+#Create table of results
+HouseData<-as.data.frame(Households,row.names=rownames)
+
+#Print households column
+kable(HouseData)
+
+################################################################################
+
+#Create Foreign sector aggregates
+Foreign      <-c( 0,                                                                    
+                  0,                                                                    
+                  0,     
+                  round(-S_model$simulation$x[yr], digits = 0),                                                                    
+                  round(S_model$simulation$im[yr], digits = 0),                                                                       
+                  0,                                                                 
+                  0,                                                                    
+                  0,  
+                  0,
+                  round(S_model$simulation$introw[yr], digits = 0),                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  0,
+                  round(S_model$simulation$oprow[yr], digits = 0),
+                  0,
+                  0,
+                  round(S_model$simulation$brow[yr]-S_model$simulation$brow[yr-1], digits = 0),
+                  0,
+                  0,
+                  round(S_model$simulation$oarow[yr]-S_model$simulation$oarow[yr-1], digits = 0),
+                  round(S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1], digits = 0),
+                  paste(round(-S_model$simulation$x[yr]+S_model$simulation$im[yr]+S_model$simulation$introw[yr]+S_model$simulation$oprow[yr]-(S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]), digits = 0)) )                                                                    
+
+#Create table of results
+ROWData<-as.data.frame(Foreign,row.names=rownames)
+
+#Print foreign sector column
+kable(ROWData)
+
+################################################################################
+
+#Create row total
+Total        <-c( 0,                                                                    
+                  0,
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                       
+                  round(S_model$simulation$y[yr]-(S_model$simulation$cons[yr]+S_model$simulation$id[yr]+S_model$simulation$gov[yr]+S_model$simulation$x[yr]-S_model$simulation$im[yr]), digits = 0),                                                                 
+                  0,                                                                    
+                  0,                                                                    
+                  0,                                                                     
+                  round(-S_model$simulation$intf[yr]+S_model$simulation$fcb[yr]-S_model$simulation$intg[yr]+S_model$simulation$inth[yr]+S_model$simulation$introw[yr]+S_model$simulation$intb[yr], digits = 0),                                                                     
+                  0,                                                                    
+                  0,                                                          
+                  0,
+                  round(S_model$simulation$oph[yr]+S_model$simulation$opf[yr]+S_model$simulation$opg[yr]+S_model$simulation$opb[yr]+
+                          +S_model$simulation$opcb[yr]+S_model$simulation$oprow[yr], digits = 0),
+                  round((S_model$simulation$hh[yr]-S_model$simulation$hh[yr-1])+(S_model$simulation$hbd[yr]-S_model$simulation$hbd[yr-1])-(S_model$simulation$hs[yr]-S_model$simulation$hs[yr-1]), digits = 0),              
+                  round((S_model$simulation$mh[yr]-S_model$simulation$mh[yr-1])-(S_model$simulation$ms[yr]-S_model$simulation$ms[yr-1]), digits = 0),
+                  round((S_model$simulation$bh[yr]-S_model$simulation$bh[yr-1])-(S_model$simulation$bs[yr]-S_model$simulation$bs[yr-1])+
+                          (S_model$simulation$bb[yr]-S_model$simulation$bb[yr-1])+((S_model$simulation$bcb[yr])-(S_model$simulation$bcb[yr-1]))+
+                          (S_model$simulation$brow[yr]-S_model$simulation$brow[yr-1]), digits = 0),
+                  round(-(S_model$simulation$lh[yr]-S_model$simulation$lh[yr-1])-(S_model$simulation$lf[yr]-S_model$simulation$lf[yr-1])+(S_model$simulation$ls[yr]-S_model$simulation$ls[yr-1]), digit = 0),
+                  round((S_model$simulation$es[yr]-S_model$simulation$es[yr-1])-(S_model$simulation$eh[yr]-S_model$simulation$eh[yr-1]), digits = 0),
+                  round((S_model$simulation$oah[yr]-S_model$simulation$oah[yr-1])+(S_model$simulation$oaf[yr]-S_model$simulation$oaf[yr-1])+(S_model$simulation$oag[yr]-S_model$simulation$oag[yr-1])+
+                          +(S_model$simulation$oab[yr]-S_model$simulation$oab[yr-1])+(S_model$simulation$oacb[yr]-S_model$simulation$oacb[yr-1])+(S_model$simulation$oarow[yr]-S_model$simulation$oarow[yr-1]), digits = 0),
+                  round((S_model$simulation$vh[yr]-S_model$simulation$vh[yr-1])+(S_model$simulation$vf[yr]-S_model$simulation$vf[yr-1])+(S_model$simulation$vg[yr]-S_model$simulation$vg[yr-1])+
+                          +(S_model$simulation$vb[yr]-S_model$simulation$vb[yr-1])+(S_model$simulation$vcb[yr]-S_model$simulation$vcb[yr-1])+(S_model$simulation$vrow[yr]-S_model$simulation$vrow[yr-1]), digits = 0),
+                  0)
+
+#Create table of results
+TotalData<-as.data.frame(Total,row.names=rownames)
+
+#Print banks column
+kable(TotalData)
+
+################################################################################
+
+#Create TFM matrix
+Italy_TFM_Matrix<-cbind(HouseData,FirmData_c,FirmData_k,GovData,BankData,CBData,ROWData,TotalData)
+kable(Italy_TFM_Matrix)
+
+################################################################################
+
+#Upload libraries
+library(knitr)
+library(kableExtra)
+
+#Create caption
+captionTFM_out <- paste("Table 2. Transactions-flow matrix in period", yr+1995)
+
+#Create html table for TFM
+Italy_TFM_Matrix %>%
+  kbl(caption=captionTFM_out,
+      #format= "html",
+      format= "latex",
+      col.names = c("Households","Firms (current)","Firms (capital)","Government","Banks","ECB","Foreign","Total"),
+      align="r") %>%
+  kable_classic(full_width = F, html_font = "helvetica")
