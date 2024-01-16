@@ -2,7 +2,7 @@
 
 **Authors**: Rosa Canelli and Marco Veronese Passarella
 
-**Last change**: 15 January 2024
+**Last change**: 16 January 2024
 
 **Description**: This repository contains two types of code. The file named `Italy_SFC_model.r` replicates the baseline and the experiments discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2022) [Is the Italian government debt sustainable? Scenarios after the Covid-19 shock](https://academic.oup.com/cje/article-abstract/46/3/581/6584486), *Cambridge Journal of Economics*. Notice that an early version of it was used to produce the simulations discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2021) [Are EU policies effective to tackle the Covid-19 crisis? The case of Italy](https://www.tandfonline.com/doi/full/10.1080/09538259.2021.1876477), *Review of Political Economy*. The other (numbered) files allow replicating the baseline and the experiments discussed in: Canelli, R., Fontana, G., Realfonzo, R. and Veronese Passarella, M. (2024) [Energy crisis, economic growth and public finance in Italy](https://www.sciencedirect.com/journal/energy-economics), *Energy Economics* (under revision). A detailed description of the latter is provided below.
 
@@ -27,7 +27,7 @@ library(bimets)
 library(knitr)
 ```
 
-Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. Available data must be reclassified accordingly. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The **balance sheet** of Italy in 2021 is:
+Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. The density of accounting matrices must be preliminarily reduced to keep the number of equations under control. Additionally, in the absence of information (e.g., on cross-sector interest payments), a decision must be made regarding which sector is paying whom. Available data must be reclassified accordingly - please refer to [Veronese Passarella 2019](https://www.elgaronline.com/view/journals/ejeep/16/1/article-p55.xml) for additional information on this point. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The associated **balance sheet** of Italy in 2021 is:
 
 $$
 \begin{array}{lccccccc}
