@@ -52,7 +52,7 @@ $$
 
 Figures are all expressed at current prices, million euros.
 
-Similarly, the simplified **transactions-flow matrix** of Italy in 2021 is:
+Similarly, the simplified or riclassified **transactions-flow matrix** of Italy in 2021 is:
 
 $$
 \begin{array}{lcccccccc}
