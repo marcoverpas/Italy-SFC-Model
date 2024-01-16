@@ -135,7 +135,7 @@ Alternatively, simply copy and paste the *https* address into your browser, save
 
 The third step is to create a text file (*txt*) defining model equations. For a comprehensive description, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024).
 
-*Note*: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, during the estimation of model coefficients, the `R` Console displays related details in a 'last in, first out' order.
+*Note*: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, after estimating model coefficients, the related details are to be read in a 'last in, first out' order from the `RStudio` Console.
 
 ```R
 S_model.txt="MODEL
