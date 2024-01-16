@@ -133,7 +133,9 @@ Running this chunk of code allows creating the dataset used by the model to esti
 
 Alternatively, simply copy and paste the *https* address into your browser, save the dataset in the chosen folder, and set the directory path accordingly.
 
-The third step is to create a text file (*txt*) defining model equations. For a comprehensive description, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024). Note: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, during the estimation of model coefficients, the `R` Console displays related details in a 'last in, first out' order.
+The third step is to create a text file (*txt*) defining model equations. For a comprehensive description, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024).
+
+*Note*: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, during the estimation of model coefficients, the `R` Console displays related details in a 'last in, first out' order.
 
 ```R
 S_model.txt="MODEL
