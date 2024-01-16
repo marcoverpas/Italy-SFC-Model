@@ -27,7 +27,9 @@ library(bimets)
 library(knitr)
 ```
 
-Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. The density of accounting matrices must be preliminarily reduced to keep the number of equations under control. Additionally, in the absence of information (e.g., on cross-sector interest payments), a decision must be made regarding which sector is paying whom. Available data must be reclassified accordingly - please refer to [Veronese Passarella 2019](https://www.elgaronline.com/view/journals/ejeep/16/1/article-p55.xml) for additional information on this point. In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The associated **balance sheet** of Italy in 2021 is:
+Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. The density of accounting matrices must be preliminarily reduced to keep the number of equations under control. Additionally, in the absence of information (e.g., on cross-sector interest payments), a decision must be made regarding which sector is paying whom. Available data must be reclassified accordingly - please refer to [Veronese Passarella 2019](https://www.elgaronline.com/view/journals/ejeep/16/1/article-p55.xml) for additional information on this point.
+
+In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The associated **balance sheet** of Italy in 2021 is:
 
 $$
 \begin{array}{lccccccc}
