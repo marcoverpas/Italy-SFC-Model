@@ -88,7 +88,9 @@ Column ~ total & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \end{array}
 $$
 
-where the entry named 'Other payments' allows aligning each sector's saving, calculated based on *Eurostat*'s non-financial transactions, with the change in financial wealth as derived from *Eurostat*'s financial balance sheets. Note: The `R` code to create the tables above (using observed series) is presented in [Section 2](#2_Accouting_tables).
+where the entry named 'Other payments' allows aligning each sector's saving, calculated based on *Eurostat*'s non-financial transactions, with the change in financial wealth as derived from *Eurostat*'s financial balance sheets.
+
+*Note*: The `R` code to create the tables above (using observed series) is presented in [Section 2](#2_Accouting_tables).
 
 The second step to create the model is to import the data (observed series). Our code takes the observed series from a *Dropbox* folder, containing *Eurostat* data for Italy over the period 1995-2021.
 
