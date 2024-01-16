@@ -27,7 +27,7 @@ library(bimets)
 library(knitr)
 ```
 
-Once packages have been loaded, the first step to create the model is to define the structure of the economy, that is, the level of aggregation implied by the accounting matrices. The density of accounting matrices must be preliminarily reduced to keep the number of equations under control. Additionally, in the absence of information (e.g., on cross-sector interest payments), a decision must be made regarding which sector is paying whom. Available data must be reclassified accordingly - please refer to [Veronese Passarella (2019)](https://www.elgaronline.com/view/journals/ejeep/16/1/article-p55.xml), section 2, for additional information on the method for reclassifying *Eurostat* time series.
+Once packages have been loaded, the first step in creating the model is to define the structure of the economy, determining the level of aggregation implied by the *desired* accounting matrices. Subsequently, the density of the *original* matrices, as implied by the observed series, must be consistently reduced to limit the number of equations. Additionally, in the absence of information (e.g., on cross-sector interest payments), a decision must be made regarding which sector is paying whom. Available data must be reclassified accordingly - please refer to [Veronese Passarella (2019)](https://www.elgaronline.com/view/journals/ejeep/16/1/article-p55.xml), section 2, for additional information on the method for reclassifying *Eurostat* time series.
 
 In our model, we consider six sectors (households, production firms, government, commercial banks, central bank, and the foreign sector) and six financial assets (cash, deposits, securities, loans, shares, and other net financial assests). The associated simplified **balance sheet** of Italy in 2021 is:
 
@@ -133,7 +133,7 @@ Running this chunk of code allows creating the dataset used by the model to esti
 
 Alternatively, simply copy and paste the *https* address into your browser, save the dataset in the chosen folder, and set the directory path accordingly.
 
-The third step is to create a text file (*txt*) defining model equations. For a comprehensive description, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024).
+The third step is to create a text file (*txt*) defining model equations. For a comprehensive description of the behavioral assumptions underlying the behavioral equations, please refer to Canelli, Fontana, Realfonzo, and Veronese Passarella (2024).
 
 *Note*: we place the key behavioral equations at the end of the code. This arrangement is intentional, as, after estimating model coefficients, the related details are to be read in a 'last in, first out' order from the `RStudio` Console.
 
