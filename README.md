@@ -1131,7 +1131,6 @@ S_model=ESTIMATE(S_model
 
 Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the *Console*. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$), which was the last variable defined in the *txt* chunk. This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
 
-*Note*: Simple OLS estimations have been employed. Additionally, log levels (instead of first differences) have been considered. In principle, this may raise concerns, as most variables are non-stationary, thus possibly leading to spurious correlations. The rationale for our choice is that observed annual time series are too short and affected by structural breaks (such as the launch of the euro, the COVID-19 crisis, etc.). This makes the use of more sophisticated estimation techniques challenging. Furthermore, while the stationarity issue could be addressed by taking first differences, abandoning levels would imply a further loss of information. Lastly, note that the aim of the model is not to outpredict other methods, but to provide a theoretical tool to develop and assess alternative policy scenarios. 
 
 ```TXT
 BEHAVIORAL EQUATION: mub
@@ -1243,6 +1242,8 @@ The details of the other estimations can be visualised by scrolling up through t
 | $μ_{b1}$     | Av. premium on gov. bills: elasticity to debt to GDP ratio           | 0.032       |
 | $μ_{b2}$     | Av. premium on gov. bills: elasticity to ECB’s holdings              | -0.079      |
 | $μ_{b3}$     | Av. premium on gov. bills: elasticity to policy rate                 | -0.422      |
+
+*Note*: Simple OLS estimations have been employed. Additionally, log levels (instead of first differences) have been considered. In principle, this may raise concerns, as most variables are non-stationary, thus possibly leading to spurious correlations. The rationale for our choice is that observed annual time series are too short and affected by structural breaks (such as the launch of the euro, the COVID-19 crisis, etc.). This makes the use of more sophisticated estimation techniques challenging. Furthermore, while the stationarity issue could be addressed by taking first differences, abandoning levels would imply a further loss of information. Lastly, note that the aim of the model is not to outpredict other methods, but to provide a theoretical tool to develop and assess alternative policy scenarios. 
 
 ### 2_Accouting_tables
 
