@@ -1131,6 +1131,7 @@ S_model=ESTIMATE(S_model
 
 Now, we can execute the entire code, enabling the creation of the model and the estimation of the associated coefficients. Information on the estimations is displayed in the *Console*. For instance, the following details pertain to the estimation of the risk premium for government securities ($\mu_b$), which was the last variable defined in the *txt* chunk. This risk premium is considered a positive function of the debt-to-GDP ratio and a negative function of both the share of debt held by the ECB and the policy rate level. The rationale here is that when the policy rate increases, the interest rate on Italian securities increases less than proportionally.
 
+*Note*: Simple OLS estimations have been employed. Additionally, log levels (instead of first differences) have been considered. In principle, this may raise concerns, as most variables are non-stationary, thus possibly leading to spurious correlations. The rationale for our choice is that observed annual time series are too short and affected by structural breaks (such as the launch of the euro, the COVID-19 crisis, etc.). This makes the use of more sophisticated estimation techniques challenging. Furthermore, while the stationarity issue could be addressed by taking first differences, abandoning levels would imply a further loss of information. Lastly, note that the aim of the model is not to outpredict other methods, but to provide a theoretical tool to develop and assess alternative policy scenarios. 
 
 ```TXT
 BEHAVIORAL EQUATION: mub
@@ -1792,7 +1793,9 @@ In-sample unadjusted simulations can be generated simply by running the followin
 
 Since we are conducting an in-sample simulation, we use a static prediction approach. This means that historical values for the lagged endogenous variables are utilised in the solutions of subsequent periods.
 
-We can now plot the observed series against the simulated one for each variable. 
+*Note*: A dynamic prediction can also be performed. All it takes is to replace `STATIC` with `DYNAMIC` (or `FORECAST`) in the code chunk above. However, the presence of several structural breaks in the period considered (e.g., the launch of the euro, three financial crises, and the Covid-19 crisis) is likely to worsen the model fit even beyond its shortcomings. In principle, this problem can be addressed by exogenising a behavioral variable reflecting the shocks (e.g., real investment) or using dummy variables. Here, we chose the simplest solution, which is to perform a static simulation. 
+
+Having clarified this, we can now plot the observed series against the simulated one for each variable. 
 
 ```R
 #Define layout
