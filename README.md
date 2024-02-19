@@ -1794,7 +1794,7 @@ In-sample unadjusted simulations can be generated simply by running the followin
 
 Since we are conducting an in-sample simulation, we use a static prediction approach. This means that historical values for the lagged endogenous variables are utilised in the solutions of subsequent periods.
 
-*Note*: A dynamic prediction can also be performed. All it takes is to replace `STATIC` with `DYNAMIC` (or `FORECAST`) in the code chunk above. However, the presence of several structural breaks in the period considered (e.g., the launch of the euro, three financial crises, and the Covid-19 crisis) is likely to worsen the model fit even beyond its shortcomings. In principle, this problem can be addressed by exogenising a behavioral variable reflecting the shocks (e.g., real investment) or using dummy variables. Here, we chose the simplest solution, which is to perform a static simulation. 
+*Note*: A dynamic prediction can also be performed. All it takes is to replace `STATIC` with `DYNAMIC` (or `FORECAST`) in the code chunk above. However, the presence of several structural breaks in the period considered (e.g., the launch of the euro, three financial crises, and the Covid-19 crisis) is likely to worsen the model fit even beyond its shortcomings. In principle, this problem can be partly addressed by exogenising variables reflecting the shocks or using dummy variables. 
 
 Having clarified this, we can now plot the observed series against the simulated one for each variable. 
 
