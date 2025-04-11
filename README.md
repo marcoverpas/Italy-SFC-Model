@@ -20,8 +20,6 @@ The other (numbered) files allow replicating the baseline and the experiments di
 - [6 Experiments](#6_Experiments)
 - [7 Quick execution](#7_Quick_execution)
 
-[Warning: work in progress] 🛠️
-
 ### 1_Model_and_data
 
 The model presented here is created using the `R` package named [Bimets](https://github.com/cran/bimets). You can install it from the *Packages* sub-pane within `RStudio`. We also recommend installing and loading the `knitr` package.
