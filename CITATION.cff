@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+title: "An Empirical SFC Macroeconomic Model for Italy Using the Bimets Package"
+authors:
+  - family-names: "Canelli"
+    given-names: "Rosa"
+  - family-names: "Veronese Passarella"
+    given-names: "Marco"
+    affiliation: "University of L'Aquila; University of Leeds"
+    orcid: "https://orcid.org/0000-0001-7652-5952"
+date-released: 2024-02-06
+url: "https://github.com/marcoverpas/Italy-SFC-Model"
+repository-code: "https://github.com/marcoverpas/Italy-SFC-Model"
+license: "CC-BY-NC-4.0"
+keywords:
+  - stock-flow consistent models
+  - macroeconomics
+  - Italy
+  - public debt sustainability
+  - energy economics
+  - R
+references:
+  - type: article
+    authors:
+      - family-names: "Canelli"
+        given-names: "Rosa"
+      - family-names: "Fontana"
+        given-names: "Giuseppe"
+      - family-names: "Realfonzo"
+        given-names: "Riccardo"
+      - family-names: "Veronese Passarella"
+        given-names: "Marco"
+    title: "Is the Italian government debt sustainable? Scenarios after the Covid-19 shock"
+    journal: "Cambridge Journal of Economics"
+    year: 2022
+  - type: article
+    authors:
+      - family-names: "Canelli"
+        given-names: "Rosa"
+      - family-names: "Fontana"
+        given-names: "Giuseppe"
+      - family-names: "Realfonzo"
+        given-names: "Riccardo"
+      - family-names: "Veronese Passarella"
+        given-names: "Marco"
+    title: "Energy crisis, economic growth and public finance in Italy"
+    journal: "Energy Economics"
+    year: 2024
