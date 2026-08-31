@@ -1,5 +1,7 @@
 # An empirical SFC macroeconomic model for Italy using [Bimets](https://github.com/cran/bimets) package
 
+[![DOI](https://zenodo.org/badge/463219261.svg)](https://doi.org/10.5281/zenodo.21220046)
+
 **Authors**: Rosa Canelli and Marco Veronese Passarella
 
 **Last change**: 6 February 2024
